@@ -4,7 +4,7 @@ from user.models import Kid
 # Create your models here.
 class Meal(models.Model):  # 식사
     meal_id = models.AutoField(primary_key=True, null=False)
-    meal_img = models.CharField(max_length=20, null=False)
+    meal_img = models.ImageField()
     meal_regdate = models.DateField(null=False)
     meal_time = models.CharField(max_length=20, null=False)
     kid_id = models.ForeignKey(Kid, on_delete=models.CASCADE)

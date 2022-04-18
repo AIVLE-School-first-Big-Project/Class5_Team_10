@@ -1,15 +1,112 @@
 <!-- head 영역 -->
+{% load static %}
 <!-- lib -->
 <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
 <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
-<!-- <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script> -->
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
 <!-- lib -->
+<style>
+#morning_previewImg, #lunch_previewImg, #evening_previewImg {
+    margin: 1rem;
+    width: 18rem;
+    height: 15rem;
+}
+
+.img {
+    width: 100%;
+    height: 15rem;
+}
+</style>
 <script>
-    $(document).ready(function() {
-        $('#id').click(function() {
-            console.log('test')
-        })
+$(document).ready(function() {
+    $('.morning_upload').click(function() {
+        $('#morning_modal').modal('show');
     })
+
+    $('#morning_fileBtn').change(function() {
+        if(this.files[0]) {
+            let reader = new FileReader()
+            reader.readAsDataURL(this.files[0])
+    
+            reader.addEventListener('load', function() {
+                $('#morning_previewImg').attr('src', reader.result)
+                readerResult = reader.result
+            }, false)
+        }
+    })
+
+    $('#morning_upload').click(function() {
+        morning_img = $('#morning_previewImg').attr('src')
+        $('#morning').attr('src', morning_img)
+        $('#morning_modal').modal('hide')
+
+        let form = $('#morning_form')[0]
+        let formData = new FormData(form)
+
+        formData.append('meal_img', $('#morning_fileBtn')[0].files[0])
+        formData.append('meal_regdate', new Date().toLocaleDateString())
+        formData.append('meal_time', '아침')
+        // formData.append('kid_id', 1)  // 어떤 키드인지
+        console.log($('#morning_fileBtn')[0].files[0])
+
+        $.ajax({
+            url: 'upload',
+            method: 'post',
+            enctype: 'multipart/form-data',
+            data: formData,
+            contentType: false,
+            processData: false,
+        })
+        console.log(form)
+        console.log(formData)
+        console.log(new Date().toLocaleDateString())
+
+    })
+    
+    $('.lunch_upload').click(function() {
+        $('#lunch_modal').modal('show');
+    })
+
+    $('#lunch_fileBtn').change(function() {
+        if(this.files[0]) {
+            let reader = new FileReader()
+            reader.readAsDataURL(this.files[0])
+    
+            reader.addEventListener('load', function() {
+                $('#lunch_previewImg').attr('src', reader.result)
+                readerResult = reader.result
+            }, false)
+        }
+    })
+
+    $('#lunch_upload').click(function() {
+        lunch_img = $('#lunch_previewImg').attr('src')
+        $('#lunch').attr('src', lunch_img)
+        $('#lunch_modal').modal('hide')
+    })
+
+    $('.evening_upload').click(function() {
+        $('#evening_modal').modal('show');
+    })
+
+    $('#evening_fileBtn').change(function() {
+        if(this.files[0]) {
+            let reader = new FileReader()
+            reader.readAsDataURL(this.files[0])
+    
+            reader.addEventListener('load', function() {
+                $('#evening_previewImg').attr('src', reader.result)
+                readerResult = reader.result
+            }, false)
+        }
+    })
+
+    $('#evening_upload').click(function() {
+        evening_img = $('#evening_previewImg').attr('src')
+        $('#evening').attr('src', evening_img)
+        $('#evening_modal').modal('hide')
+    })
+})
 </script>
 <body>
     <div class="container my-3">
@@ -22,39 +119,99 @@
         </div>
         <div class="row mt-3">
             <div class="col d-flex justify-content-center">자녀 정보</div>
-            <div class="col">
-                <div class="row d-flex justify-content-center">
-                    <img src=""/>
+            <div class="col ml-3">
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="morning" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
                 </div>
-                <div class="row d-flex justify-content-center">
-                    <button id="id">식단이미지업로드1</button>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary morning_upload">식단이미지업로드1</button>
                 </div>
-                <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단1</div>
                 </div>
             </div>
-            <div class="col">
-                <div class="row d-flex justify-content-center">
-                    <img src=""/>
+            <div class="col ml-3">
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="lunch" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
                 </div>
-                <div class="row d-flex justify-content-center">
-                    <button id="id">식단이미지업로드2</button>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary lunch_upload">식단이미지업로드2</button>
                 </div>
-                <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단2</div>
                 </div>
             </div>
-            <div class="col">
-                <div class="row d-flex justify-content-center">
-                    <img src=""/>
+            <div class="col ml-3">
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="evening" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
                 </div>
-                <div class="row d-flex justify-content-center">
-                    <button id="id">식단이미지업로드3</button>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary evening_upload">식단이미지업로드3</button>
                 </div>
-                <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단3</div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+<div class="modal fade" id="morning_modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>아침 식단 업로드</strong>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>
+            <form id="morning_form" class="modal-body text-center" method="post" enctype="multipart/form-data">
+                <img id="morning_previewImg" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                <input type="file" id="morning_fileBtn" accept=".jpg, .png"/>
+            </form>
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
+                <button class="btn btn-secondary" id="morning_upload">&nbsp;&nbsp;&nbsp;업로드&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="lunch_modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>점심 식단 업로드</strong>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="lunch_previewImg" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                <input type="file" id="lunch_fileBtn" accept=".jpg, .png"/>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
+                <button class="btn btn-secondary" id="lunch_upload">&nbsp;&nbsp;&nbsp;업로드&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="evening_modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>저녁 식단 업로드</strong>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="evening_previewImg" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                <input type="file" id="evening_fileBtn" accept=".jpg, .png"/>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
+                <button class="btn btn-secondary" id="evening_upload">&nbsp;&nbsp;&nbsp;업로드&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </div>
+</div>
