@@ -2,9 +2,12 @@ from django.db import models
 from user.models import Kid
 
 # Create your models here.
+def user_directory_path(instance, filename):
+    return 'meal_images/kid_{}/{}_{}{}'.format(instance.kid.id, instance.regdate, instance.time, '.png')
+
 class Meal(models.Model):  # 식사
     id = models.AutoField(primary_key=True, null=False)
-    img = models.ImageField(null=True)
+    img = models.ImageField(null=True, upload_to=user_directory_path)
     regdate = models.DateField(null=False)
     time = models.CharField(max_length=20, null=False)
     kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
