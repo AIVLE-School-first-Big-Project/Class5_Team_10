@@ -13,11 +13,13 @@ def meal(request):
 @csrf_exempt
 def meal_upload(request):
     print(request)
-    meal_img = request.FILES.__getitem__('meal_img')
+    # meal_img = request.FILES.__getitem__('meal_img')
+    meal_img = request.POST['meal_img']
     meal_regdate = request.POST['meal_regdate']
     meal_regdate = meal_regdate.replace('. ', '-')
     meal_regdate = meal_regdate.replace('.', '')
     meal_time = request.POST['meal_time']
+    print(meal_img)
     
     # 자녀 어떻게 선택?
     kid = Kid.objects.get(kid_id=1)

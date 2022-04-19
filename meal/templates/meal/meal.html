@@ -43,11 +43,13 @@ $(document).ready(function() {
         let form = $('#morning_form')[0]
         let formData = new FormData(form)
 
-        formData.append('meal_img', $('#morning_fileBtn')[0].files[0])
+        // formData.append('meal_img', $('#morning_fileBtn')[0].files[0])
+        formData.append('meal_img', $('#morning_form img').attr('src'))
         formData.append('meal_regdate', new Date().toLocaleDateString())
         formData.append('meal_time', '아침')
         // formData.append('kid_id', 1)  // 어떤 키드인지
         console.log($('#morning_fileBtn')[0].files[0])
+        console.log($('#morning_form img').attr('src'))
 
         $.ajax({
             url: 'upload',
@@ -110,6 +112,14 @@ $(document).ready(function() {
 </script>
 <body>
     <div class="container my-3">
+        {% if meals %}
+            {{ meals }}
+        {% endif %}
+        {% for meal in meals %}
+            {{ meal }}
+            {{ meal.meal_img }}
+            <img src="{{ meal.meal_img }}"/>
+        {% endfor %}
         <div class="row">
             <div class="col"></div>
             <div class="col-8 w-100">
