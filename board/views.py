@@ -9,7 +9,7 @@ from django.db.models import Q
 # Create your views here.
 def post_list(request): # 게시물 목록 조회 함수
     page = request.GET.get('page', '1')  # 페이지
-    posts = Post.objects.order_by('-post_regdate')
+    posts = Post.objects.order_by('-regdate')
     paginator = Paginator(posts, 10)  # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
     context = {'posts':page_obj}
@@ -17,14 +17,14 @@ def post_list(request): # 게시물 목록 조회 함수
 
 
 def post(request, post_id): # 게시물 상세 조회 함수
-    post = Post.objects.get(post_id=post_id)
+    post = Post.objects.get(id=post_id)
     context = {'post':post}
     return render(request, 'board/post.html', context)
 
 
 def post_create(request):   # 게시물 작성 함수
     if request.method == 'POST':
-        form = PostForm(request.post)
+        form = PostForm(request.Post)
         if form.is_valid(): # 유효성 검사를 통과하면
             post = form.save(commit=False)
             post.save()
