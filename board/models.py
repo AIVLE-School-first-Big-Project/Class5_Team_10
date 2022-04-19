@@ -1,3 +1,4 @@
+from sre_parse import CATEGORIES
 from django.db import models
 # from django.contrib.auth.models import User
 from user.models import User
@@ -5,7 +6,7 @@ from user.models import User
 # Create your models here.
 class Board(models.Model):
     id = models.AutoField(primary_key=True, null=False)
-    ctg = models.CharField(max_length=20, null=False)  # 카테고리
+    ctg = models.CharField(max_length=20, null=False) # 카테고리
 
     class Meta:
         unique_together = ['ctg']
