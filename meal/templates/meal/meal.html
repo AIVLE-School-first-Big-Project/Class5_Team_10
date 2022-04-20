@@ -13,7 +13,7 @@
 }
 
 .img {
-    width: 100%;
+    width: 75%;
     height: 15rem;
 }
 </style>
@@ -31,7 +31,8 @@ function modal_show(meal) {
     } else {
         $('#' + meal + '_modal img').attr('src', "{% static 'image/식판.jpg' %}")
     }
-    $('#meal_fileBtn').val('')
+
+    $('#' + meal + '_fileBtn').val('')
     $('#' + meal + '_modal').modal('show')
 }
 
@@ -44,6 +45,9 @@ function meal_upload(meal) {
     else if (meal == 'lunch') meal_time = '점심'
     else meal_time = '저녁'
 
+    if (!$('#' + meal + '_fileBtn').val())
+         $('#' + meal + '_mod').attr('disabled', 'disabled')
+
     $('#' + meal + '_fileBtn').change(function() {
         if(this.files[0]) {
             let reader = new FileReader()
@@ -54,6 +58,7 @@ function meal_upload(meal) {
                 readerResult = reader.result
             }, false)
         }
+        $('#' + meal + '_upload').removeAttr('disabled')
     })
 
     $('#' + meal + '_upload').click(function() {
@@ -75,14 +80,43 @@ function meal_upload(meal) {
             contentType: false,
             processData: false,
         })
-        
+        $('.' + meal + '_upload').attr('disabled', 'disabled')
         $('#' + meal + '_modal').modal('hide')
+        $('.' + meal + '_del_btn').removeAttr('disabled')
+    })
+}
+
+function del_img(meal) {
+    let now = new Date()
+    let regdate = now.toLocaleDateString()
+    let meal_time
+
+    if (meal == 'morning') meal_time = '아침'
+    else if (meal == 'lunch') meal_time = '점심'
+    else meal_time = '저녁'
+
+    $('#del_modal').modal('show')
+    $('#delete_Btn').click(function() {
+        $.ajax({
+            url: 'del_img',
+            method: 'delete',
+            data: JSON.stringify({
+                regdate: regdate,
+                meal_time: meal_time
+            }),
+            contentType: 'application/json'
+        }).done(function(result) {
+            $('#' + meal).attr('src', "{% static 'image/식판.jpg' %}")
+            $('.' + meal + '_del_btn').attr('disabled', 'disabled')
+            $('.' + meal + '_upload').removeAttr('disabled')
+            $('#del_modal').modal('hide')
+        })
     })
 }
 
 $(document).ready(function() {
     $('.morning_upload').click(function() {
-        modal_show('morning')
+        modal_show('morning')        
         meal_upload('morning')
     })
 
@@ -95,19 +129,29 @@ $(document).ready(function() {
         modal_show('evening')
         meal_upload('evening')
     })
+
+    $('.morning_del_btn').click(function() {
+        del_img('morning')
+    })
+
+    $('.lunch_del_btn').click(function() {
+        del_img('lunch')
+    })
+
+    $('.evening_del_btn').click(function() {
+        del_img('evening')
+    })
 })
 </script>
 <body>
     <div class="container my-3">
         <div class="row">
-            <div class="col"></div>
-            <div class="col-8 w-100">
+            <div class="col w-100">
                 <div class="text-center">날짜(달력)</div>
             </div>
-            <div class="col"></div>
+            <div class="col d-flex justify-content-center">자녀 정보</div>
         </div>
         <div class="row mt-3">
-            <div class="col d-flex justify-content-center">자녀 정보</div>
             <div class="col ml-3">
                 <div class="row d-flex justify-content-center mb-3">
                     {% if morning_meal %}
@@ -117,7 +161,13 @@ $(document).ready(function() {
                     {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
-                    <button class="btn btn-outline-secondary morning_upload">아침식단업로드</button>
+                    {% if morning_meal %}
+                    <button class="btn btn-outline-secondary morning_upload mr-1" disabled>아침 식단 업로드</button>
+                    <button class="btn btn-secondary morning_del_btn">삭제</button>
+                    {% else %}
+                    <button class="btn btn-outline-secondary morning_upload mr-1">아침 식단 업로드</button>
+                    <button class="btn btn-secondary morning_del_btn" disabled>삭제</button>
+                    {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단1</div>
@@ -132,7 +182,13 @@ $(document).ready(function() {
                     {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
-                    <button class="btn btn-outline-secondary lunch_upload">점심식단업로드</button>
+                    {% if lunch_meal %}
+                    <button class="btn btn-outline-secondary lunch_upload mr-1" disabled>점심 식단 업로드</button>
+                    <button class="btn btn-secondary lunch_del_btn">삭제</button>
+                    {% else %}
+                    <button class="btn btn-outline-secondary lunch_upload mr-1">점심 식단 업로드</button>
+                    <button class="btn btn-secondary lunch_del_btn" disabled>삭제</button>
+                    {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단2</div>
@@ -147,7 +203,13 @@ $(document).ready(function() {
                     {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
-                    <button class="btn btn-outline-secondary evening_upload">저녁식단업로드</button>
+                    {% if evening_meal %}
+                    <button class="btn btn-outline-secondary evening_upload mr-1" disabled>저녁 식단 업로드</button>
+                    <button class="btn btn-secondary evening_del_btn">삭제</button>
+                    {% else %}
+                    <button class="btn btn-outline-secondary evening_upload mr-1">저녁 식단 업로드</button>
+                    <button class="btn btn-secondary evening_del_btn" disabled>삭제</button>
+                    {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단3</div>
@@ -213,6 +275,26 @@ $(document).ready(function() {
             <div class="modal-footer justify-content-center">
                 <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
                 <button class="btn btn-secondary" id="evening_upload">&nbsp;&nbsp;&nbsp;업로드&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 삭제 모달 -->
+<div class="modal fade" id="del_modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>식단 이미지 삭제</strong>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p><strong><font color="red">정말 삭제하시겠습니까 ?</font></strong></p>
+            </dov>
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
+                <button class="btn btn-secondary" id="delete_Btn">&nbsp;&nbsp;&nbsp;삭제&nbsp;&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>

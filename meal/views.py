@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import Meal
 from user.models import Kid
+import json, os
 
 # Create your views here.
 def meal(request):
@@ -26,7 +27,6 @@ def meal_upload(request):
     meal_regdate = meal_regdate.replace('. ', '-')
     meal_regdate = meal_regdate.replace('.', '')
     meal_time = request.POST['meal_time']
-    print(meal_img)
     
     # 자녀 어떻게 선택?
     kid = Kid.objects.get(id=2)
@@ -37,3 +37,23 @@ def meal_upload(request):
     # return render(request, 'meal/meal.html')
     return redirect('./')
     # return HttpResponseRedirect('./')
+
+@csrf_exempt
+def del_img(request):
+    req = json.loads(request.body)
+    meal_regdate = req['regdate']
+    meal_regdate = meal_regdate.replace('. ', '-')
+    meal_regdate = meal_regdate.replace('.', '')
+    meal_time = req['meal_time']
+    print(meal_regdate, meal_time)
+
+    # 자녀 어떻게 선택?
+    kid = Kid.objects.get(id=2)
+    m = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=meal_regdate) & Meal.objects.filter(time=meal_time)
+    m.delete()
+    try:
+        os.remove('media/meal_images/kid_{}/{}_{}{}'.format(kid.id, meal_regdate, meal_time, '.png'))
+    except: pass
+
+    # return redirect('./')
+    return render(request, 'meal/meal.html')
