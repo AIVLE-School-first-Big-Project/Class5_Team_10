@@ -1,88 +1,118 @@
 <div class="container my-3">
-    <div class="row my-3">
-        <div class="col-6">
-            <a href="{% url 'board:post_create' %}" class="btn btn-primary">글쓰기</a>
-        </div>
-        <div class="col-6">
-            <div class="input-group">
-                <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="btn_search">검색</button>
+    <div class="col-12">
+        <h4 style="font-weight: bold;">공지사항</h4>
+        {% if kw %}
+            <h5 style="color: gray; font-weight: 550;"><i class="fas fa-search"></i>&nbsp;'{{ kw }}' 검색 결과입니다.</h5>
+        {% endif %}
+    </div>
+    <div style="margin-top: 30px;">
+        <form action="" method="GET">
+            <div class="col">
+                <div style="float: right;" class="form-row">
+                    <div class="form-row">
+                        <div class="col" style="margin-top: 10px;">
+                            <select style="width: 6em;" class="custom-select custom-select-md" name="type">
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="category">카테고리</option>
+                            </select>
+                        </div>
+                        <div class="col" style="margin-top: 10px;">
+                            <input type="text" id="search_kw" name="kw" value="{{ kw|default_if_none:'' }}" class="form-control form-control-md"
+                                style="width: 15em;" placeholder="검색어를 입력해주세요.">
+                        </div>
+                        <div class="col">
+                            <!-- <button class="btn btn-md btn-outline-dark" type="submit">검색</button> -->
+                            <button class="btn btn-sm" type="submit" id="search_btn">검색</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
+        <table class="table">
+            <thead>
+            <tr class="table-dark">
+                <th style="font-weight: bold; font-size: 16px;">번호</th>
+                <th style="font-weight: bold; font-size: 16px;">카테고리</th>
+                <th style="font-weight: bold; font-size: 16px;">제목</th>
+                <th style="font-weight: bold; font-size: 16px;">작성자</th>
+                <th style="font-weight: bold; font-size: 16px;">날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% if post_list %}
+                {% for post in post_list %}
+                <tr class="text-center" style="cursor:pointer;" onclick="location.href='/board/{{ post.id }}/'">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ post.board.ctg }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.user.id }}</td>
+                    <td>{{ post.regdate }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="3">공지가 없습니다.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
     </div>
-    <table class="table">
-        <thead>
-        <tr class="table-dark">
-            <th>번호</th>
-            <th>카테고리</th>
-            <th>제목</th>
-            <th>날짜</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if posts %}
-        {% for post in posts %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{post.board_id.board_name}}</td>
-            <td>
-                <a href="{% url 'board:post' post.post_id %}">{{ post.post_title }}</a>
-            </td>
-            <td>{{ post.post_regdate }}</td>
-        </tr>
-        {% endfor %}
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if post_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?type={{ type }}&kw={{ kw }}&page={{ post_list.previous_page_number }}"
+                tabindex="-1" style="font-size: 15px;">이전</a>
+        </li>
         {% else %}
-        <tr>
-            <td colspan="3">공지가 없습니다.</td>
-        </tr>
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
         {% endif %}
-        </tbody>
-    </table>
-        <!-- 페이징처리 시작 -->
-        <ul class="pagination justify-content-center">
-            <!-- 이전페이지 -->
-            {% if post_list.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ post_list.previous_page_number }}" 
-                    href="javascript:void(0)">이전</a>
-                
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
-            </li>
-            {% endif %}
-            <!-- 페이지리스트 -->
-            {% for page_number in post_list.paginator.page_range %}
-            {% if page_number == post_list.number %}
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" data-page="{{ page_number }}"
-                href="javascript:void(0)">{{ page_number }}</a>
-            </li>
-            {% else %}
-            <li class="page-item">
-                <a class="page-link" data-page="{{ page_number }}"
-                href="javascript:void(0)">{{ page_number }}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-            <!-- 다음페이지 -->
-            {% if post_list.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ post_list.next_page_number }}"
-                href="javascript:void(0)">다음</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
-            </li>
-            {% endif %}
-        </ul>
-        <!-- 페이징처리 끝 -->
+        <!-- 페이지리스트 -->
+        {% for page_number in post_list.paginator.page_range %}
+        {% if page_number >= post_list.number|add:-5 and page_number <= post_list.number|add:5 %}
+        {% if page_number == post_list.number %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="?type={{ type }}&kw={{ kw }}&page={{ page_number }}" style="font-size: 15px;">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?type={{ type }}&kw={{ kw }}&page={{ page_number }}" style="font-size: 15px;">{{ page_number }}</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if post_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?type={{ type }}&kw={{ kw }}&page={{ post_list.next_page_number }}"
+                tabindex="-1" style="font-size: 15px;">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
 </div>
-<form id="searchForm" method="get" action="{% url 'board:post_list' %}">
-    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
-    <input type="hidden" id="page" name="page" value="{{ page }}">
-</form>
+
+<!-- 관리자만 글쓰기 버튼 활성화-->
+{% if request.user.is_staff %}
+<div class="col-6">
+    <a href="{% url 'board:post_create' %}" class="btn btn-primary">글쓰기</a>
+</div>
+{% endif %}
+
+<script type="text/javascript">
+    target = window.location.search.split('&')[0].split('=')[1]
+    var type = document.getElementsByTagName('option')
+    for (var i = 0; i < 5; i++) {
+        if (type[i].value === target) {
+            type[i].setAttribute('selected', 'selected')
+        }
+    }
+</script>

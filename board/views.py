@@ -5,14 +5,24 @@ from .forms import *
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-
 # Create your views here.
 def post_list(request): # 게시물 목록 조회 함수
     page = request.GET.get('page', '1')  # 페이지
-    posts = Post.objects.order_by('-regdate')
-    paginator = Paginator(posts, 10)  # 페이지당 10개씩 보여주기
+    kw = request.GET.get('kw', '')  # 검색어
+    type = request.GET.get('type', '') # 카테고리
+    post_list = Post.objects.order_by('-regdate')
+
+    if kw:
+        if type == 'title':
+            post_list = post_list.filter(Q(title__icontains=kw))# 제목 검색
+        if type == 'content':
+            post_list = post_list.filter(Q(content__icontains=kw))  # 내용 검색
+        if type == 'category':
+            post_list = post_list.filter(Q(board__ctg__icontains=kw))
+    
+    paginator = Paginator(post_list, 10)  # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
-    context = {'posts':page_obj}
+    context = {'post_list':page_obj, 'page': page, 'kw': kw, 'type':type}
     return render(request, 'board/post_list.html', context)
 
 
