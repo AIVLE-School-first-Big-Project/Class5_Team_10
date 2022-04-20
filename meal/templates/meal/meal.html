@@ -18,114 +18,54 @@
 }
 </style>
 <script>
-$(document).ready(function() {
-    // 아침
-    $('.morning_upload').click(function() {
-        $('#morning_modal').modal('show');
-    })
+function modal_show(meal) {
+    let now = new Date()
+    let meal_time
 
-    $('#morning_fileBtn').change(function() {
+    if (meal == 'morning') meal_time = '아침'
+    else if (meal == 'lunch') meal_time = '점심'
+    else meal_time = '저녁'
+    
+    if ($('#' + meal).attr('src') != "{% static 'image/식판.jpg' %}") {
+        $('#' + meal + '_modal img').attr('src', $('#' + meal).attr('src'))
+    } else {
+        $('#' + meal + '_modal img').attr('src', "{% static 'image/식판.jpg' %}")
+    }
+    $('#meal_fileBtn').val('')
+    $('#' + meal + '_modal').modal('show')
+}
+
+function meal_upload(meal) {
+    let now = new Date()
+    let regdate = now.toLocaleDateString()
+    let meal_time
+
+    if (meal == 'morning') meal_time = '아침'
+    else if (meal == 'lunch') meal_time = '점심'
+    else meal_time = '저녁'
+
+    $('#' + meal + '_fileBtn').change(function() {
         if(this.files[0]) {
             let reader = new FileReader()
             reader.readAsDataURL(this.files[0])
     
             reader.addEventListener('load', function() {
-                $('#morning_previewImg').attr('src', reader.result)
+                $('#' + meal + '_previewImg').attr('src', reader.result)
                 readerResult = reader.result
             }, false)
         }
     })
 
-    $('#morning_upload').click(function() {
-        morning_img = $('#morning_previewImg').attr('src')
-        $('#morning').attr('src', morning_img)
+    $('#' + meal + '_upload').click(function() {
+        meal_img = $('#' + meal + '_previewImg').attr('src')
+        $('#' + meal).attr('src', meal_img)
 
-        let form = $('#morning_form')[0]
+        let form = $('#' + meal + '_form')[0]
         let formData = new FormData(form)
 
-        formData.append('meal_img', $('#morning_fileBtn')[0].files[0])  // 식단 이미지 사진
-        formData.append('meal_regdate', new Date().toLocaleDateString())
-        formData.append('meal_time', '아침')
-
-        $.ajax({
-            url: 'upload',
-            method: 'post',
-            enctype: 'multipart/form-data',
-            data: formData,
-            contentType: false,
-            processData: false,
-        })
-
-        $('#morning_modal').modal('hide')
-    })
-    
-    // 점심
-    $('.lunch_upload').click(function() {
-        $('#lunch_modal').modal('show');
-    })
-
-    $('#lunch_fileBtn').change(function() {
-        if(this.files[0]) {
-            let reader = new FileReader()
-            reader.readAsDataURL(this.files[0])
-    
-            reader.addEventListener('load', function() {
-                $('#lunch_previewImg').attr('src', reader.result)
-                readerResult = reader.result
-            }, false)
-        }
-    })
-
-    $('#lunch_upload').click(function() {
-        lunch_img = $('#lunch_previewImg').attr('src')
-        $('#lunch').attr('src', lunch_img)
-
-        let form = $('#lunch_form')[0]
-        let formData = new FormData(form)
-
-        formData.append('meal_img', $('#lunch_fileBtn')[0].files[0])  // 식단 이미지 사진
-        formData.append('meal_regdate', new Date().toLocaleDateString())
-        formData.append('meal_time', '점심')
-
-        $.ajax({
-            url: 'upload',
-            method: 'post',
-            enctype: 'multipart/form-data',
-            data: formData,
-            contentType: false,
-            processData: false,
-        })
-
-        $('#lunch_modal').modal('hide')
-    })
-
-    // 저녁
-    $('.evening_upload').click(function() {
-        $('#evening_modal').modal('show');
-    })
-
-    $('#evening_fileBtn').change(function() {
-        if(this.files[0]) {
-            let reader = new FileReader()
-            reader.readAsDataURL(this.files[0])
-    
-            reader.addEventListener('load', function() {
-                $('#evening_previewImg').attr('src', reader.result)
-                readerResult = reader.result
-            }, false)
-        }
-    })
-
-    $('#evening_upload').click(function() {
-        evening_img = $('#evening_previewImg').attr('src')
-        $('#evening').attr('src', evening_img)
-
-        let form = $('#evening_form')[0]
-        let formData = new FormData(form)
-
-        formData.append('meal_img', $('#evening_fileBtn')[0].files[0])  // 식단 이미지 사진
-        formData.append('meal_regdate', new Date().toLocaleDateString())
-        formData.append('meal_time', '저녁')
+        formData.append('meal_img', $('#' + meal + '_fileBtn')[0].files[0])  // 식단 이미지 사진
+        formData.append('meal_regdate', regdate)
+        formData.append('meal_time', meal_time)
 
         $.ajax({
             url: 'upload',
@@ -136,7 +76,24 @@ $(document).ready(function() {
             processData: false,
         })
         
-        $('#evening_modal').modal('hide')
+        $('#' + meal + '_modal').modal('hide')
+    })
+}
+
+$(document).ready(function() {
+    $('.morning_upload').click(function() {
+        modal_show('morning')
+        meal_upload('morning')
+    })
+
+    $('.lunch_upload').click(function() {
+        modal_show('lunch')
+        meal_upload('lunch')
+    })
+
+    $('.evening_upload').click(function() {
+        modal_show('evening')
+        meal_upload('evening')
     })
 })
 </script>
@@ -153,18 +110,14 @@ $(document).ready(function() {
             <div class="col d-flex justify-content-center">자녀 정보</div>
             <div class="col ml-3">
                 <div class="row d-flex justify-content-center mb-3">
-                    {% if meals.0.time == '아침' %}
-                    <img class="img" id="morning" src="{{ meals.0.img.url }}"/>
+                    {% if morning_meal %}
+                    <img class="img" id="morning" src="{{ morning_meal.0.img.url }}"/>
                     {% else %}
                     <img class="img" id="morning" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
                     {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
-                    {% if meals.0.time == '아침' %}
-                    <button class="btn btn-outline-secondary morning_upload" disabled>식단이미지업로드1</button>
-                    {% else %}
-                    <button class="btn btn-outline-secondary morning_upload">식단이미지업로드1</button>
-                    {% endif %}
+                    <button class="btn btn-outline-secondary morning_upload">아침식단업로드</button>
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단1</div>
@@ -172,18 +125,14 @@ $(document).ready(function() {
             </div>
             <div class="col ml-3">
                 <div class="row d-flex justify-content-center mb-3">
-                    {% if meals.1.time == '점심' %}
-                    <img class="img" id="lunch" src="{{ meals.1.img.url }}"/>
+                    {% if lunch_meal %}
+                    <img class="img" id="lunch" src="{{ lunch_meal.0.img.url }}"/>
                     {% else %}
                     <img class="img" id="lunch" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
                     {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
-                    {% if meals.1.time == '점심' %}
-                    <button class="btn btn-outline-secondary lunch_upload" disabled>식단이미지업로드2</button>
-                    {% else %}
-                    <button class="btn btn-outline-secondary lunch_upload">식단이미지업로드2</button>
-                    {% endif %}
+                    <button class="btn btn-outline-secondary lunch_upload">점심식단업로드</button>
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단2</div>
@@ -191,18 +140,14 @@ $(document).ready(function() {
             </div>
             <div class="col ml-3">
                 <div class="row d-flex justify-content-center mb-3">
-                    {% if meals.2.time == '저녁' %}
-                    <img class="img" id="evening" src="{{ meals.2.img.url }}"/>
+                    {% if evening_meal %}
+                    <img class="img" id="evening" src="{{ evening_meal.0.img.url }}"/>
                     {% else %}
                     <img class="img" id="evening" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
                     {% endif %}
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
-                    {% if meals.2.time == '저녁' %}
-                    <button class="btn btn-outline-secondary evening_upload" disabled>식단이미지업로드3</button>
-                    {% else %}
-                    <button class="btn btn-outline-secondary evening_upload">식단이미지업로드3</button>
-                    {% endif %}
+                    <button class="btn btn-outline-secondary evening_upload">저녁식단업로드</button>
                 </div>
                 <div class="row d-flex justify-content-center mb-3">
                     <div class="col">식단3</div>
@@ -211,6 +156,7 @@ $(document).ready(function() {
         </div>
     </div>
 </body>
+<!-- 모달 -->
 <div class="modal fade" id="morning_modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">

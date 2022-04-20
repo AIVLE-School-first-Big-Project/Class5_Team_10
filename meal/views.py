@@ -9,9 +9,12 @@ def meal(request):
     # 있다면 조건문 처리 필요
     # 자녀, 날짜 어떻게 선택?
     kid = Kid.objects.get(id=2)
-    meals = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate='2022-04-19')
-    if meals:
-        return render(request, 'meal/meal.html', {'meals': meals})
+    morning_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate='2022-04-20') & Meal.objects.filter(time='아침')
+    lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate='2022-04-20') & Meal.objects.filter(time='점심')
+    evening_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate='2022-04-20') & Meal.objects.filter(time='저녁')
+    if morning_meal or lunch_meal or evening_meal:
+        return render(request, 'meal/meal.html', {'morning_meal': morning_meal, 'lunch_meal': lunch_meal, 'evening_meal': evening_meal})
+        # return redirect('./', {'meals': meals})
     else:
         return render(request, 'meal/meal.html')
 
@@ -31,4 +34,6 @@ def meal_upload(request):
     m = Meal(img=meal_img, regdate=meal_regdate, time=meal_time, kid=kid)
     m.save()
 
+    # return render(request, 'meal/meal.html')
     return redirect('./')
+    # return HttpResponseRedirect('./')
