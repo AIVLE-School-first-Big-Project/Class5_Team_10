@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
+from .models import Post, Board, Comment
 from django.utils import timezone
-from .forms import *
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from .forms import PostForm, CommentForm
+from user.models import User
+
 
 # Create your views here.
 def post_list(request): # 게시물 목록 조회 함수
@@ -31,17 +34,24 @@ def post(request, post_id): # 게시물 상세 조회 함수
     context = {'post':post}
     return render(request, 'board/post.html', context)
 
-
+@csrf_exempt
 def post_create(request):   # 게시물 작성 함수
     if request.method == 'POST':
-        form = PostForm(request.Post)
-        if form.is_valid(): # 유효성 검사를 통과하면
-            post = form.save(commit=False)
-            post.save()
-            return redirect('/board/')
-    else:
-        form = PostForm()
-    return render(request, 'board/post_create.html', {'form':form})
+        post = Post()
+        board =  Board.objects.get(ctg=request.POST['type'])
+        post.title = request.POST['title']
+        post.content = request.POST['content']
+        post.board = board
+        post.regdate = timezone.now()
+        img = request.FILES.get('img')
+        if img:
+            post.img = img
+        post.user = request.user
+        post.save()
+        return redirect('board:post_list')
+    return render(request, 'board/post_create.html')
 
-# def comment_create(request, post_id): # 게시물 댓글 작성 함수
-
+def post_delete(request, post_id):
+    post = Post.objects.get(id=post_id)
+    post.delete()
+    return redirect('board:post_list')
