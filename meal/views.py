@@ -29,16 +29,19 @@ def meal(request):
 
     # 있다면 조건문 처리 필요
     # 자녀, 날짜 어떻게 선택?
-    kid = Kid.objects.get(id=2)
-    regdata = '2022-04-21'
-    morning_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='아침')
-    lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='점심')
-    evening_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='저녁')
-    if morning_meal or lunch_meal or evening_meal:
-        return render(request, 'meal/meal.html', {'morning_meal': morning_meal, 'lunch_meal': lunch_meal, 'evening_meal': evening_meal})
-        # return redirect('./', {'meals': meals})
-    else:
-        return render(request, 'meal/meal.html')
+    try:
+        kid = Kid.objects.get(id=2)
+        regdata = '2022-04-22'
+        morning_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='아침')
+        lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='점심')
+        evening_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='저녁')
+        if morning_meal or lunch_meal or evening_meal:
+            return render(request, 'meal/meal.html', {'morning_meal': morning_meal, 'lunch_meal': lunch_meal, 'evening_meal': evening_meal})
+            # return redirect('./', {'meals': meals})
+        else:
+            return render(request, 'meal/meal.html')
+    except: pass
+    return render(request, 'meal/meal.html')
 
 @csrf_exempt
 def meal_upload(request):
