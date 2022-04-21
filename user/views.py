@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from user.forms import UserForm
+from user.forms import UserForm, KidRegisterForm
 from user.models import User
 
 # 회원가입
@@ -55,3 +55,37 @@ def id_check(request):
         result = 'possible'
 
     return JsonResponse({ 'result': result })
+
+
+# 아이등록
+def kid_register(request):
+    if request.method == "POST":
+        form = KidRegisterForm(request.POST, request.FILES)
+        print(request)
+
+        if form.is_valid():
+            kid_regit = form.save(commit=False)
+            kid_regit.user = request.user
+            kid_regit.save()
+            return redirect('/')
+    else:
+        form = KidRegisterForm()
+    content = {
+        'form': form,
+    }
+    return render(request, 'user/register.html', content)
+
+
+# 아이선택
+def kid_select(request):
+    if request.method == 'GET':
+        # 로그인한 사용자의 user에 연결된 kid정보를 불러온다.
+        # 불러올 정보 
+        # 모든 키드의 정보
+        # if kid의 정보 1
+        # 한칸짜리 얼굴보여주기
+        # if kid의 정보 2개
+        # if kid의 정보 3개
+        # if kid의 정보 4개
+
+        user = User.objects
