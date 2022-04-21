@@ -1,4 +1,3 @@
-from sre_parse import CATEGORIES
 from django.db import models
 # from django.contrib.auth.models import User
 from user.models import User
@@ -14,6 +13,7 @@ class Board(models.Model):
     def __str__(self):
         return self.ctg
 
+
 class Post(models.Model):
     id = models.AutoField(primary_key=True, null=False)
     title = models.CharField(max_length=20, null=False)
@@ -26,6 +26,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True, null=False)
