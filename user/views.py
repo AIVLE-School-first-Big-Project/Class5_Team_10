@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from user.forms import UserForm, KidRegisterForm
-from user.models import User
+from user.models import User, Kid
 
 # 회원가입
 def signup(request):
@@ -77,8 +77,14 @@ def kid_register(request):
 
 
 # 아이선택
-def kid_select(request):
-    if request.method == 'GET':
+# def kid_select(request):
+#     if request.user.is_authenticated():
+#         user_id = request.session['_auth_user_id']
+#         kid_set = Kid.objects.filter(user_id = user_id)
+
+#         for kid in kid_set:
+
+            
         # 로그인한 사용자의 user에 연결된 kid정보를 불러온다.
         # 불러올 정보 
         # 모든 키드의 정보
@@ -87,5 +93,3 @@ def kid_select(request):
         # if kid의 정보 2개
         # if kid의 정보 3개
         # if kid의 정보 4개
-
-        user = User.objects
