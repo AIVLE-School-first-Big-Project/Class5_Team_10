@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<div class='container'>
+    <div class='row my-5'>
+        <div class='col'>
+            <form action='./' method='POST'>
+                {% csrf_token %}
+                <div class='row mx-5'>
+                    <div class='col mt-4'>
+                        <div class='row  mb-2' id='user_id_check_div'>
+                            <h6 class='font-wieght-bold'>아이디</h6>
+                            <div class='input-group'>
+                                <input type='text' class='form-control' name='id' id='user_id'
+                                    value="{{ form.id.value | default_if_none:'' }}" placeholder=' 아이디를 입력하세요.' required>
+                                <button color=#feb737 type='button' class='btn btn-outline-secondary' onclick=id_check()>중복확인</button>
+                            </div>
+                            <small class='mt-1 text-danger' id='id_check_msg'> {{id_error_msg}} </small>
+                        </div>
+                        <div class='row mb-2'>
+                            <h6 class='font-wieght-bold'>비밀번호</h6>
+                            <input type='password' class='form-control' name='password1' id='password'
+                                value="{{ form.password1.value | default_if_none:'' }}" placeholder=' 비밀번호를 입력하세요.' required>
+                        </div>
+                        <div class='row mb-2'>
+                            <h6 class='font-wieght-bold'>비밀번호 확인</h6>
+                            <input type='password' class='form-control' name='password2' id='password_check'
+                                placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
+                            <small class='mt-1 text-danger'> {{password_error_msg}} </small>
+                        </div>
+                        <div class='row mb-4'>
+                            <h6 class='font-wieght-bold'>이름</h6>
+                            <input type='text' class='form-control' name='name' id='user_name'
+                                value="{{ form.name.value | default_if_none:'' }}" placeholder=' 이름을 입력하세요.' required>
+                            <h6 class='font-wieght-bold' id='user_name_check'></h6>
+                        </div>
+                        <div class='row mb-4'>
+                            <h6 class='font-wieght-bold'>이메일</h6>
+                            <input type='text' class='form-control' name='email' id='email' placeholder=' 이메일을 입력하세요.'>
+                            <small class='mt-1 text-danger' id='email_check_msg'> {{email_error_msg}} </small>
+                        </div>
+                    </div>
+                </div>		
+                <div class='row mx-3 justify-content-around'>
+                    <a class='btn btn-outline-secondary col mr-1' data-toggle='modal' data-target='#modal'>이전</a>
+                    <button class='btn btn-outline-secondary col' id='add_user_button'>회원가입</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class='modal fade' id='modal' tabindex='-1'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <strong>돌아가기</strong>
+                <button type='button' class='close' data-dismiss='modal'>
+                    <span>x</span>
+                </button>
+            </div>
+            <div class='modal-body text-center'>
+                <p>이전 단계로 돌아가시겠습니까?</p>
+                <small>
+                    현재 진행단계의 변경사항이 저장되지 않습니다.
+                </small>
+            </div>
+            <div class='modal-footer justify-content-center'>
+                <button class='btn btn-outline-secondary' data-dismiss='modal'>아니오</button>
+                <a href='../login' class='btn btn-secondary'>&nbsp;&nbsp;&nbsp;예&nbsp;&nbsp;&nbsp;</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+function id_check() {
+    let user_id = document.getElementById('user_id').value
+    let msg_div = document.getElementById('user_id_check_div')
+    let msg = document.getElementById('id_check_msg')
+
+    const ajax = axios({
+        url: './id_check',
+        method: 'get',
+        params: {'user_id': user_id},
+        
+    })
+    ajax.then(function (result) {
+        check_result = result['data']['result']
+        console.log(check_result)
+        if (check_result == 'fail') {
+            msg.removeAttribute('class')
+            msg.setAttribute('class', 'text-danger')
+            msg.innerHTML = '이미 존재하는 아이디입니다.'
+            msg_div.append(msg)
+        } else {
+            msg.removeAttribute('class')
+            msg.setAttribute('class', 'text-primary')
+            msg.innerHTML = '사용가능한 아이디입니다.'
+            msg_div.append(msg)
+        }
+    })
+}
+</script>
+{% endblock content %}

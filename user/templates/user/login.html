@@ -1,0 +1,17 @@
+<div >
+    <form method="post" action="{% url 'user:login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
+        <div>
+            <label for="id">사용자ID</label>
+            <input type="text" name="id" id="id"
+                   value="{{ form.id.value|default_if_none:'' }}">
+        </div>
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="password" name="password" id="password"
+                   value="{{ form.password.value|default_if_none:'' }}">
+        </div>
+        <button type="submit">로그인</button>
+    </form>
+</div>
