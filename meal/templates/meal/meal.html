@@ -16,6 +16,17 @@
     width: 75%;
     height: 15rem;
 }
+
+.nav_bar {
+    border: 1px solid;
+    border-color: #FC6600;
+    border-radius: 5%;
+}
+
+.nav_btn {
+    border: 0;
+    background-color: rgb(255, 255, 255);
+}
 </style>
 <script>
 function modal_show(meal) {
@@ -149,70 +160,80 @@ $(document).ready(function() {
             <div class="col w-100">
                 <div class="text-center">날짜(달력)</div>
             </div>
-            <div class="col d-flex justify-content-center">자녀 정보</div>
         </div>
         <div class="row mt-3">
-            <div class="col ml-3">
-                <div class="row d-flex justify-content-center mb-3">
-                    {% if morning_meal %}
-                    <img class="img" id="morning" src="{{ morning_meal.0.img.url }}"/>
-                    {% else %}
-                    <img class="img" id="morning" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
-                    {% endif %}
+            <div class="col-3 d-flex justify-content-center mt-3 mb-3 mr-3">자녀 정보</div>
+            <div class="col">
+                <!-- nav bar -->
+                <div class="row w-100 mt-3 mb-3 nav_bar">
+                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='#'">아침</button>
+                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='#'">점심</button>
+                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='#'">저녁</button>
                 </div>
-                <div class="row d-flex justify-content-center mb-3">
-                    {% if morning_meal %}
-                    <button class="btn btn-outline-secondary morning_upload mr-1" disabled>아침 식단 업로드</button>
-                    <button class="btn btn-secondary morning_del_btn">삭제</button>
-                    {% else %}
-                    <button class="btn btn-outline-secondary morning_upload mr-1">아침 식단 업로드</button>
-                    <button class="btn btn-secondary morning_del_btn" disabled>삭제</button>
-                    {% endif %}
-                </div>
-                <div class="row d-flex justify-content-center mb-3">
-                    <div class="col">식단1</div>
-                </div>
-            </div>
-            <div class="col ml-3">
-                <div class="row d-flex justify-content-center mb-3">
-                    {% if lunch_meal %}
-                    <img class="img" id="lunch" src="{{ lunch_meal.0.img.url }}"/>
-                    {% else %}
-                    <img class="img" id="lunch" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
-                    {% endif %}
-                </div>
-                <div class="row d-flex justify-content-center mb-3">
-                    {% if lunch_meal %}
-                    <button class="btn btn-outline-secondary lunch_upload mr-1" disabled>점심 식단 업로드</button>
-                    <button class="btn btn-secondary lunch_del_btn">삭제</button>
-                    {% else %}
-                    <button class="btn btn-outline-secondary lunch_upload mr-1">점심 식단 업로드</button>
-                    <button class="btn btn-secondary lunch_del_btn" disabled>삭제</button>
-                    {% endif %}
-                </div>
-                <div class="row d-flex justify-content-center mb-3">
-                    <div class="col">식단2</div>
-                </div>
-            </div>
-            <div class="col ml-3">
-                <div class="row d-flex justify-content-center mb-3">
-                    {% if evening_meal %}
-                    <img class="img" id="evening" src="{{ evening_meal.0.img.url }}"/>
-                    {% else %}
-                    <img class="img" id="evening" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
-                    {% endif %}
-                </div>
-                <div class="row d-flex justify-content-center mb-3">
-                    {% if evening_meal %}
-                    <button class="btn btn-outline-secondary evening_upload mr-1" disabled>저녁 식단 업로드</button>
-                    <button class="btn btn-secondary evening_del_btn">삭제</button>
-                    {% else %}
-                    <button class="btn btn-outline-secondary evening_upload mr-1">저녁 식단 업로드</button>
-                    <button class="btn btn-secondary evening_del_btn" disabled>삭제</button>
-                    {% endif %}
-                </div>
-                <div class="row d-flex justify-content-center mb-3">
-                    <div class="col">식단3</div>
+                <div class="row">
+                    <div class="col ml-3">
+                        <div class="row d-flex justify-content-center mb-3">
+                            {% if morning_meal %}
+                            <img class="img" id="morning" src="{{ morning_meal.0.img.url }}"/>
+                            {% else %}
+                            <img class="img" id="morning" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                            {% endif %}
+                        </div>
+                        <div class="row d-flex justify-content-center mb-3">
+                            {% if morning_meal %}
+                            <button class="btn btn-outline-secondary morning_upload mr-1" disabled>아침 식단 업로드</button>
+                            <button class="btn btn-secondary morning_del_btn">삭제</button>
+                            {% else %}
+                            <button class="btn btn-outline-secondary morning_upload mr-1">아침 식단 업로드</button>
+                            <button class="btn btn-secondary morning_del_btn" disabled>삭제</button>
+                            {% endif %}
+                        </div>
+                        <div class="row d-flex justify-content-center mb-3">
+                            <div class="col">식단1</div>
+                        </div>
+                    </div>
+                    <div class="col ml-3">
+                        <div class="row d-flex justify-content-center mb-3">
+                            {% if lunch_meal %}
+                            <img class="img" id="lunch" src="{{ lunch_meal.0.img.url }}"/>
+                            {% else %}
+                            <img class="img" id="lunch" src="{% static '/image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                            {% endif %}
+                        </div>
+                        <div class="row d-flex justify-content-center mb-3">
+                            {% if lunch_meal %}
+                            <button class="btn btn-outline-secondary lunch_upload mr-1" disabled>점심 식단 업로드</button>
+                            <button class="btn btn-secondary lunch_del_btn">삭제</button>
+                            {% else %}
+                            <button class="btn btn-outline-secondary lunch_upload mr-1">점심 식단 업로드</button>
+                            <button class="btn btn-secondary lunch_del_btn" disabled>삭제</button>
+                            {% endif %}
+                        </div>
+                        <div class="row d-flex justify-content-center mb-3">
+                            <div class="col">식단2</div>
+                        </div>
+                    </div>
+                    <div class="col ml-3">
+                        <div class="row d-flex justify-content-center mb-3">
+                            {% if evening_meal %}
+                            <img class="img" id="evening" src="{{ evening_meal.0.img.url }}"/>
+                            {% else %}
+                            <img class="img" id="evening" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                            {% endif %}
+                        </div>
+                        <div class="row d-flex justify-content-center mb-3">
+                            {% if evening_meal %}
+                            <button class="btn btn-outline-secondary evening_upload mr-1" disabled>저녁 식단 업로드</button>
+                            <button class="btn btn-secondary evening_del_btn">삭제</button>
+                            {% else %}
+                            <button class="btn btn-outline-secondary evening_upload mr-1">저녁 식단 업로드</button>
+                            <button class="btn btn-secondary evening_del_btn" disabled>삭제</button>
+                            {% endif %}
+                        </div>
+                        <div class="row d-flex justify-content-center mb-3">
+                            <div class="col">식단3</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
