@@ -51,6 +51,10 @@ def post_create(request):   # 게시물 작성 함수
         return redirect('board:post_list')
     return render(request, 'board/post_create.html')
 
+def post_modify(request, post_id):
+    post = Post.objects.get(id=post_id)
+    return redirect('board:post', post_id)
+
 def post_delete(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
