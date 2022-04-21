@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class='container'>
+    <div class='row my-5'>
+        <div class='col'>
+            <form action='.' method='POST' enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div class='row mx-5'>
+                    <div class='col mt-4'>
+                        <div class='row mb-2' id=kid_name_div>
+                            <label class='font-weight-bold' for='kid_name'>아이 이름</label>
+                            <div class='input-group'>
+                                <input type='text' class='form-control' name='name' id='kid_name'
+                                    value="{{ form.name.value | default_if_none:'' }}" placeholder='아이 이름을 입력하세요.' required>
+                            </div>
+                        </div>
+                        <div class='row mb-2'>
+                            <label class='font-weight-bold' for='kid_birth_date'>아이 생년월일</label>
+                            <input type='text' class='form-control' name='birthday' id='kid_birth_date'
+                                value="{{ form.birthday.value | default_if_none:'' }}" placeholder='0000-00-00' required>
+                        </div>
+                        <div class='row mb-2'>
+                            <label class='font-weight-bold' for='kid_height'>아이 신장</label>
+                            <input type='text' class='form-control' name='height' id='kid_height'
+                                value="{{ form.height.value | default_if_none:'' }}" placeholder='(cm)' required>
+                        </div>
+                        <div class='row mb-2'>
+                            <label class='font-weight-bold' for='kid_weight'>아이 체중</label>
+                            <input type='text' class='form-control' name='weight' id='kid_weight'
+                                value="{{ form.weight.value | default_if_none:'' }}" placeholder='(kg)' required>
+                        </div>
+                        <div class='row mb-2'>
+                            <label class='font-weight-bold' for='kid_img'>아이 사진</label>
+                            <input type="file" class='form-control' name="img" id="kid_img" 
+                                accept="image/*">
+                        </div>
+                        <input type='submit' value='아이등록'>  
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
