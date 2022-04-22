@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
 <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/> <!-- 기호 사용 -->
 <!-- lib -->
 <style>
 #morning_previewImg, #lunch_previewImg, #evening_previewImg {
@@ -13,8 +14,18 @@
 }
 
 .img {
+    width: 100%;
+    height: 15rem;
+}
+
+#morning_meal {
     width: 75%;
     height: 15rem;
+    border: 1px solid;
+}
+
+.search_result {
+    height: 20rem;
 }
 
 .nav_bar {
@@ -125,6 +136,43 @@ function del_img(meal) {
     })
 }
 
+// input 태그 row 추가, ajax통신으로 모델 결과 받아와서 적용 -> 이미지 업로드 여부로 나뉘어야하는 거 잊으면 안 됨!
+cnt = 0
+function food_plus(food_name) {
+    cnt += 1
+    $('#add_food').before(
+        '<div class="row ml-2 mr-2 mb-3" id="food_form' + cnt + '">' +
+            '<input class="col w-100 mr-1" disabled ' + 'value=' + food_name + ' name=' + food_name + '/>' +
+            '<select name="volume">' +
+                '<option value="1인분">1인분</option>' +
+                '<option value="0.5인분">0.5인분</option>' +
+                '<option value="1.5인분">1.5인분</option>' +
+            '</select>' +
+            '<button class="btn btn-secondary ml-1" id="del_food_btn' + cnt + '">삭제</button>' +
+        '</div>'
+    )
+    
+    // 해당 food row 삭제 버튼 클릭 시 해당 row 삭제
+    $('#del_food_btn' + cnt).click(function() {
+        $(this).parent().remove()
+    })
+
+    // // ajax 통신으로 AI 모델한테 아웃풋 가져올 때 음식 개수까지 갖고 온 후 loop
+    // for (cnt = 0; cnt < 5; cnt++) {
+    //     $('#morning_meal').append(
+    //         '<div class="row ml-1 mr-1 mt-3">' +
+    //             '<input class="col w-100 mr-1"/>' +
+    //             '<select name="volume">' +
+    //                 '<option value="1인분">1인분</option>' +
+    //                 '<option value="0.5인분">0.5인분</option>' +
+    //                 '<option value="1.5인분">1.5인분</option>' +
+    //             '</select>' +
+    //             '<button class="btn btn-secondary ml-1">수정</button>' +
+    //         '</div>'
+    //     )
+    // }
+}
+
 $(document).ready(function() {
     $('.morning_upload').click(function() {
         modal_show('morning')        
@@ -151,6 +199,42 @@ $(document).ready(function() {
 
     $('.evening_del_btn').click(function() {
         del_img('evening')
+    })
+
+    // 검색 모달 띄우고 결과값 들어가게
+    $('#add_food').click(function() {
+        $('.food_table').empty()
+        $.ajax({
+            url: 'food_list',
+            method: 'post',
+        }).done(function(foods) {
+            if (foods) {
+                foods = foods.split(' ')
+                $.each(foods, function(idx, food) {
+                    if (food) {
+                        // $('.food_table').append(`<div class="row" id="${food}"><div class="col"><input type="radio" name="food" value="${food}"/>${food}</div></div>`)
+                        // $('.food_table').append(`<tr id="${food}"><td><input type="radio" name="food" value="${food}"/> ${food}</td>\
+                        //     <td><button class="btn btn-outline-secondary add_${food}">추가</button></td></tr>`)
+                        $('.food_table').append(`<div class="mb-3 ml-5"><tr id="${food}"><td><input type="radio" name="food" value="${food}"/> ${food}</td></tr></div>`)
+                    }
+                })
+            }
+        })
+        $('.food_input').val('')
+        $('#food_search').modal('show')
+        // $('#morning_modal').modal('show')
+        // food_plus('김치찌개')
+    })
+
+    // $('.food_input').keydown(function() {
+    //     $('.search_food').removeAttr('disabled')
+    // })
+
+    $('.search_food').click(function() {
+        if (!($('.food_input').val())) {
+            $('.food_table').empty()
+            $('.food_table').append('<font class="d-flex justify-content-center" color="red">한 글자 이상 검색해주세요.</font>')
+        }
     })
 })
 </script>
@@ -189,7 +273,17 @@ $(document).ready(function() {
                             {% endif %}
                         </div>
                         <div class="row d-flex justify-content-center mb-3">
-                            <div class="col">식단1</div>
+                            <div class="col" id="morning_meal" style="overflow-y: auto;">
+                                <div class="row mt-3">
+                                    <div class="col-8 d-flex justify-content-center">오늘의 아침 식단</div>
+                                </div>
+                                <div class="row d-flex justify-content-center mt-3" id="food_form">
+                                    <button class="btn btn-outline-secondary mt-1 w-75" id="add_food">식단 추가</button>
+                                </div>
+                                <div class="row d-flex justify-content-center mt-3 meal_submit">
+                                    <button class="btn btn-secondary w-75">결과 확인</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col ml-3">
@@ -300,7 +394,35 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-<!-- 삭제 모달 -->
+<!-- 음식 검색 모달 -->
+<div class="modal fade" id="food_search" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <strong>음식 검색</strong>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>x</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row">
+                    <div class="col d-flex justify-content-end">
+                        <input type="text" class="text-center w-50 ml-3 food_input" placeholder="한 글자 이상을 입력하세요."/>
+                        <button class="btn border search_food"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
+                <div class="row mt-3 mb-3 search_result" style="overflow-y: auto;">
+                    <table class="w-100 food_table"></table>
+                </div>
+            </dov>
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
+                <button class="btn btn-secondary" id="add_Btn">&nbsp;&nbsp;&nbsp;추가&nbsp;&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 이미지 삭제 모달 -->
 <div class="modal fade" id="del_modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -311,7 +433,7 @@ $(document).ready(function() {
                 </button>
             </div>
             <div class="modal-body text-center">
-                <p><strong><font color="red">정말 삭제하시겠습니까 ?</font></strong></p>
+                <strong><font color="red">정말 삭제하시겠습니까 ?</font></strong>
             </dov>
             <div class="modal-footer justify-content-center">
                 <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>

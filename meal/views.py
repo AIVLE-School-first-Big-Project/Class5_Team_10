@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Meal, Nutrition
 from user.models import Kid
@@ -82,5 +82,9 @@ def del_img(request):
     return render(request, 'meal/meal.html')
 
 @csrf_exempt
-def nutrition_list(request):
-    return render(request, 'meal/meal.html')
+def food_list(request):
+    foods = Nutrition.objects.all()
+    food_name_list = []
+    for food in foods:
+        food_name_list.append(food.food + ' ')
+    return HttpResponse(food_name_list)
