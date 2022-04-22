@@ -3,9 +3,10 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Meal, Nutrition
 from user.models import Kid
-import json, os, csv
+import json, os, csv, datetime
 
 # Create your views here.
+@csrf_exempt
 def meal(request):
     # nutrition db가 없으면 추가(csv_to_model)
     nutirition = []
@@ -29,12 +30,21 @@ def meal(request):
 
     # 있다면 조건문 처리 필요
     # 자녀, 날짜 어떻게 선택?
+
+    if request.method == "POST":
+        req = json.loads(request.body)
+        regdate = req['regdate']
+    else :
+        regdate = datetime.date.today()
+
+
+
     try:
         kid = Kid.objects.get(id=2)
-        regdata = '2022-04-22'
-        morning_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='아침')
-        lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='점심')
-        evening_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdata) & Meal.objects.filter(time='저녁')
+        # regdata = '2022-04-22'
+        morning_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdate) & Meal.objects.filter(time='아침')
+        lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdate) & Meal.objects.filter(time='점심')
+        evening_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=regdate) & Meal.objects.filter(time='저녁')
         if morning_meal or lunch_meal or evening_meal:
             return render(request, 'meal/meal.html', {'morning_meal': morning_meal, 'lunch_meal': lunch_meal, 'evening_meal': evening_meal})
             # return redirect('./', {'meals': meals})
