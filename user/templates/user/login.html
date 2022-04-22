@@ -1,17 +1,29 @@
-<div >
-    <form method="post" action="{% url 'user:login' %}">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
-        <div>
-            <label for="id">사용자ID</label>
-            <input type="text" name="id" id="id"
-                   value="{{ form.id.value|default_if_none:'' }}">
+{% extends "base.html" %}
+{% block content %}
+<div class='container'>
+    <div class='row my-5'>
+        <div class='col'>
+            <form method="POST" action=".">
+                {% csrf_token %}
+                <div class='row mx-5'>
+                    <div class='col mt-4'>
+                        <div class='row mb-2' id='user_id_div'>
+                            <label for="id">사용자ID</label>
+                            <input type="text" name="username" id="id"
+                                value="{{ form.username.value|default_if_none:'' }}">
+                        </div>
+                        <div>
+                            <label for="password">비밀번호</label>
+                            <input type="password" name="password" id="password"
+                                value="{{ form.password.value|default_if_none:'' }}">
+                            <small class='mt-1 text-danger'>{{ password_error_msg }}</small>
+                        </div>
+                        
+                    </div>
+                </div>
+                <button type="submit">로그인</button>
+            </form>
         </div>
-        <div>
-            <label for="password">비밀번호</label>
-            <input type="password" name="password" id="password"
-                   value="{{ form.password.value|default_if_none:'' }}">
-        </div>
-        <button type="submit">로그인</button>
-    </form>
+    </div>
 </div>
+{% endblock content %}
