@@ -11,6 +11,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
 
 <!-- lib -->
+{% block content %}
 <style>
 #morning_previewImg, #lunch_previewImg, #evening_previewImg {
     margin: 1rem;
@@ -46,7 +47,6 @@
 </style>
 <script>
 function modal_show(meal) {
-    let now = new Date()
     let meal_time
 
     if (meal == 'morning') meal_time = '아침'
@@ -64,8 +64,7 @@ function modal_show(meal) {
 }
 
 function meal_upload(meal) {
-    let now = new Date()
-    let regdate = now.toLocaleDateString()
+    let regdate = $('#datepicker').val()
     let meal_time
 
     if (meal == 'morning') meal_time = '아침'
@@ -114,8 +113,7 @@ function meal_upload(meal) {
 }
 
 function del_img(meal) {
-    let now = new Date()
-    let regdate = now.toLocaleDateString()
+    let regdate = $('#datepicker').val()
     let meal_time
 
     if (meal == 'morning') meal_time = '아침'
@@ -263,33 +261,20 @@ $(document).ready(function() {
         minDate: "-5Y", //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
         maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
     })                    
-    
-    //초기값을 오늘 날짜로 설정해줘야 합니다.
-    $('#datepicker').datepicker('setDate', 'today') //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)   
-    
-    
-    $('#date').click(function() {
-        let regdate = $('#datepicker').val()
-        $.ajax({
-            method: 'post',
-            data: JSON.stringify({
-                regdate: regdate,
-            }),
-            contentType: 'application/json'
-        }).done(function(result) {
-            console.log(regdate)
-        })
-    })
-
 })
 </script>
 <body>
     <div class="container my-3">
         <div class="row">
-            <div class="col w-100">
-                <input type="text" id="datepicker">
+            <form class="col w-100" action="./" method="post">
+                {% if date %}
+                <input type="text" name="datepicker" id="datepicker" value="{{ date }}">
                 <button class="btn btn-secondary" id ="date">선택</button>
-            </div>
+                {% else %}
+                <input type="text" name="datepicker" id="datepicker">
+                <button class="btn btn-secondary" id ="date">선택</button>
+                {% endif %}
+            </form>
         </div>
         <div class="row mt-3">
             <div class="col-3 d-flex justify-content-center mt-3 mb-3 mr-3">자녀 정보</div>
@@ -488,3 +473,4 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+{% endblock %}
