@@ -1,0 +1,28 @@
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container">
+    <form action="{% url 'board:post_modify' post.id %}" method="post" class="post-form my-3" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class='form-group'>
+            <label for='title'>제목</label>
+            <input type="text" class="form-control" name="title" required value="{{post.title}}">
+            <label for='title'>카테고리</label>
+            <select name='category'>
+                <option value='공지'>공지</option>
+                <option value='영양'>영양</option>
+                <option value='Q&A'>Q&A</option>
+                <option value='Q&A'>기타</option>
+            </select><br><br>
+            {% if post.img %}
+            <a href='/'><img class="image" src="{{ post.img.url }}"/></a>
+            {% endif %}
+            <label for='content'>내용</label>
+            <textarea name='content' required>{{ post.content }}</textarea>
+            <input type="file" name="image">
+            <label><input type="checkbox" name="check" value="1"> 사진을 삭제하시겠습니까?</label>
+            <input type="submit" value="수정하기" class="btn btn-primary">
+            
+        </div>
+    </form>
+</div>
