@@ -1,23 +1,58 @@
-<div class="title1">작성자 : {{ post.user.username }}</div>
-<div class="title2">게시일 : {{ post.regdate }}</div>    
-<div class="title1">제목 : {{ post.title }}</div>
-<div class="container">
-    {% if post.img %}
-      <a href='/'><img class="image" src="{{ post.img.url }}"/></a>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+
+<div class="container my-3">
+    <!--작성자, 게시일, 제목-->
+    <div class="card-header">
+        <p><strong>제목 : {{ post.title }}</strong></p>
+        <p><strong>카테고리 : {{ post.board.ctg }}</strong></p>
+    </div>
+    <div class="card-body">
+    <!--이미지-->
+    <div class="image-box">
+        {% if post.img %}
+            <a href='/'><img class="img-fluid img-thumbnail" src="{{ post.img.url }}"/></a>
+        {% endif %}
+    </div>
+    <!--내용-->
+    <div>
+        {{ post.content }}
+    </div>
+    </div>
+    {% if request.user.is_staff %}
+        <a href="javascript:void(0)" class="modify btn btn-primary"
+        data-uri="{% url 'board:post_modify' post.id  %}">수정</a>
+    {% endif%}
+    {% if request.user.is_staff %}
+        <a href="javascript:void(0)" class="delete btn btn-primary"
+        data-uri="{% url 'board:post_delete' post.id  %}">삭제</a>
+    {% endif%}
+    {% if user.is_authenticated %}
+    <div class="container my-3">
+        <br>댓글 작성
+        <form action='' method="POST">
+            {% csrf_token %}
+            <textarea name="comment" id="content" name="content"></textarea><br>
+            <button class="primaryContained" type="submit">댓글 작성하기</button>
+        </form>
+    </div>
     {% endif %}
 </div>
-<div class="title1">{{ post.content }}</div>
 
-{% if request.user.is_staff %}
-    <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"
-    data-uri="{% url 'board:post_delete' post.id  %}">삭제</a>
-{% endif%}
 
 <script type='text/javascript'>
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function(element) {
         element.addEventListener('click', function() {
             if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+    const modify_elements = document.getElementsByClassName("modify");
+    Array.from(modify_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 수정하시겠습니까?")) {
                 location.href = this.dataset.uri;
             };
         });

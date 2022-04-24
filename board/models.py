@@ -1,6 +1,8 @@
 from django.db import models
 from user.models import User
 from datetime import datetime
+from django.conf import settings
+import os
 
 # Create your models here.
 def board_directory_path(instance, filename):

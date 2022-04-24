@@ -1,88 +1,22 @@
-{% block content %}
-<div class="container">
-    <h5 class="my-3 border-bottom pb-2">게시물 등록</h5>
-    <form id="'post_form">
+<div class="container">    
+    <form action="{% url 'board:post_create' %}" method="post" class="post-form my-3" enctype="multipart/form-data">
         {% csrf_token %}
-        <!-- 오류표시 Start -->
-        {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for field in form %}
-            {% if field.errors %}
-            <div>
-                <strong>{{ field.label }}</strong>
-                {{ field.errors }}
-            </div>
-            {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
-        <!-- 오류표시 End -->
-        <div>
-            <label for="title">제목</label>
-            <input type="text" name="title", id="title" required>
-        </div>
-        <div>
-            <label for="board">카테고리</label>
-            <select style="width: 6em;" class="custom-select custom-select-md" name="type" id="type">
-                <option value="영양">영양</option>
-                <option value="기타">기타</option>
-                <option value="Q&A">Q&A</option>
-            </select>
-        </div>
-        <div>
-            <textarea id='content' rows="10" cols="50" name="content" required></textarea><br>
-        </div>
-        <div>
-            <input type="file" name="imgs" id='file_button'>
+        <table>
+        </table>
+        <div class='form-group'>
+            <label for='title'>제목</label>
+            <input type="text" class="form-control" name="title" required>
+            <label for='title'>카테고리</label>
+            <select name='category'>
+                <option value='공지'>공지</option>
+                <option value='영양'>영양</option>
+                <option value='Q&A'>Q&A</option>
+                <option value='Q&A'>기타</option>
+            </select><br><br>
+            <label for='content'>내용</label>
+            <textarea name='content' required></textarea>
+            <input type="file" name="image">
+            <input type="submit" value="등록하기" class="btn btn-primary">
         </div>
     </form>
-    <button id='submit'>등록하기</button>
 </div>
-{% endblock %}
-
-<script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
-<script>
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-$('#submit').click(function() {
-    if(!$('#title').val() & !$('#content').val()) {
-        alert('제목과 내용을 입력해주세요.')
-    } else {
-        let form = $('#post_form')[0]    
-        let formData = new FormData(form)
-        let title = $('#title').val()
-        let content = $('#content').val()
-        let type = $('#type option:selected').val()
-        let csrftoken = getCookie('csrftoken');
-        formData.append('csrfmiddlewaretoken', csrftoken)
-        formData.append('title', title)
-        formData.append('content', content)
-        formData.append('type', type)
-        formData.append('img', $('#file_button')[0].files[0])
-
-        $.ajax({
-        url: '/board/post/create/',
-        method: 'post',
-        data: formData,
-        contentType: false,
-        processData: false,
-        }).done(function(result) {
-            console.log(result)
-            location.href='http://127.0.0.1:8000/board/'
-        })
-    }
-})
-</script>
