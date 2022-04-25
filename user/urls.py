@@ -13,7 +13,7 @@ urlpatterns = [
     path('signup/id_check', views.id_check),
     path('register/', views.kid_register, name='kid_register'),
     path('select/', views.kid_select, name='kid_select'),
-    path('selected/', views.kid_selected, name='kid_selected'),
+    path('update/', views.user_update, name='user_update'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
