@@ -1,5 +1,5 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 
 <div class="container my-3">
     <!--작성자, 게시일, 제목-->
@@ -8,8 +8,8 @@
         <p><strong>카테고리 : {{ post.board.ctg }}</strong></p>
     </div>
     <div class="card-body">
-    <!--이미지-->
-    <div class="image-box">
+        <!--이미지-->
+        <div class="image-box">
         {% if post.img %}
             <a href='/'><img class="img-fluid img-thumbnail" src="{{ post.img.url }}"/></a>
         {% endif %}
@@ -18,25 +18,53 @@
     <div>
         {{ post.content }}
     </div>
-    </div>
-    {% if request.user.is_staff %}
-        <a href="javascript:void(0)" class="modify btn btn-primary"
-        data-uri="{% url 'board:post_modify' post.id  %}">수정</a>
-    {% endif%}
-    {% if request.user.is_staff %}
-        <a href="javascript:void(0)" class="delete btn btn-primary"
-        data-uri="{% url 'board:post_delete' post.id  %}">삭제</a>
-    {% endif%}
-    {% if user.is_authenticated %}
-    <div class="container my-3">
-        <br>댓글 작성
-        <form action='' method="POST">
-            {% csrf_token %}
-            <textarea name="comment" id="content" name="content"></textarea><br>
+</div>
+{% if request.user.is_staff %}
+<a href="javascript:void(0)" class="modify btn btn-primary"
+data-uri="{% url 'board:post_modify' post.id  %}">수정</a>
+{% endif%}
+{% if request.user.is_staff %}
+<a href="javascript:void(0)" class="delete btn btn-primary"
+data-uri="{% url 'board:post_delete' post.id  %}">삭제</a>
+{% endif%}
+<hr class="my-5">
+{% if user.is_authenticated %}
+<div class="container my-3">
+    <br>댓글 작성
+    <form action="" method="POST">
+        {% csrf_token %}
+        <textarea name="content" id="content"></textarea><br>
             <button class="primaryContained" type="submit">댓글 작성하기</button>
         </form>
     </div>
     {% endif %}
+    <!-- 댓글 조회란 -->
+    <div>
+    <table class="table">
+        <thead>
+            <tr class="table-dark">
+                <th style="font-weight: bold; font-size: 16px;">작성자</th>
+                <th style="font-weight: bold; font-size: 16px;">등록일</th>
+                <th style="font-weight: bold; font-size: 16px;">내용</th>
+            </tr>
+            <tbody>
+                {% if comments %}
+                {% for comment in comments %}
+                <tr class="text-center" style="cursor:pointer;">
+                    <td>{{ comment.user.username }}</td>
+                    <td>{{ comment.regdate }}</td>
+                    <td>{{ comment.content }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="10">등록된 댓글이 없습니다.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </thead>
+    </table>
+    </div>
 </div>
 
 

@@ -1,4 +1,3 @@
-from re import T
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Board, Comment
 from django.utils import timezone
@@ -34,7 +33,8 @@ def post(request, post_id): # 게시물 상세 조회 함수
     context = {'post':post}
     # 댓글 작성 예외처리
     try:
-        comments = Comment.objects.filter(post_table=post_id)
+        comments = Comment.objects.filter(post=post_id)
+        context = {'post':post, 'comments':comments}
     except:
         comments = None
     if request.method == "POST":
@@ -42,12 +42,13 @@ def post(request, post_id): # 게시물 상세 조회 함수
             
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.user = User.objects.get(pk=request.user.id)
+            print(comment.content)
+            comment.user = request.user
             comment.post = Post.objects.get(pk=post_id)
-            comment.create_date = timezone.now()
+            comment.regdate = timezone.now()
             comment.save()
         else:
-            return render(request, 'post_detail/post_detail_test.html', {'post':post, 'comments':comments})
+            return render(request, 'board/post.html', {'post':post, 'comments':comments})
     return render(request, 'board/post.html', context)
 
 
