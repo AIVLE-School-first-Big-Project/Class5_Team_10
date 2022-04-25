@@ -1,3 +1,4 @@
+from gzip import READ
 from urllib import response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -94,6 +95,17 @@ def del_img(request):
 @csrf_exempt
 def food_list(request):
     foods = Nutrition.objects.all()
+    food_name_list = []
+    for food in foods:
+        food_name_list.append(food.food + ' ')
+    return HttpResponse(food_name_list)
+
+
+@csrf_exempt
+def search_food_list(request):
+    req = json.loads(request.body)
+    search_data = req['search_data']
+    foods = Nutrition.objects.filter(food__icontains=search_data)
     food_name_list = []
     for food in foods:
         food_name_list.append(food.food + ' ')

@@ -18,26 +18,35 @@
     width: 18rem;
     height: 15rem;
 }
-
+.frame {
+    height: 20rem;
+}
 .img {
-    width: 100%;
+    width: 75%;
     height: 15rem;
 }
 
-#morning_meal {
+.meal {
     width: 75%;
-    height: 15rem;
-    border: 1px solid;
+    border: rgb(189, 188, 188) 1px solid;
 }
 
 .search_result {
     height: 20rem;
 }
 
-.nav_bar {
-    border: 1px solid;
-    border-color: #FC6600;
+.picked_food_list {
+    height: 1rem;
+}
+
+.picked_food {
+    border:rgb(189, 188, 188) 1px solid;
     border-radius: 5%;
+    background-color: #e7e7e7;
+}
+
+.nav_bar {
+    border: rgb(189, 188, 188) 1px solid;
 }
 
 .nav_btn {
@@ -139,44 +148,60 @@ function del_img(meal) {
     })
 }
 
-// input 태그 row 추가, ajax통신으로 모델 결과 받아와서 적용 -> 이미지 업로드 여부로 나뉘어야하는 거 잊으면 안 됨!
-cnt = 0
-function food_plus(food_name) {
-    cnt += 1
-    $('#add_food').before(
-        '<div class="row ml-2 mr-2 mb-3" id="food_form' + cnt + '">' +
-            '<input class="col w-100 mr-1" disabled ' + 'value=' + food_name + ' name=' + food_name + '/>' +
-            '<select name="volume">' +
-                '<option value="1인분">1인분</option>' +
-                '<option value="0.5인분">0.5인분</option>' +
-                '<option value="1.5인분">1.5인분</option>' +
-            '</select>' +
-            '<button class="btn btn-secondary ml-1" id="del_food_btn' + cnt + '">삭제</button>' +
-        '</div>'
-    )
-    
-    // 해당 food row 삭제 버튼 클릭 시 해당 row 삭제
-    $('#del_food_btn' + cnt).click(function() {
-        $(this).parent().remove()
-    })
+// // input 태그 row 추가, ajax통신으로 모델 결과 받아와서 적용 -> 이미지 업로드 여부로 나뉘어야하는 거 잊으면 안 됨!
+// cnt = 0
+// function food_plus(food_name) {
+//     cnt += 1
+//     $('.add_food').before(
+//         '<div class="row ml-2 mr-2 mb-3" id="food_form' + cnt + '">' +
+//             '<input class="col w-100 mr-1" disabled ' + 'value=' + food_name + ' name=' + food_name + '/>' +
+//             '<select name="volume">' +
+//                 '<option value="1인분">1인분</option>' +
+//                 '<option value="0.5인분">0.5인분</option>' +
+//                 '<option value="1.5인분">1.5인분</option>' +
+//             '</select>' +
+//             '<button class="btn btn-secondary ml-1" id="del_food_btn' + cnt + '">삭제</button>' +
+//         '</div>'
+//     )
 
-    // // ajax 통신으로 AI 모델한테 아웃풋 가져올 때 음식 개수까지 갖고 온 후 loop
-    // for (cnt = 0; cnt < 5; cnt++) {
-    //     $('#morning_meal').append(
-    //         '<div class="row ml-1 mr-1 mt-3">' +
-    //             '<input class="col w-100 mr-1"/>' +
-    //             '<select name="volume">' +
-    //                 '<option value="1인분">1인분</option>' +
-    //                 '<option value="0.5인분">0.5인분</option>' +
-    //                 '<option value="1.5인분">1.5인분</option>' +
-    //             '</select>' +
-    //             '<button class="btn btn-secondary ml-1">수정</button>' +
-    //         '</div>'
-    //     )
-    // }
-}
+//     // ajax 통신으로 AI 모델한테 아웃풋 가져올 때 음식 개수까지 갖고 온 후 loop
+//     for (cnt = 0; cnt < 5; cnt++) {
+//         $('#morning_meal').append(
+//             '<div class="row ml-1 mr-1 mt-3">' +
+//                 '<input class="col w-100 mr-1"/>' +
+//                 '<select name="volume">' +
+//                     '<option value="1인분">1인분</option>' +
+//                     '<option value="0.5인분">0.5인분</option>' +
+//                     '<option value="1.5인분">1.5인분</option>' +
+//                 '</select>' +
+//                 '<button class="btn btn-secondary ml-1">수정</button>' +
+//             '</div>'
+//         )
+//     }
+// }
 
 $(document).ready(function() {
+    // 데이트피커
+    //input을 datepicker로 선언
+    $("#datepicker").datepicker({
+        dateFormat: 'yy-mm-dd', //달력 날짜 형태
+        showOtherMonths: true, //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        showMonthAfterYear:true, // 월- 년 순서가아닌 년도 - 월 순서
+        changeYear: true, //option값 년 선택 가능
+        changeMonth: true, //option값  월 선택 가능                
+        showOn: "both", //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시  
+        buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif", //버튼 이미지 경로
+        buttonImageOnly: true, //버튼 이미지만 깔끔하게 보이게함
+        buttonText: "선택", //버튼 호버 텍스트              
+        yearSuffix: "년", //달력의 년도 부분 뒤 텍스트
+        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트
+        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 Tooltip
+        dayNamesMin: ['일','월','화','수','목','금','토'], //달력의 요일 텍스트
+        dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'], //달력의 요일 Tooltip
+        minDate: "-5Y", //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
+    })
+    
     $('.morning_upload').click(function() {
         modal_show('morning')        
         meal_upload('morning')
@@ -205,8 +230,14 @@ $(document).ready(function() {
     })
 
     // 검색 모달 띄우고 결과값 들어가게
-    $('#add_food').click(function() {
+    $('.add_food').click(function() {
+        
+        // 들어갈 폼 - 전역변수 선언
+        window.parent_food_form = $(this).parent().attr('id')
+        window.food_list = []  // 전역변수 선언
+
         $('.food_table').empty()
+        $('.picked_food_list').empty()
         $.ajax({
             url: 'food_list',
             method: 'post',
@@ -215,10 +246,7 @@ $(document).ready(function() {
                 foods = foods.split(' ')
                 $.each(foods, function(idx, food) {
                     if (food) {
-                        // $('.food_table').append(`<div class="row" id="${food}"><div class="col"><input type="radio" name="food" value="${food}"/>${food}</div></div>`)
-                        // $('.food_table').append(`<tr id="${food}"><td><input type="radio" name="food" value="${food}"/> ${food}</td>\
-                        //     <td><button class="btn btn-outline-secondary add_${food}">추가</button></td></tr>`)
-                        $('.food_table').append(`<div class="mb-3 ml-5"><tr id="${food}"><td><input type="radio" name="food" value="${food}"/> ${food}</td></tr></div>`)
+                        $('.food_table').append(`<div class="mb-3 ml-5"><input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
                     }
                 })
             }
@@ -229,9 +257,35 @@ $(document).ready(function() {
         // food_plus('김치찌개')
     })
 
-    // $('.food_input').keydown(function() {
-    //     $('.search_food').removeAttr('disabled')
-    // })
+    // 실시간 검색
+    let old_val
+    $(".food_input").on("propertychange change keyup paste input", function(){
+        let current_val = $(this).val()
+        if (current_val == old_val) {
+            return
+        }
+        old_val = current_val
+        $.ajax({
+            url: 'search_food_list',
+            method: 'post',
+            data: JSON.stringify({
+                search_data: $('.food_input').val()
+            }),
+            contentType: 'application/json'
+        }).done(function(foods) {
+            $('.food_table').empty()
+            if (foods) {
+                foods = foods.split(' ')
+                $.each(foods, function(idx, food) {
+                    if (food) {
+                        $('.food_table').append(`<div class="mb-3 ml-5"><input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
+                    }
+                })
+            } else if (!foods) {
+                $('.food_table').append('<font class="d-flex justify-content-center" color="red">『' + $('.food_input').val() + '』에 대한 검색 결과가 존재하지 않습니다.</font>')
+            }
+        })
+    })
 
     $('.search_food').click(function() {
         if (!($('.food_input').val())) {
@@ -239,28 +293,59 @@ $(document).ready(function() {
             $('.food_table').append('<font class="d-flex justify-content-center" color="red">한 글자 이상 검색해주세요.</font>')
         }
     })
+    
+    // 검색창에서 음식 선택
+    $(document).on('click', 'input:checkbox', function() {
+        food_id = $(this).attr('id')
+        check_id = '#' + food_id
+        if($(check_id).is(':checked')) {
+            $('.picked_food_list').append(`<button class="mr-1 p-1 picked_food" id="${food_id}"><small>${food_id} x</small></button>`)
+            window.food_list.push(food_id)
+        }
+    })
 
+    // 검색창에서 선택된 음식 삭제 & 체크박스 해제
+    $(document).on('click', '.picked_food', function() {
+        food_id = $(this).attr('id')
+        picked_id = '#' + food_id
+        $('input:checkbox[id="' + food_id +'"]').prop('checked', false)
+        $('button' + picked_id).remove()
 
-    // 데이트피커
-    //input을 datepicker로 선언
-    $("#datepicker").datepicker({
-        dateFormat: 'yy-mm-dd', //달력 날짜 형태
-        showOtherMonths: true, //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-        showMonthAfterYear:true, // 월- 년 순서가아닌 년도 - 월 순서
-        changeYear: true, //option값 년 선택 가능
-        changeMonth: true, //option값  월 선택 가능                
-        showOn: "both", //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시  
-        buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif", //버튼 이미지 경로
-        buttonImageOnly: true, //버튼 이미지만 깔끔하게 보이게함
-        buttonText: "선택", //버튼 호버 텍스트              
-        yearSuffix: "년", //달력의 년도 부분 뒤 텍스트
-        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트
-        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 Tooltip
-        dayNamesMin: ['일','월','화','수','목','금','토'], //달력의 요일 텍스트
-        dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'], //달력의 요일 Tooltip
-        minDate: "-5Y", //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-        maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
-    })                    
+        // 전역변수에서도 해당 음식 삭제
+        for(let i = 0; i < window.food_list.length; i++) {
+            if (window.food_list[i] === food_id) {
+                window.food_list.splice(i, 1)
+                i--
+            }
+        }
+    })
+
+    // 음식 검색 후 음식 추가
+    $('#add_Btn').click(function() {
+        add_food_place = '#' + window.parent_food_form + ' .add_food'
+        cnt = $('.picked_food_list').children().length
+
+        for (i = 0; i < cnt; i++) {
+            $(add_food_place).before(
+                '<div class="row ml-1 mr-1 mt-3 mb-3">' +
+                    '<input class="col w-100 mr-1" disabled value=' + window.food_list[i] + ' name=' + window.food_list[i] + '/>' +
+                    '<select name="volume">' +
+                        '<option value="1인분">1인분</option>' +
+                        '<option value="0.5인분">0.5인분</option>' +
+                        '<option value="1.5인분">1.5인분</option>' +
+                    '</select>' +
+                    '<button class="btn btn-secondary ml-1 del_food_btn" id="del_' + window.food_list[i] + '_btn">삭제</button>' +
+                '</div>'
+            )
+        }
+        $('#food_search').modal('hide')
+    })
+
+    // 음식 삭제
+    $(document).on('click', '.del_food_btn', function() {
+        btn_id = '#' + $(this).attr('id')
+        $(btn_id).parent().remove()
+    })
 })
 </script>
 <body>
@@ -275,91 +360,118 @@ $(document).ready(function() {
                 <button class="btn btn-secondary" id ="date">선택</button>
                 {% endif %}
             </form>
+            <!-- nav bar -->
+            <div class="col w-100 mt-3 mb-3 nav_bar">
+                <div class="row">
+                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='./#morning_row'">아침</button>
+                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='./#lunch_row'">점심</button>
+                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='./#evening_row'">저녁</button>
+                </div>
+            </div>
         </div>
         <div class="row mt-3">
-            <div class="col-3 d-flex justify-content-center mt-3 mb-3 mr-3">자녀 정보</div>
-            <div class="col">
-                <!-- nav bar -->
-                <div class="row w-100 mt-3 mb-3 nav_bar">
-                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='#'">아침</button>
-                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='#'">점심</button>
-                    <button class="col d-flex justify-content-center nav_btn m-1" onclick="location.href='#'">저녁</button>
+            <div class="col d-flex justify-content-center mt-3 mb-3 mr-3">자녀 정보</div>
+        </div>
+        <!-- 아침 -->
+        <div class="row" id="morning_row">
+            <div class="col ml-3 frame">
+                {% if morning_meal %}
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="morning" src="{{ morning_meal.0.img.url }}"/>
                 </div>
-                <div class="row">
-                    <div class="col ml-3">
-                        <div class="row d-flex justify-content-center mb-3">
-                            {% if morning_meal %}
-                            <img class="img" id="morning" src="{{ morning_meal.0.img.url }}"/>
-                            {% else %}
-                            <img class="img" id="morning" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
-                            {% endif %}
-                        </div>
-                        <div class="row d-flex justify-content-center mb-3">
-                            {% if morning_meal %}
-                            <button class="btn btn-outline-secondary morning_upload mr-1" disabled>아침 식단 업로드</button>
-                            <button class="btn btn-secondary morning_del_btn">삭제</button>
-                            {% else %}
-                            <button class="btn btn-outline-secondary morning_upload mr-1">아침 식단 업로드</button>
-                            <button class="btn btn-secondary morning_del_btn" disabled>삭제</button>
-                            {% endif %}
-                        </div>
-                        <div class="row d-flex justify-content-center mb-3">
-                            <div class="col" id="morning_meal" style="overflow-y: auto;">
-                                <div class="row mt-3">
-                                    <div class="col-8 d-flex justify-content-center">오늘의 아침 식단</div>
-                                </div>
-                                <div class="row d-flex justify-content-center mt-3" id="food_form">
-                                    <button class="btn btn-outline-secondary mt-1 w-75" id="add_food">식단 추가</button>
-                                </div>
-                                <div class="row d-flex justify-content-center mt-3 meal_submit">
-                                    <button class="btn btn-secondary w-75">결과 확인</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ml-3">
-                        <div class="row d-flex justify-content-center mb-3">
-                            {% if lunch_meal %}
-                            <img class="img" id="lunch" src="{{ lunch_meal.0.img.url }}"/>
-                            {% else %}
-                            <img class="img" id="lunch" src="{% static '/image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
-                            {% endif %}
-                        </div>
-                        <div class="row d-flex justify-content-center mb-3">
-                            {% if lunch_meal %}
-                            <button class="btn btn-outline-secondary lunch_upload mr-1" disabled>점심 식단 업로드</button>
-                            <button class="btn btn-secondary lunch_del_btn">삭제</button>
-                            {% else %}
-                            <button class="btn btn-outline-secondary lunch_upload mr-1">점심 식단 업로드</button>
-                            <button class="btn btn-secondary lunch_del_btn" disabled>삭제</button>
-                            {% endif %}
-                        </div>
-                        <div class="row d-flex justify-content-center mb-3">
-                            <div class="col">식단2</div>
-                        </div>
-                    </div>
-                    <div class="col ml-3">
-                        <div class="row d-flex justify-content-center mb-3">
-                            {% if evening_meal %}
-                            <img class="img" id="evening" src="{{ evening_meal.0.img.url }}"/>
-                            {% else %}
-                            <img class="img" id="evening" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
-                            {% endif %}
-                        </div>
-                        <div class="row d-flex justify-content-center mb-3">
-                            {% if evening_meal %}
-                            <button class="btn btn-outline-secondary evening_upload mr-1" disabled>저녁 식단 업로드</button>
-                            <button class="btn btn-secondary evening_del_btn">삭제</button>
-                            {% else %}
-                            <button class="btn btn-outline-secondary evening_upload mr-1">저녁 식단 업로드</button>
-                            <button class="btn btn-secondary evening_del_btn" disabled>삭제</button>
-                            {% endif %}
-                        </div>
-                        <div class="row d-flex justify-content-center mb-3">
-                            <div class="col">식단3</div>
-                        </div>
-                    </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary morning_upload mr-1" disabled>아침 식단 업로드</button>
+                    <button class="btn btn-secondary morning_del_btn">삭제</button>
                 </div>
+                {% else %}
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="morning" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary morning_upload mr-1">아침 식단 업로드</button>
+                    <button class="btn btn-secondary morning_del_btn" disabled>삭제</button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col mb-3 meal frame" style="overflow-y: auto;">
+                <div class="row mt-3 d-flex justify-content-center">오늘의 아침 식단</div>
+                <div class="row d-flex justify-content-center mt-3 p-2" id="morning_food_form">
+                    <button class="btn btn-outline-secondary mt-1 w-75 add_food">식단 추가</button>
+                </div>
+                <div class="row d-flex justify-content-center mt-2 meal_submit">
+                    <button class="btn btn-secondary w-75">결과 확인</button>
+                </div>
+            </div>
+            <div class="col mb-3 meal frame" style="overflow-y: auto;">
+                <div class="row mt-3 d-flex justify-content-center">아침 식단 결과</div>
+            </div>
+        </div>
+        <!-- 점심 -->
+        <div class="row" id="lunch_row">
+            <div class="col ml-3 frame">
+                {% if lunch_meal %}
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="lunch" src="{{ lunch_meal.0.img.url }}"/>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary lunch_upload mr-1" disabled>점심 식단 업로드</button>
+                    <button class="btn btn-secondary lunch_del_btn">삭제</button>
+                </div>
+                {% else %}
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="lunch" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary lunch_upload mr-1">점심 식단 업로드</button>
+                    <button class="btn btn-secondary lunch_del_btn" disabled>삭제</button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col mb-3 meal frame" style="overflow-y: auto;">
+                <div class="row mt-3 d-flex justify-content-center">오늘의 점심 식단</div>
+                <div class="row d-flex justify-content-center mt-3 p-2" id="lunch_food_form">
+                    <button class="btn btn-outline-secondary mt-1 w-75 add_food">식단 추가</button>
+                </div>
+                <div class="row d-flex justify-content-center mt-2 meal_submit">
+                    <button class="btn btn-secondary w-75">결과 확인</button>
+                </div>
+            </div>
+            <div class="col mb-3 meal frame" style="overflow-y: auto;">
+                <div class="row mt-3 d-flex justify-content-center">점심 식단 결과</div>
+            </div>
+        </div>
+        <!-- 저녁 -->
+        <div class="row" id="evening_row">
+            <div class="col ml-3 frame">
+                {% if evening_meal %}
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="evening" src="{{ evening_meal.0.img.url }}"/>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary evening_upload mr-1" disabled>저녁 식단 업로드</button>
+                    <button class="btn btn-secondary evening_del_btn">삭제</button>
+                </div>
+                {% else %}
+                <div class="row d-flex justify-content-center mb-3">
+                    <img class="img" id="evening" src="{% static 'image/식판.jpg' %}" alt="이미지가 존재하지 않습니다."/>
+                </div>
+                <div class="row d-flex justify-content-center mb-3">
+                    <button class="btn btn-outline-secondary evening_upload mr-1">저녁 식단 업로드</button>
+                    <button class="btn btn-secondary evening_del_btn" disabled>삭제</button>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col mb-3 meal frame" style="overflow-y: auto;">
+                <div class="row mt-3 d-flex justify-content-center">오늘의 저녁 식단</div>
+                <div class="row d-flex justify-content-center mt-3 p-2" id="evening_food_form">
+                    <button class="btn btn-outline-secondary mt-1 w-75 add_food">식단 추가</button>
+                </div>
+                <div class="row d-flex justify-content-center mt-2 meal_submit">
+                    <button class="btn btn-secondary w-75">결과 확인</button>
+                </div>
+            </div>
+            <div class="col mb-3 meal frame" style="overflow-y: auto;">
+                <div class="row mt-3 d-flex justify-content-center">저녁 식단 결과</div>
             </div>
         </div>
     </div>
@@ -443,9 +555,10 @@ $(document).ready(function() {
                     </div>
                 </div>
                 <div class="row mt-3 mb-3 search_result" style="overflow-y: auto;">
+                    <div class="row mb-3 ml-5 picked_food_list"></div>
                     <table class="w-100 food_table"></table>
                 </div>
-            </dov>
+            </div>
             <div class="modal-footer justify-content-center">
                 <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
                 <button class="btn btn-secondary" id="add_Btn">&nbsp;&nbsp;&nbsp;추가&nbsp;&nbsp;&nbsp;</button>
