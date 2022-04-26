@@ -1,8 +1,11 @@
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.forms import formset_factory, inlineformset_factory
 from user.forms import UserCreationForm, KidRegisterForm, UpdateUserForm
@@ -215,3 +218,24 @@ def CustomLogout(request):
     return redirect('/')
 
 
+def ForgotIDView(request):
+    context = {}
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+            if user is not None:
+                template = render_to_string('user/find_username_email_template.html', 
+                                            {'name': user.name, 'id':user.username})
+                method_email = EmailMessage(
+                    '[밀키드] 요청하신 ID입니다.',
+                    template,
+                    settings.EMAIL_HOST_USER,
+                    [email],
+                )
+                method_email.send(fail_silently=False)
+                return render(request, 'user/find_username_done.html', context)
+        except:
+            messages.info(request, "등록된 이메일이 없습니다.")
+    context = {}
+    return render(request, 'user/find_username_form.html', context)
