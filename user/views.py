@@ -1,9 +1,10 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.forms import formset_factory, inlineformset_factory
 from user.forms import UserCreationForm, KidRegisterForm, UpdateUserForm
 from user.models import User, Kid
 
@@ -147,3 +148,68 @@ def user_update(request):
 
 
 # 아이 정보 수정
+# def kid_update(request):
+#     user_id = request.session['_auth_user_id']
+#     kid_set = Kid.objects.filter(user_id = user_id)
+#     KidRegisterFormSet = formset_factory(KidRegisterForm, extra=0)
+#     if request.method == 'POST':
+#         formset = KidRegisterFormSet(request.POST, request.FILES)
+#         if formset.is_valid():
+#             formset.save()
+#             messages.success(request, '아이정보가 수정되었습니다.')
+#             # do something with the formset.cleaned_data
+#             return redirect('/')
+#         else:
+#             context = {
+#                 'formset' : formset,
+#             }
+#             return render(request, 'user/kid_update.html', context)
+#     else:
+#         formset = KidRegisterFormSet(initial=[
+#             {"name" : kid.name, 
+#              "birthday" : kid.birthday,
+#              "img" : kid.img, 
+#              "height" : kid.height, 
+#              "weight" : kid.weight}
+#              for kid in kid_set
+#         ])
+#     context = {'formset' : formset}
+#     return render(request, 'user/kid_update.html', context)
+
+# 아이 정보 수정
+def kid_update(request):
+    user_id = request.session['_auth_user_id']
+    user = User.objects.get(pk = user_id)
+    KidRegisterFormSet = inlineformset_factory(User, Kid, extra=0, fields=(
+        'name', 'birthday', 'img', 'height', 'weight'
+    ))
+    print('1')
+    if request.method == 'POST':
+        formset = KidRegisterFormSet(request.POST, request.FILES, instance=user)
+        print('2')
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, '아이정보가 수정되었습니다.')
+            # do something with the formset.cleaned_data
+            return redirect('/')
+    else:
+        print('3')
+        formset = KidRegisterFormSet(instance=user)
+    context = {'formset' : formset}
+    print('4')
+    return render(request, 'user/kid_update.html', context)
+
+
+
+# 회원탈퇴
+def member_del(request):
+    user_id = request.session['_auth_user_id']
+    data = User.objects.get(pk=user_id)
+    data.delete()
+    logout(request)
+    return redirect('/')
+
+# 로그아웃
+def CustomLogout(request):
+    logout(request)
+    return redirect('/')

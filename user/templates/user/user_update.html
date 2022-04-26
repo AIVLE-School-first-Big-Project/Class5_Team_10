@@ -45,7 +45,7 @@
             </div>
         </div>
         <button type="submit"><span style="text-decoration: double;">수정 완료</span></button>
-        <button><span style="text-decoration: double;"> <a href="/" style = "color : #fff" >탈퇴하기</a></span></button>
+        <button><span style="text-decoration: double;"> <a href="{% url 'user:member_del' %}" style = "color : #fff" >탈퇴하기</a></span></button>
     </form>
 </div>
 {% endblock content %}

@@ -17,5 +17,8 @@ function selecting(kid_id){
         <a href="#" onclick="selecting({{ kid.id }})">{{ kid.name }}</a>
     </div>
     {% endfor %}
+    <div>
+        <button><span style="text-decoration: double;"> <a href="{% url 'user:kid_register' %}" style = "color : #fff" >아이정보등록하기</a></span></button>
+    </div>
 <div>
 {% endblock content %}
