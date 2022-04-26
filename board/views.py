@@ -27,28 +27,28 @@ def post_list(request): # 게시물 목록 조회 함수
     context = {'post_list':page_obj, 'page': page, 'kw': kw, 'type':type}
     return render(request, 'board/post_list.html', context)
 
-
+@csrf_exempt
 def post(request, post_id): # 게시물 상세 조회 함수
     post = get_object_or_404(Post, pk=post_id)
-    context = {'post':post}
-    # 댓글 작성 예외처리
-    try:
-        comments = Comment.objects.filter(post=post_id)
-        context = {'post':post, 'comments':comments}
-    except:
-        comments = None
+    comments = Comment.objects.filter(post=post_id)
+    comments_list = comments.order_by('-regdate')
+    
+    # 댓글 페이징 처리
+    page = request.GET.get('page', '1')  # 페이지
+    paginator = Paginator(comments_list, 10)  # 페이지당 10개씩 보여주기
+    comments_obj = paginator.get_page(page)
+    context = {'post':post, 'comments_list':comments_obj, 'page':page}
+
     if request.method == "POST":
         form = CommentForm(request.POST)
-            
         if form.is_valid():
             comment = form.save(commit=False)
-            print(comment.content)
             comment.user = request.user
             comment.post = Post.objects.get(pk=post_id)
             comment.regdate = timezone.now()
             comment.save()
         else:
-            return render(request, 'board/post.html', {'post':post, 'comments':comments})
+            return render(request, 'board/post.html', context)
     return render(request, 'board/post.html', context)
 
 
@@ -98,6 +98,7 @@ def post_modify(request, post_id): # 게시물 수정 함수
     context = {'form':form, 'post':post}
     return render(request, 'board/post_modify.html', context)
 
+
 @csrf_exempt
 def post_delete(request, post_id):
     post = Post.objects.get(id=post_id)
@@ -105,7 +106,19 @@ def post_delete(request, post_id):
     return redirect('board:post_list')
 
 
+@csrf_exempt
+def comment_modify(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    post_id = comment.post.id
+    comment.content = request.POST.get('comment')
+    comment.moddate = timezone.now()
+    comment.save()
+    return redirect('board:post', post_id=post_id)
+
+
+@csrf_exempt
 def comment_delete(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
+    post_id = comment.post.id
     comment.delete()
-    return redirect('board:post', post_id=comment.post.id)
+    return redirect('board:post', post_id=post_id)
