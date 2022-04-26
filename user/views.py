@@ -213,3 +213,5 @@ def member_del(request):
 def CustomLogout(request):
     logout(request)
     return redirect('/')
+
+
