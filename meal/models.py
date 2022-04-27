@@ -42,4 +42,5 @@ class Nutrition(models.Model):  # 영양성분
 class Diet(models.Model):  # 식단
     id = models.AutoField(primary_key=True, null=False)
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+    portions = models.FloatField(default=1, null=False)
     nutrition = models.ForeignKey(Nutrition, on_delete=models.DO_NOTHING)
