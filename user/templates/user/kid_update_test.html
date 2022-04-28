@@ -1,0 +1,62 @@
+{{ formset.management_form }}
+{% for form in formset %}
+<table>
+<tr>
+    <th>
+        <label for="id_kid_{{ form.fields.id.value }}_name">아이 이름:</label>
+    </th>
+    <td>
+        {{ form.name.value }}
+        <!-- <input type="text" name="kid_set-0-name" value="이루리01" maxlength="20" id="id_kid_set-0-name"> -->
+        <input type="hidden" name="name" value="{{ form.name.value }}" id="id_kid_{{ form.fields.id.value }}_name">
+        <input type="hidden" name="name" value="{{ form.fields.name.initial }}" id="id_kid_set-0-name">
+    </td>
+</tr>
+<tr>
+    <th>
+        <label for="id_kid_{{ form.fields.id.value }}_birthday">Birthday:</label>
+    </th>
+    <td>
+        <input type="text" name="kid_set-0-birthday" value="2019-06-09" id="id_kid_{{ form.fields.id.value }}_birthday">
+    </td>
+</tr>
+<tr>
+    <th>
+        <label for="id_kid_set-0-img">Img:</label>
+    </th>
+    <td>현재: <a href="/media/kid_images/%EC%9D%B4%EB%A3%A8%EB%A6%AC01_2022-04-25-10-27-03_luri1.JPG">kid_images/이루리01_2022-04-25-10-27-03_luri1.JPG</a>
+        <input type="checkbox" name="kid_set-0-img-clear" id="kid_set-0-img-clear_id">
+        <label for="kid_set-0-img-clear_id">취소</label>
+        <br>
+        변경:
+        <input type="file" name="kid_set-0-img" accept="image/*" id="id_kid_set-0-img">
+    </td>
+</tr>
+<tr>
+    <th>
+        <label for="id_kid_set-0-height">Height:</label>
+    </th>
+    <td>
+        <input type="number" name="kid_set-0-height" value="101.0" step="any" id="id_kid_set-0-height">
+    </td>
+</tr>
+<tr>
+    <th>
+        <label for="id_kid_set-0-weight">Weight:</label>
+    </th>
+    <td>
+        <input type="number" name="kid_set-0-weight" value="20.0" step="any" id="id_kid_set-0-weight">
+    </td>
+</tr>
+<tr>
+    <th>
+        <label for="id_kid_set-0-DELETE">삭제:</label>
+    </th>
+    <td>
+        <input type="checkbox" name="kid_set-0-DELETE" id="id_kid_set-0-DELETE">
+        <input type="hidden" name="kid_set-0-id" value="1" id="id_kid_set-0-id">
+        <input type="hidden" name="kid_set-0-user" value="2" id="id_kid_set-0-user">
+    </td>
+</tr>
+</table>
+{% endfor %}

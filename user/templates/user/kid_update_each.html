@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <form method="POST" action=".">
+        {% csrf_token %}
+        <div>
+            <div>
+                <h3>
+                    비밀번호와 이메일만 수정이 가능합니다.
+                </h3>
+                <div>
+                    <h6>이름</h6>
+                    <div>{{ kid.name }}</div>
+                </div>
+                <div>
+                    <h6>아이디</h6>
+                    <div>{{ kid.id }}</div>
+                </div>
+                <!-- <div>
+                    <label for="password">비밀번호</label>
+                    <input type="password" name="password1" id="password" 
+                        value ="{{ form.password.value|default_if_none:'' }}" required placeholder="">
+                </div>
+                <h6 class='font-wieght-bold'>비밀번호 확인</h6>
+                <input type='password' class='form-control' name='password2' id='password_check'
+                    placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
+                <small class='mt-1 text-danger'> {{password_error_msg}} </small>
+                <div>
+                    <label for="email">이메일</label>
+                    <input type="text" name="email" id="email"
+                        value="{{ form.email.value|default_if_none:'' }}" required>
+                </div> -->
+            </div>
+        </div>
+        <button type="submit"><span style="text-decoration: double;">수정 완료</span></button>
+        <button><span style="text-decoration: double;"> <a href="{% url 'user:member_del' %}" style = "color : #fff" >탈퇴하기</a></span></button>
+    </form>
+</div>
+{% endblock content %}

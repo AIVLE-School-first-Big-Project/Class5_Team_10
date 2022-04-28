@@ -8,11 +8,13 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.forms import formset_factory, inlineformset_factory
-from user.forms import UserCreationForm, KidRegisterForm, UpdateUserForm
+from user.forms import UserCreationForm, KidRegisterForm, UpdateUserForm, UpdateKidForm
 from user.models import User, Kid
+from user.decorators import *
 
 
 # 회원가입
+@logout_message_required
 def signup(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -66,35 +68,44 @@ def id_check(request):
         check_result = None
     if check_result is None:
         result = 'possible'
-
     return JsonResponse({ 'result': result })
 
 
 # 로그인
+@logout_message_required
 def CustomLogin(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
-            return redirect('/')
-        else:
-            password_error_msg = '비밀번호가 일치하지 않습니다. 다시 입력해주세요.'
+        user_id = request.POST.get('username')
+        try:
+            User.objects.get(username=user_id)
+            if form.is_valid():
+                auth_login(request, form.get_user())
+                return redirect('user:kid_select')
+            else:
+                password_error_msg = '비밀번호가 일치하지 않습니다. 다시 입력해주세요.'
+                context = {
+                    'form' : form,
+                    'password_error_msg' : password_error_msg,
+                }
+                return render(request, 'user/login.html', context)
+        except:
+            id_error_msg = '일치하는 아이디가 없습니다.'
             context = {
-                'form' : form,
-                'password_error_msg' : password_error_msg,
+                    'form' : form,
+                    'id_error_msg' : id_error_msg,
             }
             return render(request, 'user/login.html', context)
     else:
         form = AuthenticationForm()
-
     context = {
         'form' : form,
     }
-
     return render(request, 'user/login.html', context)
 
 
 # 아이등록
+@login_message_required
 def kid_register(request):
     if request.method == "POST":
         form = KidRegisterForm(request.POST, request.FILES)
@@ -103,17 +114,17 @@ def kid_register(request):
             kid_regit = form.save(commit=False)
             kid_regit.user = request.user
             kid_regit.save()
-            return redirect('/')
+            return redirect('user:kid_select')
     else:
         form = KidRegisterForm()
     context = {
         'form': form,
     }
-
     return render(request, 'user/register.html', context)
 
 
 # 아이선택
+@login_message_required
 def kid_select(request):
     if request.user.is_authenticated:
         user_id = request.session['_auth_user_id']
@@ -121,11 +132,11 @@ def kid_select(request):
     context = {
         'kid_set' : kid_set,
     }
-
     return render(request, 'user/select.html', context)
 
 
 # 회원 정보 수정
+@login_message_required
 def user_update(request):
     user = request.user
     if request.method == 'POST':
@@ -133,7 +144,7 @@ def user_update(request):
         if form.is_valid():
             form.save()
             messages.success(request, '회원정보가 수정되었습니다.')
-            return redirect('/')
+            return redirect('user:kid_select')
         else:
             email_error_msg = '이메일 양식이 맞지 않습니다.'
             context = {
@@ -180,6 +191,7 @@ def user_update(request):
 #     return render(request, 'user/kid_update.html', context)
 
 # 아이 정보 수정
+@login_message_required
 def kid_update(request):
     user_id = request.session['_auth_user_id']
     user = User.objects.get(pk = user_id)
@@ -199,12 +211,19 @@ def kid_update(request):
         print('3')
         formset = KidRegisterFormSet(instance=user)
     context = {'formset' : formset}
+    
+    ##테스트
+    for form in formset:
+        print(form.as_table())
+    ###
     print('4')
+    
+    
     return render(request, 'user/kid_update.html', context)
 
 
-
 # 회원탈퇴
+@login_message_required
 def member_del(request):
     user_id = request.session['_auth_user_id']
     data = User.objects.get(pk=user_id)
@@ -212,12 +231,16 @@ def member_del(request):
     logout(request)
     return redirect('/')
 
+
 # 로그아웃
+# @logout_message_required
 def CustomLogout(request):
     logout(request)
     return redirect('/')
 
 
+# 아이디 찾기 메일링 서비스
+@login_message_required
 def ForgotIDView(request):
     context = {}
     if request.method == 'POST':
@@ -239,3 +262,70 @@ def ForgotIDView(request):
             messages.info(request, "등록된 이메일이 없습니다.")
     context = {}
     return render(request, 'user/find_username_form.html', context)
+
+
+# 아이 정보 수정
+@login_message_required
+def kid_update_test(request):
+    user_id = request.session['_auth_user_id']
+    kid_set = Kid.objects.filter(user_id = user_id)
+    KidRegisterFormSet = formset_factory(KidRegisterForm, extra=0)
+    if request.method == 'POST':
+        formset = KidRegisterFormSet(request.POST, request.FILES)
+        if formset.is_valid():
+            formset.save()
+            messages.success(request, '아이정보가 수정되었습니다.')
+            # do something with the formset.cleaned_data
+            return redirect('/')
+        else:
+            context = {
+                'formset' : formset,
+            }
+            return render(request, 'user/kid_update_test.html', context)
+    else:
+        formset = KidRegisterFormSet(initial=[
+            {"name" : kid.name, 
+             "birthday" : kid.birthday,
+             "img" : kid.img, 
+             "height" : kid.height, 
+             "weight" : kid.weight}
+             for kid in kid_set
+        ])
+    context = {'formset' : formset}
+    return render(request, 'user/kid_update_test.html', context)
+
+
+# 아이 정보 삭제
+@login_message_required
+def kid_del(request):
+    kid_id = request.session['_auth_user_id'] # 아이 세션 정보를 받아와야 함
+    data = Kid.objects.get(pk=kid_id)
+    data.delete()
+    return redirect('/')
+
+
+# 아이 정보 수정(각자)
+@login_message_required
+def kid_update_each(request):
+    kid_id = request.session['kid_id']
+    kid = Kid.objects.get(pk=kid_id)
+    if request.method == 'POST':
+        form = UpdateKidForm(request.POST, instance=kid)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '회원정보가 수정되었습니다.')
+            return redirect('user:kid_select')
+        else:
+            email_error_msg = '이메일 양식이 맞지 않습니다.'
+            context = {
+                'form' : form,
+                'email_error_msg' : email_error_msg,
+            }
+            return render(request, 'user/kid_update_each.html', context)  
+    else:
+        form = UpdateKidForm()
+    context = {
+        'form' : form,
+        'kid' : kid,
+    }
+    return render(request, 'user/kid_update_each.html', context)

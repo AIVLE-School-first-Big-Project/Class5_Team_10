@@ -40,7 +40,7 @@ class Kid(models.Model):
     id = models.AutoField(primary_key=True, null=False)
     name = models.CharField(max_length=20, null=False)
     birthday = models.DateField(null=False)
-    img = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    img = models.ImageField(upload_to=user_directory_path)
     height = models.FloatField(null=False)
     weight = models.FloatField(null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

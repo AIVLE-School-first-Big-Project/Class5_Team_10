@@ -137,8 +137,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# LOGIN_REDIRECT_URL = ''
-
 # Email 전송
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
@@ -147,3 +145,7 @@ EMAIL_HOST_USER = 'team.mealkid@gmail.com'
 EMAIL_HOST_PASSWORD = 'aivle202101'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+LOGIN_URL = 'user:login'
+LOGOUT_URL = 'user:logout'

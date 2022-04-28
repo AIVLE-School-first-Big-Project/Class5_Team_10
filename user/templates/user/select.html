@@ -4,7 +4,7 @@
 <script>
 function selecting(kid_id){
     sessionStorage.setItem('kid_id',kid_id)
-    location.href='http://127.0.0.1:8000/meal/meal'
+    location.href="{% url 'user:kid_update_each' %}"
 }
 </script>
 <div>
@@ -12,7 +12,7 @@ function selecting(kid_id){
     <div> 
         {# 아이 사진 보여주기 #}
         <img src="{{ kid.img.url }}" class="img-responsive" style="width: 10%; float: left; margin-right: 10px;"
-            onclick="selecting({{ kid.id }})"/>
+            onclick="selecting({{ kid.id }})"/>  
         {# 아이 이름과 나이 보여주기 #}
         <a href="#" onclick="selecting({{ kid.id }})">{{ kid.name }}</a>
     </div>
@@ -20,5 +20,5 @@ function selecting(kid_id){
     <div>
         <button><span style="text-decoration: double;"> <a href="{% url 'user:kid_register' %}" style = "color : #fff" >아이정보등록하기</a></span></button>
     </div>
-<div>
+</div>
 {% endblock content %}
