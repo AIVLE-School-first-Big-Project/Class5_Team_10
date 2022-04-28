@@ -1,6 +1,4 @@
-{% load static %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+{% include "base.html" %}
 <div class="container">
     <form action="{% url 'board:post_modify' post.id %}" method="post" class="post-form my-3" enctype="multipart/form-data">
         {% csrf_token %}
