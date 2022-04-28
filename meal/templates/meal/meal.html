@@ -8,11 +8,26 @@
 
 <!-- 데이트피커 -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!-- 차트 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
 
 <!-- lib -->
 {% block content %}
 <style>
+#profile {
+    width: 18rem;
+    height: 15rem;
+    border-radius: 20%;
+}
+
+#myChart {
+    width: 20rem;
+    height: 20rem;
+}
+
+
 #morning_previewImg, #lunch_previewImg, #evening_previewImg {
     margin: 1rem;
     width: 18rem;
@@ -175,19 +190,110 @@ $(document).ready(function() {
         showOtherMonths: true, //빈 공간에 현재월의 앞뒤월의 날짜를 표시
         showMonthAfterYear:true, // 월- 년 순서가아닌 년도 - 월 순서
         changeYear: true, //option값 년 선택 가능
-        changeMonth: true, //option값  월 선택 가능                
-        showOn: "both", //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시  
-        buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif", //버튼 이미지 경로
-        buttonImageOnly: true, //버튼 이미지만 깔끔하게 보이게함
-        buttonText: "선택", //버튼 호버 텍스트              
+        changeMonth: true, //option값  월 선택 가능                           
         yearSuffix: "년", //달력의 년도 부분 뒤 텍스트
         monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트
         monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 Tooltip
         dayNamesMin: ['일','월','화','수','목','금','토'], //달력의 요일 텍스트
         dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'], //달력의 요일 Tooltip
         minDate: "-5Y", //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-        maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
+        maxDate: "+0d" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
     })
+
+    //차트
+
+    let canvas = document.getElementById('myChart')
+    let ctx = canvas.getContext('2d')
+    let labels = ['칼로리','단백질','칼슘','인','나트륨','칼륨','마그네슘','철분','아연']
+
+    let myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    axis: 'y',
+                    // 아직 잘 모름
+                    label: '냠냠',
+                    // 값에 따라 색 바꾸기
+                    color: function(context) {
+                        let index = context.dataIndex
+                        let value = context.dataset.data[index]
+                        return 
+                            value < 50.0 ? 'red' :  // 음수 값은 빨간색으로 그립니다
+                            value < 70.0 ? 'blue' :    // 그 밖의 다른 값들은 파란색과 초록색으로 그립니다
+                            'green';
+                    },
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1,
+                    ////
+                    data:  {{intake}},
+                }
+            ],
+
+            
+        },
+        options: { 
+            type: 'bar',
+            indexAxis: 'y',
+            responsive: true,
+            // 라벨에 텍스트 바꾸기
+            tooltips: {
+            //     callbacks: {
+            //         label: function(tooltipItem, data) {
+            //             let label = data.datasets[tooltipItem.datasetIndex].label || ''
+
+            //             if (label) {
+            //                 label += ': '
+            //             }
+            //             label += Math.round(tooltipItem.yLabel * 100) / 100
+            //             return label
+            //         },
+            //         //라벨 색상 바꾸기
+            //         labelColor: function(tooltipItem, chart) {
+            //             return {
+            //                 borderColor: 'rgb(255, 0, 0)',
+            //                 backgroundColor: 'rgb(255, 0, 0)'
+            //             }
+            //         },
+            //         labelTextColor: function(tooltipItem, chart) {
+            //             return '#543453'
+            //         }
+
+            //     }
+            // }
+                callbacks: {
+                    labelColor: function(tooltipItem, chart) {
+                        return {
+                            borderColor: 'rgb(255, 0, 0)',
+                            backgroundColor: 'rgb(255, 0, 0)'
+                        }
+                    },
+                    labelTextColor: function(tooltipItem, chart) {
+                        return '#543453'
+                    }
+                }
+            }
+        }
+    })
+
     
     $('.morning_upload').click(function() {
         modal_show('morning')        
@@ -363,7 +469,7 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
             }).done(function(results) {
-                console.log('gg')
+                window.location.reload()
             })
             $(this).attr('disabled', 'disabled')
             $('.' + meal + '_upload').attr('disabled', 'disabled')
@@ -373,6 +479,9 @@ $(document).ready(function() {
             $('#' + $(food_form).attr('id') + ' .add_food').attr('disabled', 'disabled')
         } else console.log('no')
     })
+
+
+    
 })
 </script>
 <body>
@@ -397,8 +506,26 @@ $(document).ready(function() {
                 </div>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col d-flex justify-content-center mt-3 mb-3 mr-3">자녀 정보</div>
+        <div class="row mb-3 ml-3">
+            <div class="col">
+                <img class="img" id="profile" src="{{ kid.img.url }}"/>  
+            </div>
+            <div class="col">                 
+                <div class="row">이름 : {{kid.name}}</div>
+                <div class="row">생일 : {{kid.birthday | date:"y-m-d" }}</div>
+                <div class="row">키 : {{kid.height}}</div>
+                <div class="row">몸무게 : {{kid.weight}}</div>
+                <div class="row">
+                    <a href="/user/edit/{{ kid.id }}">아이 프로필 수정</a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="chart-container">
+                    <canvas id="myChart">
+                        <p>Hello Fallback World</p>
+                    </canvas> 
+                </div>
+            </div>
         </div>
         <!-- 아침 -->
         <div class="row" id="morning_row">
@@ -452,7 +579,7 @@ $(document).ready(function() {
             </div>
             <div class="col mb-3 meal frame" style="overflow-y: auto;">
                 <div class="row mt-3 d-flex justify-content-center">아침 식단 결과</div>
-                <img class="img w-100" id="lunch" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
+                <img class="w-100" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
             </div>
         </div>
         <!-- 점심 -->
@@ -507,7 +634,7 @@ $(document).ready(function() {
             </div>
             <div class="col mb-3 meal frame" style="overflow-y: auto;">
                 <div class="row mt-3 d-flex justify-content-center">점심 식단 결과</div>
-                <img class="img w-100" id="lunch" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
+                <img class="w-100" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
             </div>
         </div>
         <!-- 저녁 -->
@@ -562,7 +689,7 @@ $(document).ready(function() {
             </div>
             <div class="col mb-3 meal frame" style="overflow-y: auto;">
                 <div class="row mt-3 d-flex justify-content-center">저녁 식단 결과</div>
-                <img class="img w-100" id="lunch" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
+                <img class="w-100"src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
             </div>
         </div>
     </div>
@@ -669,7 +796,7 @@ $(document).ready(function() {
             </div>
             <div class="modal-body text-center">
                 <strong><font color="red">정말 삭제하시겠습니까 ?</font></strong>
-            </dov>
+            </div>
             <div class="modal-footer justify-content-center">
                 <button class="btn btn-outline-secondary" data-dismiss="modal">취소</button>
                 <button class="btn btn-secondary" id="delete_Btn">&nbsp;&nbsp;&nbsp;삭제&nbsp;&nbsp;&nbsp;</button>

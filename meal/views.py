@@ -79,6 +79,24 @@ def meal(request):
             if evening_diet: context['evening_diet'] = evening_diet
             else: pass
 
+            nuts = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid)
+
+            intake = [0]*9
+
+            for nut in nuts:
+                intake[0] += nut.nutrition.energy
+                intake[1] += nut.nutrition.protein
+                intake[2] += nut.nutrition.calcium
+                intake[3] += nut.nutrition.phosphorus
+                intake[4] += nut.nutrition.sodium
+                intake[5] += nut.nutrition.potassium
+                intake[6] += nut.nutrition.magnesium
+                intake[7] += nut.nutrition.iron
+                intake[8] += nut.nutrition.zinc
+
+            context['intake'] = intake
+            context['kid'] = kid
+
             if morning_meal or lunch_meal or evening_meal:
                 return render(request, 'meal/meal.html', context=context)
             else:
@@ -127,6 +145,24 @@ def meal(request):
             else: pass
             if evening_diet: context['evening_diet'] = evening_diet
             else: pass
+
+            nuts = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid)
+
+            intake = [0]*9
+
+            for nut in nuts:
+                intake[0] += nut.nutrition.energy
+                intake[1] += nut.nutrition.protein
+                intake[2] += nut.nutrition.calcium
+                intake[3] += nut.nutrition.phosphorus
+                intake[4] += nut.nutrition.sodium
+                intake[5] += nut.nutrition.potassium
+                intake[6] += nut.nutrition.magnesium
+                intake[7] += nut.nutrition.iron
+                intake[8] += nut.nutrition.zinc
+
+            context['intake'] = intake
+            context['kid'] = kid
 
             if morning_meal or lunch_meal or evening_meal:
                 return render(request, 'meal/meal.html', context=context)
