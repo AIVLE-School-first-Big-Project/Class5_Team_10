@@ -1,6 +1,19 @@
 {% load static %}
+
+<link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+<script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 
+{% comment %} <style>
+.comment_modify {
+    border:rgb(189, 188, 188) 1px solid;
+
+    border-radius: 5%;
+
+    background-color: #e7e7e7;
+}
+</style> {% endcomment %}
 <div class="container my-3">
     <!--작성자, 게시일, 제목-->
     <div class="card-header">
@@ -20,69 +33,171 @@
     </div>
 </div>
 {% if request.user.is_staff %}
-<a href="javascript:void(0)" class="modify btn btn-primary"
+<a href="javascript:void(0)" class="post_modify btn btn-primary"
 data-uri="{% url 'board:post_modify' post.id  %}">수정</a>
 {% endif%}
 {% if request.user.is_staff %}
-<a href="javascript:void(0)" class="delete btn btn-primary"
+<a href="javascript:void(0)" class="post_delete btn btn-primary"
 data-uri="{% url 'board:post_delete' post.id  %}">삭제</a>
 {% endif%}
 <hr class="my-5">
+</div>
+
+<div>
 {% if user.is_authenticated %}
-<div class="container my-3">
-    <br>댓글 작성
-    <form action="" method="POST">
+    <div class="container my-3">
+        <br>댓글 작성
         {% csrf_token %}
-        <textarea name="content" id="content"></textarea><br>
-            <button class="primaryContained" type="submit">댓글 작성하기</button>
+        <form action="" method="POST">
+            <textarea name="content" id="content" required></textarea><br>
+            <button class="primaryContained">댓글 작성하기></button>
         </form>
     </div>
-    {% endif %}
-    <!-- 댓글 조회란 -->
-    <div>
-    <table class="table">
-        <thead>
-            <tr class="table-dark">
-                <th style="font-weight: bold; font-size: 16px;">작성자</th>
-                <th style="font-weight: bold; font-size: 16px;">등록일</th>
-                <th style="font-weight: bold; font-size: 16px;">내용</th>
-            </tr>
-            <tbody>
-                {% if comments %}
-                {% for comment in comments %}
-                <tr class="text-center" style="cursor:pointer;">
-                    <td>{{ comment.user.username }}</td>
-                    <td>{{ comment.regdate }}</td>
-                    <td>{{ comment.content }}</td>
-                </tr>
-                {% endfor %}
-                {% else %}
-                <tr>
-                    <td colspan="10">등록된 댓글이 없습니다.</td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </thead>
-    </table>
-    </div>
+{% endif %}
+</div>
+
+<!-- 댓글 조회 -->
+<div class="container my-3">
+    <ul class="comments-list reply-list">
+        {% if comments_list %}
+        {% for comment in comments_list %}
+        <form action="{% url 'board:comment_modify' comment.id %}" method="POST">
+            <li>
+                <span>{{ comment.user.username }}</span>
+                <span>{{ comment.regdate }}</span>
+                <span><input type="text" class="comment" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required></span>
+                <span>
+                {% if request.user.username == comment.user.username %}
+                    <a href="javascript:void(0)" class="comment_modify btn btn-primary" id="{{comment.id}}">수정</a>
+                    <button class="comment_submit btn btn-primary" id="{{comment.id}}_submit" style="display:none">완료</button>
+                    {% comment %} <a href="javascript:void(0)" class="comment_submit btn btn-primary" id="{{comment.id}}_submit" style="display:none"
+                    data-uri="{% url 'board:comment_modify' comment.id %}">완료</a> {% endcomment %}
+                    <a href="javascript:void(0)" class="comment_cancel btn btn-primary" id="{{comment.id}}_cancel" style="display:none">취소</a>
+                    <a href="javascript:void(0)" class="comment_delete btn btn-primary" id="{{comment.id}}_delete"
+                    data-uri="{% url 'board:comment_delete' comment.id %}">삭제</a>
+                {% endif%}
+                </span>
+            </li>
+        </form>
+        {% endfor %}
+        {% else %}
+            등록된 댓글이 없습니다.
+        {% endif %}
+    </ul>
 </div>
 
 
+
+<!-- 댓글 페이징처리 시작 -->
+<div>
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if comments_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?&page={{ comments_list.previous_page_number }}"
+                tabindex="-1" style="font-size: 15px;">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in comments_list.paginator.page_range %}
+        {% if page_number >= comments_list.number|add:-5 and page_number <= comments_list.number|add:5 %}
+        {% if page_number == comments_list.number %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="?&page={{ page_number }}" style="font-size: 15px;">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?&page={{ page_number }}" style="font-size: 15px;">{{ page_number }}</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if post_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?&page={{ comments_list.next_page_number }}"
+                tabindex="-1" style="font-size: 15px;">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+<!-- 페이징처리 끝 -->
+
+
+
 <script type='text/javascript'>
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
-            if(confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            };
+    $(document).ready(function() {
+        const delete_post = document.getElementsByClassName("post_delete");
+        Array.from(delete_post).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if(confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri
+                };
+            });
         });
-    });
-    const modify_elements = document.getElementsByClassName("modify");
-    Array.from(modify_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
-            if(confirm("정말로 수정하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            };
+
+        const modify_post = document.getElementsByClassName("post_modify");
+        Array.from(modify_post).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if(confirm("정말로 수정하시겠습니까?")) {
+                    location.href = this.dataset.uri
+                };
+            });
         });
-    });
+
+        const delete_comment = document.getElementsByClassName("comment_delete");
+        Array.from(delete_comment).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if(confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri
+                };
+            });
+        });
+
+        const modify_comment = document.getElementsByClassName("comment_submit");
+        Array.from(modify_comment).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if(confirm("정말로 수정하시겠습니까?")) {
+                    location.href = this.dataset.uri
+                };
+            });
+        });
+
+        $(document).on('click', '.comment_modify', function() {
+            input_id = '#' + $(this).attr('id') + "_input"
+            $(input_id).removeAttr('readonly')
+            // 댓글 수정 완료, 취소 버튼 활성화
+            submit_id = '#' + $(this).attr('id') + "_submit" 
+            cancle_id = '#' + $(this).attr('id') + "_cancel"
+            delete_id = '#' + $(this).attr('id') + "_delete"
+            
+            $(submit_id).show();
+            $(cancle_id).show();
+            $(this).hide();
+            console.log(this)
+            $(delete_id).hide();
+        })
+
+        $(document).on('click', '.comment_cancel', function() {
+            cancel_id = '#' + $(this).attr('id')
+            id = input_id.split('_')[0]
+            input_id = id + '_input'
+
+            $(input_id).attr('readonly', true)
+            delete_id = id + "_delete"
+            modify_id = id
+            $(modify_id).show();
+            $(delete_id).show();
+            $(this).hide();
+            $(submit_id).hide();
+        })
+    })
 </script>
