@@ -12,11 +12,6 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('signup/id_check', views.id_check),
     path('register/', views.kid_register, name='kid_register'),
-<<<<<<< HEAD
-    path('select/', views.kid_select, name='kid_select'),
-    path('update/', views.user_update, name='user_update'),
-    path('select/kid', views.kid, name='kid'),  # 추가
-=======
     path('select_kid/', views.kid_select, name='kid_select'),
     path('update/my_info/', views.user_update, name='user_update'),
     path('select_kid/kid', views.kid_send, name='kid'),  # 추가
@@ -28,7 +23,6 @@ urlpatterns = [
     path('update/kid_info/test/', views.kid_update_test, name='kid_update_test'),
     path('kid_del/', views.kid_del, name='kid_del'),
     path('update/kid_info/each/', views.kid_update_each, name='kid_update_each'),    
->>>>>>> user
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
