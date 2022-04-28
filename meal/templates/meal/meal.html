@@ -149,7 +149,8 @@ function del_meal_diet(meal) {
             method: 'delete',
             data: JSON.stringify({
                 regdate: regdate,
-                meal_time: meal_time
+                meal_time: meal_time,
+                kid_id: sessionStorage.getItem('kid_id')
             }),
             contentType: 'application/json'
         }).done(function(result) {
@@ -160,11 +161,13 @@ function del_meal_diet(meal) {
             $('#' + meal +'_frame .add_food').removeAttr('disabled')
             $('#' + meal +'_frame .result_btn').removeAttr('disabled')
             $('#del_modal').modal('hide')
+            window.location.reload()
         })
     })
 }
 
 $(document).ready(function() {
+    console.log(sessionStorage.getItem('kid_id'))
     // 데이트피커
     //input을 datepicker로 선언
     $("#datepicker").datepicker({
@@ -350,6 +353,7 @@ $(document).ready(function() {
             formData.append('frame', $(food_form).attr('id'))
             formData.append('food_result', food_result)
             formData.append('portions', portions)
+            formData.append('kid_id', sessionStorage.getItem('kid_id'))
 
             $.ajax({
                 url: 'meal_diet',
@@ -376,6 +380,7 @@ $(document).ready(function() {
         <div class="row">
             <form class="col w-100" action="./" method="post">
                 {% if date %}
+                <input type="hidden" name="kid_id" value="{{ kid_id }}">
                 <input type="text" name="datepicker" id="datepicker" value="{{ date }}">
                 <button class="btn btn-secondary" id ="date">선택</button>
                 {% else %}
@@ -447,6 +452,7 @@ $(document).ready(function() {
             </div>
             <div class="col mb-3 meal frame" style="overflow-y: auto;">
                 <div class="row mt-3 d-flex justify-content-center">아침 식단 결과</div>
+                <img class="img w-100" id="lunch" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
             </div>
         </div>
         <!-- 점심 -->
@@ -501,6 +507,7 @@ $(document).ready(function() {
             </div>
             <div class="col mb-3 meal frame" style="overflow-y: auto;">
                 <div class="row mt-3 d-flex justify-content-center">점심 식단 결과</div>
+                <img class="img w-100" id="lunch" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
             </div>
         </div>
         <!-- 저녁 -->
@@ -555,6 +562,7 @@ $(document).ready(function() {
             </div>
             <div class="col mb-3 meal frame" style="overflow-y: auto;">
                 <div class="row mt-3 d-flex justify-content-center">저녁 식단 결과</div>
+                <img class="img w-100" id="lunch" src="{% static 'image/로고.png' %}" alt="로고 이미지"/>
             </div>
         </div>
     </div>

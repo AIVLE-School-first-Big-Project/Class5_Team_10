@@ -2,19 +2,27 @@
 {% block content %}
 <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
 <script>
-function selecting(kid_id){
-    sessionStorage.setItem('kid_id',kid_id)
-    location.href='http://127.0.0.1:8000/meal/meal'
-}
+    function selecting(kid_id) {
+        sessionStorage.removeItem('kid_id')
+        sessionStorage.setItem('kid_id', kid_id)
+        $.ajax({
+            url: 'kid',
+            method: 'post',
+            data: {kid_id: kid_id}
+        }).done(function() {
+            location.href='http://127.0.0.1:8000/meal/meal'
+        })
+    }
 </script>
 <div>
     {% for kid in kid_set %}
     <div> 
-        {# 아이 사진 보여주기 #}
-        <img src="{{ kid.img.url }}" class="img-responsive" style="width: 10%; float: left; margin-right: 10px;"
-            onclick="selecting({{ kid.id }})"/>
-        {# 아이 이름과 나이 보여주기 #}
-        <a href="#" onclick="selecting({{ kid.id }})">{{ kid.name }}</a>
+        <!-- 아이 사진 보여주기 -->
+        <div class="select_kid" onclick="selecting({{ kid.id }})">
+            <img src="{{ kid.img.url }}" class="img-responsive" style="width: 10%; float: left; margin-right: 10px;"/>
+            <!-- 아이 이름과 나이 보여주기 -->
+            <p>{{ kid.name }}</ap>
+            </div>
     </div>
     {% endfor %}
 <div>

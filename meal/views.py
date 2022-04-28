@@ -11,11 +11,21 @@ from .ai import prediction
 @csrf_exempt
 def meal(request):
     context = {}
-    # 자녀, 날짜 어떻게 선택?
-    kid = Kid.objects.get(id=1)
 
     if request.method == "GET":
-        # nutrition db가 없으면 추가(csv_to_model)
+        # 자녀정보
+        try:
+            kid_id = request.session['kid_id']
+            kid_id = int(kid_id)
+            context['kid_id'] = kid_id
+            kid = Kid.objects.get(id=kid_id)
+        except: pass
+
+        # 오늘 날짜 디폴트
+        date = datetime.date.today().strftime('%Y-%m-%d')
+        context['date'] = date
+
+        # 영양성분 DB 존재여부
         nutirition = []
         try: nutirition = Nutrition.objects.get(food='쌀밥')
         except: pass
@@ -34,8 +44,6 @@ def meal(request):
                                     transfat=row[15]))
             Nutrition.objects.bulk_create(tmp)
 
-        date = datetime.date.today().strftime('%Y-%m-%d')
-        context['date'] = date
         try:
             morning_meal = 0
             lunch_meal = 0
@@ -74,12 +82,15 @@ def meal(request):
             if morning_meal or lunch_meal or evening_meal:
                 return render(request, 'meal/meal.html', context=context)
             else:
-                return render(request, 'meal/meal.html', {'date': date})
+                return render(request, 'meal/meal.html', context=context)
         except: pass
-        return render(request, 'meal/meal.html', {'date': date})
+        return render(request, 'meal/meal.html', context=context)
 
     # 날짜 선택할 경우
     if request.method == "POST":
+        kid_id = request.POST.get('kid_id')
+        context['kid_id'] = kid_id
+        kid = Kid.objects.get(id=kid_id)
         date = request.POST.get('datepicker')
         context['date'] = date
         try:
@@ -120,9 +131,9 @@ def meal(request):
             if morning_meal or lunch_meal or evening_meal:
                 return render(request, 'meal/meal.html', context=context)
             else:
-                return render(request, 'meal/meal.html', {'date': date})
+                return render(request, 'meal/meal.html', context=context)
         except: pass
-        return render(request, 'meal/meal.html', {'date': date})
+        return render(request, 'meal/meal.html', context=context)
 
 @csrf_exempt
 def meal_upload(request):
@@ -141,7 +152,9 @@ def meal_upload(request):
 @csrf_exempt
 def meal_diet(request):
     # 자녀 어떻게 선택?
-    kid = Kid.objects.get(id=1)
+    kid_id = request.POST['kid_id']
+    try: kid = Kid.objects.get(id=kid_id)
+    except: pass
 
     meal_regdate = request.POST['date']
     if request.POST['frame'] == 'morning_food_form': meal_time = '아침'
@@ -198,8 +211,9 @@ def del_meal_diet(request):
     meal_regdate = meal_regdate.replace('.', '')
     meal_time = req['meal_time']
 
-    # 자녀 어떻게 선택?
-    kid = Kid.objects.get(id=1)
+    kid_id = req['kid_id']
+    kid = Kid.objects.get(id=kid_id)
+
     m = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=meal_regdate) & Meal.objects.filter(time=meal_time)
     m.delete()
     try: os.remove('media/meal_images/kid_{}/{}_{}{}'.format(kid.id, meal_regdate, meal_time, '.png'))

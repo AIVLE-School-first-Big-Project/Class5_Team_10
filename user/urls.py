@@ -14,6 +14,7 @@ urlpatterns = [
     path('register/', views.kid_register, name='kid_register'),
     path('select/', views.kid_select, name='kid_select'),
     path('update/', views.user_update, name='user_update'),
+    path('select/kid', views.kid, name='kid'),  # 추가
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

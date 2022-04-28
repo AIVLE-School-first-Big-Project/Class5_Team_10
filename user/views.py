@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from user.forms import UserCreationForm, KidRegisterForm, UpdateUserForm
 from user.models import User, Kid
+from django.views.decorators.csrf import csrf_exempt
 
 
 # 회원가입
@@ -147,3 +148,11 @@ def user_update(request):
 
 
 # 아이 정보 수정
+
+# 아이 선택 시 세션에 저장
+@csrf_exempt
+def kid(request):
+    request.session['kid_id'] = 0
+    if request.session['kid_id'] == 0:
+        request.session['kid_id'] = request.POST.get('kid_id')
+    return  render(request, 'user/user_update.html')
