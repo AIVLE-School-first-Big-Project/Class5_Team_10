@@ -1,39 +1,26 @@
-<!-- 네비게이션바 -->
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom"> -->
-    <!-- <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'board:post_list' %}">MealKid</a>
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                {% if user.is_authenticated %}
-                <a class="nav-link" href="{% url 'user:logout' %}">{{ user.username }} (로그아웃)</a>
-                {% else %}
-                <a class="nav-link" href="{% url 'user:login' %}">로그인</a>
-                {% endif %}
-            </li>
-        </ul>
-    </div> -->
-<!-- </nav> -->
-<nav>
-    <ul class="nav justify-content-center">
-        <li class="nav-item">
-            <a class="navbar-brand" href="{% url 'board:post_list' %}">MealKid</a>
-        </li>
-    </ul>
-    <ul class="nav justify-content-end">
-        <li class="nav-item">
-            {% if user.is_authenticated %}
-            <a class="nav-link" href="{% url 'user:logout' %}">{{ user.username }} (로그아웃)</a>
-            {% else %}
-            <a class="nav-link" href="{% url 'user:login' %}">로그인</a>
-            {% endif %}
-        </li>
-    </ul>
+{% load static %}
+<nav class="navbar navbar-light" style="background-color: #F75425;">
+    <div class="mx-auto order-0">
+        <a class="navbar-brand mx-auto" href="/">
+            <img src="{% static 'images/main_logo.png' %}" alt="" width="150" height="70 " class="top-50 start-50">
+        </a>
+    </div>
+    {% if user.is_authenticated %}
+    <a class="nav-link active text-white">{{ user.username}}님 환영합니다.</a>
+    <a class="nav-link active text-white" aria-current="page" href="#">마이페이지</a>
+    <a class="nav-link active text-white" aria-current="page" href="#">로그아웃</a>
+    {% else %}
+    <a class="nav-link active text-white" aria-current="page" href="{% url 'user:login' %}">로그인</a>
+    {% endif %}    
 </nav>
+
+<div class="navbar mx-auto" id="navbarNavDropdown" style="background-color: #FEE0C9;">
+    <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        내 아이
+    </a>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'user:login' %}">로그인</a>
+        <a class="dropdown-item" href="{% url 'user:logout' %}">로그아웃</a>
+    </div>
+    <a class="nav-link text-black" href="{% url 'board:post_list' %}">게시판</a>
+</div>

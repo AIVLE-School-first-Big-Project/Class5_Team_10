@@ -1,1 +1,11 @@
-<a href="{% url 'user:login' %}">로그인</a>
+{% load static %}
+{% include "base.html" %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"> 
+</head>
+
+<body>
+    <h1><a href="{% url 'user:login' %}"><img src="{% static 'images/main.png' %}" style="max-width: 100%; height: auto;"></a></h1>
+</body> 

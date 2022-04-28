@@ -1,4 +1,4 @@
-{% load static %}
+{% include "base.html" %}
 <div class="container my-3">    
     <form action="{% url 'board:post_create' %}" method="post" class="post-form my-3" enctype="multipart/form-data">
         {% csrf_token %}
