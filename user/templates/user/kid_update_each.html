@@ -1,39 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
-    <form method="POST" action=".">
-        {% csrf_token %}
-        <div>
-            <div>
-                <h3>
-                    비밀번호와 이메일만 수정이 가능합니다.
-                </h3>
-                <div>
-                    <h6>이름</h6>
-                    <div>{{ kid.name }}</div>
+<!-- <div>
+    아이 사진, 키, 몸무게만 수정이 가능합니다.
+</div> -->
+<div class="container">
+    <div class="row my-5">
+        <div class="col">
+            <form method="POST" action="." enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div class="row mx-5">
+                    <div class="col mt-4">
+                        <div class="row mb-2">
+                            <label class="font-weight-bold">이름</label>
+                            <span>{{ kid.name }}</span>
+                        </div>
+                        <div class="row mb-2">
+                            <label class="font-weight-bold">생년월일</label>
+                            <span class='row mb-2'>{{ kid.birthday }}</span>
+                        </div>
+                        <div class='row mb-2'>
+                            <label class='font-weight-bold' for='kid_height'>아이 신장</label>
+                            <input type='text' class='form-control' name='height' id='kid_height'
+                                value="{{ form.height.value | default_if_none:'' }}" placeholder='(cm)' required>
+                        </div>
+                        <div class='row mb-2'>
+                            <label class='font-weight-bold' for='kid_weight'>아이 체중</label>
+                            <input type='text' class='form-control' name='weight' id='kid_weight'
+                                value="{{ form.weight.value | default_if_none:'' }}" placeholder='(kg)' required>
+                        <div class="row mb-2">
+                            <label class="font-weight-bold" for="kid_img">아이 사진</label>
+                            <input type="file" class="form-control" name="img" accept="image/*" 
+                                id="kid_id">
+                        </div>
+                        <img src="{{ kid.img.url }}" class="img-responsive" style="width: 10%; float: left; margin-right: 10px;"/>
+                    </div>
                 </div>
-                <div>
-                    <h6>아이디</h6>
-                    <div>{{ kid.id }}</div>
-                </div>
-                <!-- <div>
-                    <label for="password">비밀번호</label>
-                    <input type="password" name="password1" id="password" 
-                        value ="{{ form.password.value|default_if_none:'' }}" required placeholder="">
-                </div>
-                <h6 class='font-wieght-bold'>비밀번호 확인</h6>
-                <input type='password' class='form-control' name='password2' id='password_check'
-                    placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
-                <small class='mt-1 text-danger'> {{password_error_msg}} </small>
-                <div>
-                    <label for="email">이메일</label>
-                    <input type="text" name="email" id="email"
-                        value="{{ form.email.value|default_if_none:'' }}" required>
-                </div> -->
-            </div>
+                <button type="submit"><span style="text-decoration: double;">수정 완료</span></button>
+                <button><span style="text-decoration: double;"> <a href="{% url 'user:kid_del' %}" style = "color : #fff" >아이정보삭제</a></span></button>
+            </form>
         </div>
-        <button type="submit"><span style="text-decoration: double;">수정 완료</span></button>
-        <button><span style="text-decoration: double;"> <a href="{% url 'user:member_del' %}" style = "color : #fff" >탈퇴하기</a></span></button>
-    </form>
+    </div>
 </div>
 {% endblock content %}

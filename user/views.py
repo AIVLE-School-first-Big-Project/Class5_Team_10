@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.forms import formset_factory, inlineformset_factory
 from user.forms import UserCreationForm, KidRegisterForm, UpdateUserForm, UpdateKidForm
@@ -40,9 +41,9 @@ def signup(request):
             else:
                 if form.is_valid():
                     User.objects.create_user(id=id, username=id, password=password1, email=email, name=name)
-                    user = authenticate(username=id, password=password1)  # 사용자 인증
-                    auth_login(request, user)  # 로그인
-                    return redirect('/')
+                    # user = authenticate(username=id, password=password1)  # 사용자 인증
+                    # auth_login(request, user)  # 로그인
+                    return redirect('user:login')
                 else:
                     email_error_msg = '이메일 양식이 맞지 않습니다.'
                     context = {
@@ -159,6 +160,7 @@ def user_update(request):
         'user' : user,
     }
     return render(request, 'user/user_update.html', context)
+
 
 
 # 아이 정보 수정
@@ -298,30 +300,23 @@ def kid_update_test(request):
 # 아이 정보 삭제
 @login_message_required
 def kid_del(request):
-    kid_id = request.session['_auth_user_id'] # 아이 세션 정보를 받아와야 함
+    kid_id = request.session['kid_id'] # 아이 세션 정보를 받아와야 함
     data = Kid.objects.get(pk=kid_id)
     data.delete()
-    return redirect('/')
+    return redirect('user:kid_select')
 
 
-# 아이 정보 수정(각자)
+# 아이 정보 수정(각자) # meal view에 위치해야 할 듯
 @login_message_required
 def kid_update_each(request):
     kid_id = request.session['kid_id']
     kid = Kid.objects.get(pk=kid_id)
     if request.method == 'POST':
-        form = UpdateKidForm(request.POST, instance=kid)
+        form = UpdateKidForm(request.POST, request.FILES, instance=kid)
         if form.is_valid():
             form.save()
-            messages.success(request, '회원정보가 수정되었습니다.')
-            return redirect('user:kid_select')
-        else:
-            email_error_msg = '이메일 양식이 맞지 않습니다.'
-            context = {
-                'form' : form,
-                'email_error_msg' : email_error_msg,
-            }
-            return render(request, 'user/kid_update_each.html', context)  
+            messages.success(request, '아이 정보가 수정되었습니다.')
+            return redirect('meal:meal')
     else:
         form = UpdateKidForm()
     context = {
@@ -329,3 +324,12 @@ def kid_update_each(request):
         'kid' : kid,
     }
     return render(request, 'user/kid_update_each.html', context)
+
+    
+# 아이 선택 시 세션에 저장
+@csrf_exempt
+def kid_send(request):
+    request.session['kid_id'] = 0
+    if request.session['kid_id'] == 0:
+        request.session['kid_id'] = request.POST.get('kid_id')
+    return  render(request, 'user/user_update.html')
