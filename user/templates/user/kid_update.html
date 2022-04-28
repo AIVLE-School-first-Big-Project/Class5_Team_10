@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+{% if form.errors %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <div id="form_errors">
+            {% for dict in formset.errors %}
+                {% for error in dict.values %}
+                    <strong>{{ error }}</strong>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+<div>
+    <form method="POST" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <div>
+            {% for form in formset %}
+                <!-- <table>
+                    <tr>
+                        <td>아이 이름</td>
+                        <td>
+                            <h6>{{ form.name.value }}</h6>
+                            <input type="hidden" name="name" id="name"
+                            value="{{ form.name.value | default_if_none:'1' }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>아이 생년월일</td>
+                        <td>
+                            {{ form.birthday.value }}
+                            <input type="hidden" name="birthday" id="name"
+                            value="{{ form.birthday.value | default_if_none:'2' }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class='font-weight-bold' for='kid_img' style="width:100%; border:0;">아이 사진</label>
+                        </td>
+                        <td>
+                            <input type="file" class='form-control' name="img" id="kid_img" 
+                        accept="image/*">        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="height">아이 신장</label>                        
+                        </td>
+                        <td>
+                            <input type="text" name="height" id="height"
+                            value="{{ form.height.value | default_if_none:'' }}" required>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="weight">아이 체중</label>
+                        </td>
+                        <td>
+                            <input type="text" name="weight" id="weight"
+                            value="{{ form.weight.value | default_if_none:'' }}" required>    
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <br> -->
+                {{ form.as_table}}
+                <br>
+                <br>
+            {% endfor %}
+        </div>
+        <button type="submit">수정 완료</button>
+    </form>
+</div>
+{% endblock content %}

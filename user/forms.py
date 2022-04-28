@@ -23,3 +23,10 @@ class UpdateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("password1", "password2", "email")
+
+
+class UpdateKidForm(forms.ModelForm):
+
+    class Meta:
+        model = Kid
+        fields = ("img", "height", "weight")

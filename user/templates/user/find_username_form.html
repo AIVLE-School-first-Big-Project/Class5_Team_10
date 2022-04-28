@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <h1>아이디를 잊어버리셨나요?</h1>
+    <p>이메일 주소를 입력하시면 아이디를 보내드립니다.</p>
+</div>
+<div>
+    <form method="POST">
+    {% csrf_token %}
+        <div>
+            이메일: <input type="email" name="email">
+        </div>
+        <div>
+            <input type="Submit" name="email_submit" value="전송">
+        </div>
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}
