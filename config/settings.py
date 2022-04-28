@@ -143,11 +143,6 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-<<<<<<< HEAD
-# LOGIN_REDIRECT_URL = ''
-
-
-=======
 # Email 전송
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
@@ -160,4 +155,3 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGIN_URL = 'user:login'
 LOGOUT_URL = 'user:logout'
->>>>>>> user
