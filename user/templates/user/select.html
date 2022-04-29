@@ -18,19 +18,11 @@
     {% for kid in kid_set %}
     <div> 
         <!-- 아이 사진 보여주기 -->
-<<<<<<< HEAD
-        <div class="select_kid" onclick="selecting({{ kid.id }})">
-            <img src="{{ kid.img.url }}" class="img-responsive" style="width: 10%; float: left; margin-right: 10px;"/>
-            <!-- 아이 이름과 나이 보여주기 -->
-            <p>{{ kid.name }}</ap>
-            </div>
-=======
         <div class="select_kid" onclick="selecting( {{ kid.id }} )">
             <img src="{{ kid.img.url }}" class="img-responsive" style="width: 10%; float: left; margin-right: 10px;"/>
         <!-- 아이 이름과 나이 보여주기 -->
             <p>{{ kid.name }}</p>
         </div>
->>>>>>> user
     </div>
     {% endfor %}
 <div>
