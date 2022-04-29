@@ -79,22 +79,69 @@ def meal(request):
             if evening_diet: context['evening_diet'] = evening_diet
             else: pass
 
-            nuts = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid)
+            nut_breakfast = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='아침')
+            nut_lunch = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='점심')
+            nut_dinner = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='저녁')
 
-            intake = [0]*9
+            intake2 = {}
+            intake2['breakfast'] = [0]*7
+            intake2['lunch'] = [0]*7
+            intake2['dinner'] = [0]*7
+            intake2['breakfast_per'] = [0]*7
+            intake2['lunch_per'] = [0]*7
+            intake2['dinner_per'] = [0]*7
 
-            for nut in nuts:
-                intake[0] += nut.nutrition.energy
-                intake[1] += nut.nutrition.protein
-                intake[2] += nut.nutrition.calcium
-                intake[3] += nut.nutrition.phosphorus
-                intake[4] += nut.nutrition.sodium
-                intake[5] += nut.nutrition.potassium
-                intake[6] += nut.nutrition.magnesium
-                intake[7] += nut.nutrition.iron
-                intake[8] += nut.nutrition.zinc
+            for nut in nut_breakfast:
+                intake2['breakfast'][0] += nut.nutrition.energy
+                intake2['breakfast'][1] += nut.nutrition.carbohydrate
+                intake2['breakfast'][2] += nut.nutrition.protein
+                intake2['breakfast'][3] += nut.nutrition.fat
+                intake2['breakfast'][4] += nut.nutrition.sodium * 0.4
+                intake2['breakfast'][5] += nut.nutrition.calcium
+                intake2['breakfast'][6] += nut.nutrition.iron
+                intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 
+                intake2['breakfast_per'][1] += nut.nutrition.carbohydrate * 100 / 300
+                intake2['breakfast_per'][2] += nut.nutrition.protein * 100 / 45
+                intake2['breakfast_per'][3] += nut.nutrition.fat * 100 / 50
+                intake2['breakfast_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500
+                intake2['breakfast_per'][5] += nut.nutrition.calcium * 100 / 800
+                intake2['breakfast_per'][6] += nut.nutrition.iron * 100 / 15
 
-            context['intake'] = intake
+            for nut in nut_lunch:
+                intake2['lunch'][0] += nut.nutrition.energy
+                intake2['lunch'][1] += nut.nutrition.carbohydrate
+                intake2['lunch'][2] += nut.nutrition.protein
+                intake2['lunch'][3] += nut.nutrition.fat
+                intake2['lunch'][4] += nut.nutrition.sodium * 0.4 
+                intake2['lunch'][5] += nut.nutrition.calcium
+                intake2['lunch'][6] += nut.nutrition.iron
+                intake2['lunch_per'][0] += nut.nutrition.energy * 100 / 2000
+                intake2['lunch_per'][1] += nut.nutrition.carbohydrate * 100 / 300
+                intake2['lunch_per'][2] += nut.nutrition.protein * 100 / 45
+                intake2['lunch_per'][3] += nut.nutrition.fat * 100 / 50
+                intake2['lunch_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
+                intake2['lunch_per'][5] += nut.nutrition.calcium * 100 / 800
+                intake2['lunch_per'][6] += nut.nutrition.iron * 100 / 15
+
+            for nut in nut_dinner:
+                intake2['dinner'][0] += nut.nutrition.energy
+                intake2['dinner'][1] += nut.nutrition.carbohydrate
+                intake2['dinner'][2] += nut.nutrition.protein
+                intake2['dinner'][3] += nut.nutrition.fat 
+                intake2['dinner'][4] += nut.nutrition.sodium * 0.4 
+                intake2['dinner'][5] += nut.nutrition.calcium
+                intake2['dinner'][6] += nut.nutrition.iron
+                intake2['dinner_per'][0] += nut.nutrition.energy * 100 / 2000
+                intake2['dinner_per'][1] += nut.nutrition.carbohydrate * 100 / 300
+                intake2['dinner_per'][2] += nut.nutrition.protein * 100 / 45
+                intake2['dinner_per'][3] += nut.nutrition.fat * 100 / 50
+                intake2['dinner_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
+                intake2['dinner_per'][5] += nut.nutrition.calcium * 100 / 800
+                intake2['dinner_per'][6] += nut.nutrition.iron * 100 / 15
+
+            j_intake = json.dumps(intake2)
+
+            context['intake'] = j_intake
             context['kid'] = kid
 
             if morning_meal or lunch_meal or evening_meal:
@@ -146,22 +193,69 @@ def meal(request):
             if evening_diet: context['evening_diet'] = evening_diet
             else: pass
 
-            nuts = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid)
+            nut_breakfast = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='아침')
+            nut_lunch = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='점심')
+            nut_dinner = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='저녁')
 
-            intake = [0]*9
+            intake2 = {}
+            intake2['breakfast'] = [0]*7
+            intake2['lunch'] = [0]*7
+            intake2['dinner'] = [0]*7
+            intake2['breakfast_per'] = [0]*7
+            intake2['lunch_per'] = [0]*7
+            intake2['dinner_per'] = [0]*7
 
-            for nut in nuts:
-                intake[0] += nut.nutrition.energy
-                intake[1] += nut.nutrition.protein
-                intake[2] += nut.nutrition.calcium
-                intake[3] += nut.nutrition.phosphorus
-                intake[4] += nut.nutrition.sodium
-                intake[5] += nut.nutrition.potassium
-                intake[6] += nut.nutrition.magnesium
-                intake[7] += nut.nutrition.iron
-                intake[8] += nut.nutrition.zinc
+            for nut in nut_breakfast:
+                intake2['breakfast'][0] += nut.nutrition.energy
+                intake2['breakfast'][1] += nut.nutrition.carbohydrate
+                intake2['breakfast'][2] += nut.nutrition.protein
+                intake2['breakfast'][3] += nut.nutrition.fat
+                intake2['breakfast'][4] += nut.nutrition.sodium * 0.4
+                intake2['breakfast'][5] += nut.nutrition.calcium
+                intake2['breakfast'][6] += nut.nutrition.iron
+                intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 
+                intake2['breakfast_per'][1] += nut.nutrition.carbohydrate * 100 / 300
+                intake2['breakfast_per'][2] += nut.nutrition.protein * 100 / 45
+                intake2['breakfast_per'][3] += nut.nutrition.fat * 100 / 50
+                intake2['breakfast_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500
+                intake2['breakfast_per'][5] += nut.nutrition.calcium * 100 / 800
+                intake2['breakfast_per'][6] += nut.nutrition.iron * 100 / 15
 
-            context['intake'] = intake
+            for nut in nut_lunch:
+                intake2['lunch'][0] += nut.nutrition.energy
+                intake2['lunch'][1] += nut.nutrition.carbohydrate
+                intake2['lunch'][2] += nut.nutrition.protein
+                intake2['lunch'][3] += nut.nutrition.fat
+                intake2['lunch'][4] += nut.nutrition.sodium * 0.4 
+                intake2['lunch'][5] += nut.nutrition.calcium
+                intake2['lunch'][6] += nut.nutrition.iron
+                intake2['lunch_per'][0] += nut.nutrition.energy * 100 / 2000
+                intake2['lunch_per'][1] += nut.nutrition.carbohydrate * 100 / 300
+                intake2['lunch_per'][2] += nut.nutrition.protein * 100 / 45
+                intake2['lunch_per'][3] += nut.nutrition.fat * 100 / 50
+                intake2['lunch_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
+                intake2['lunch_per'][5] += nut.nutrition.calcium * 100 / 800
+                intake2['lunch_per'][6] += nut.nutrition.iron * 100 / 15
+
+            for nut in nut_dinner:
+                intake2['dinner'][0] += nut.nutrition.energy
+                intake2['dinner'][1] += nut.nutrition.carbohydrate
+                intake2['dinner'][2] += nut.nutrition.protein
+                intake2['dinner'][3] += nut.nutrition.fat 
+                intake2['dinner'][4] += nut.nutrition.sodium * 0.4 
+                intake2['dinner'][5] += nut.nutrition.calcium
+                intake2['dinner'][6] += nut.nutrition.iron
+                intake2['dinner_per'][0] += nut.nutrition.energy * 100 / 2000
+                intake2['dinner_per'][1] += nut.nutrition.carbohydrate * 100 / 300
+                intake2['dinner_per'][2] += nut.nutrition.protein * 100 / 45
+                intake2['dinner_per'][3] += nut.nutrition.fat * 100 / 50
+                intake2['dinner_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
+                intake2['dinner_per'][5] += nut.nutrition.calcium * 100 / 800
+                intake2['dinner_per'][6] += nut.nutrition.iron * 100 / 15
+
+            j_intake = json.dumps(intake2)
+
+            context['intake'] = j_intake
             context['kid'] = kid
 
             if morning_meal or lunch_meal or evening_meal:

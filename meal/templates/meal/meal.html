@@ -23,8 +23,7 @@
 }
 
 #myChart {
-    width: 20rem;
-    height: 20rem;
+    width: 35vw;
 }
 
 
@@ -204,94 +203,87 @@ $(document).ready(function() {
 
     let canvas = document.getElementById('myChart')
     let ctx = canvas.getContext('2d')
-    let labels = ['칼로리','단백질','칼슘','인','나트륨','칼륨','마그네슘','철분','아연']
+    let labels = ['칼로리','탄수화물','단백질','지방','나트륨','칼슘','철분']
+    let intake = {{ intake|safe }}
+
+    const footer = (tooltipItems) => {
+        let sum = 0;
+      
+        intake.forEach(function(intake) {
+          sum += intake.parsed.x;
+        });
+        return 'Sum: ' + sum;
+    }
 
     let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
-            datasets: [
-                {
-                    axis: 'y',
-                    // 아직 잘 모름
-                    label: '냠냠',
-                    // 값에 따라 색 바꾸기
-                    color: function(context) {
-                        let index = context.dataIndex
-                        let value = context.dataset.data[index]
-                        return 
-                            value < 50.0 ? 'red' :  // 음수 값은 빨간색으로 그립니다
-                            value < 70.0 ? 'blue' :    // 그 밖의 다른 값들은 파란색과 초록색으로 그립니다
-                            'green';
-                    },
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
-                    ],
-                    borderWidth: 1,
-                    ////
-                    data:  {{intake}},
-                }
-            ],
-
-            
+            datasets: [{
+                axis: 'y',
+                label: '아침',
+				data: intake.breakfast_per,
+				backgroundColor: [
+                    'rgba(255, 0, 0, 0.5)'
+                ],
+				hoverBackgroundColor: [
+                    'rgb(255, 0, 0)'
+                ]
+			},{
+                axis: 'y',
+                label: '점심',
+				data: intake.lunch_per,
+				backgroundColor: [
+                    'rgba(255, 255, 0, 0.5)'
+                ],
+				hoverBackgroundColor: [
+                    'rgb(255, 255, 0)'
+                ]
+			},{
+                axis: 'y',
+                label: '저녁',
+				data: intake.dinner_per,
+				backgroundColor: [
+                    'rgba(0, 255, 0, 0.5)'
+                ],
+				hoverBackgroundColor: [
+                    'rgb(0, 255, 0)'
+                ]
+			}]
         },
-        options: { 
+
+        options: {
             type: 'bar',
             indexAxis: 'y',
-            responsive: true,
-            // 라벨에 텍스트 바꾸기
-            tooltips: {
-            //     callbacks: {
-            //         label: function(tooltipItem, data) {
-            //             let label = data.datasets[tooltipItem.datasetIndex].label || ''
-
-            //             if (label) {
-            //                 label += ': '
-            //             }
-            //             label += Math.round(tooltipItem.yLabel * 100) / 100
-            //             return label
-            //         },
-            //         //라벨 색상 바꾸기
-            //         labelColor: function(tooltipItem, chart) {
-            //             return {
-            //                 borderColor: 'rgb(255, 0, 0)',
-            //                 backgroundColor: 'rgb(255, 0, 0)'
-            //             }
-            //         },
-            //         labelTextColor: function(tooltipItem, chart) {
-            //             return '#543453'
-            //         }
-
-            //     }
-            // }
-                callbacks: {
-                    labelColor: function(tooltipItem, chart) {
-                        return {
-                            borderColor: 'rgb(255, 0, 0)',
-                            backgroundColor: 'rgb(255, 0, 0)'
+            scales: {
+                x: {
+                    stacked: true,
+                    ticks: {
+                        callback: function(value, index, ticks) {
+                            return value+'%'
                         }
                     },
-                    labelTextColor: function(tooltipItem, chart) {
-                        return '#543453'
+                    grid: {
+                        lineWidth: 0
+                    },
+                },
+                y: {
+                    stacked: true,                                      
+                    ticks: {
+                        display: true, //this will remove only the label
+                    },
+                    grid: {
+                        lineWidth: 0
                     }
+                },
+            },
+            plugins: {
+                tooltip: {
+                    footer: footer,
                 }
             }
         }
+
     })
 
     
