@@ -63,10 +63,17 @@
                     <div class="col-3 text-white mt-1">
                         {{ comment.regdate }}
                     </div>
+                    {% comment %} <div class="col-5 d-flex justify-content-start text-white mt-1">
+                        {{ comment.user.username }}
+                    </div>
+                    <div class="col-5 d-flex justify-content-end text-white mt-1">
+                        {{ comment.regdate }}
+                    </div>
+                    <div class="col-2"></div> {% endcomment %}
                 </div>
                 <div class="row">
-                    <div class="col text-white mt-1">
-                        <input type="text" class="comment" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required>
+                    <div class="col-10 text-white mt-1">
+                        <input type="text" class="comment w-75 rounded" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required>
                     </div>
                     <div class="col d-flex justify-content-end">
                         {% if request.user.username == comment.user.username %}
@@ -78,7 +85,7 @@
                         {% endif%}
                     </div>
                 </div>
-                <hr class="navbar_color">
+                <hr class="navbar_color" style="width:100%; margin-bottom:0">
             </form>
             {% endfor %}
             {% else %}
@@ -98,13 +105,13 @@
                 <form action="" method="POST">
                 {% csrf_token %}
                     <div class="row">
+                        <div class="col-10 text-white text-start align-self-center mt-2 mb-1">
+                            <textarea wrap="hard" name="content" id="content" class="textarea_comment w-75" required></textarea>
+                        </div>
                         <div class="col-2 text-white text-start align-self-center mt-1 mb-1">
                             <div class="row justify-content-center">
                                 <button class="btn comment_border text-white"><small><b>댓글 등록</b></small></button>
                             </div>
-                        </div>
-                        <div class="col-10 text-white text-start align-self-center mt-2 mb-1">
-                            <textarea wrap="hard" name="content" id="content" class="textarea_comment" required></textarea>
                         </div>
                     </div>
                 </form>
