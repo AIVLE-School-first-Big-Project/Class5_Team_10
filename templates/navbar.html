@@ -1,15 +1,16 @@
 {% if user.is_authenticated %}
-<div class="navbar mx-auto justify-content-center" id="navbarNavDropdown" style="background-color: #FEE0C9;">
+<div class="navbar mx-auto justify-content-center navbar_color" id="navbarNavDropdown">
     <div class='col'></div>
         <div class='col'>
             <div class="row justify-content-center">
                 <div class="dropdown">
-                    <a class="nav-link dropdown-toggle text-black text-white" role="button" id="dropdownMenuLink" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-black text-white" role="button"
+                     id="dropdownMenuLink" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <b>내 아이</b>
                     </a>
                     <div class="col">
                     <div class="dropdown-menu row justify-content-center" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'user:login' %}">로그인</a>
+                        <a class="dropdown-item" href="{% url 'user:kid_register' %}">아이 등록하기</a></a>
                         <a class="dropdown-item" href="{% url 'user:logout' %}">로그아웃</a>
                     </div>
                 </div>

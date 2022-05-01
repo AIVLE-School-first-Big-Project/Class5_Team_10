@@ -1,22 +1,10 @@
 {% load static %}
 {% include "base.html" %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="utf-8"> 
-</head>
-<style>
-    #img {
-        height: 10rem;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-</style>
-<body>
-    <h1><img src="{% static 'images/main.png' %}" id="img" style="max-width: 50%; height: auto;"></h1>
-    <div class="col text-center">
-        <a href="{% url 'user:login' %}"><button class="btn btn3 btn-secondary btn-lg active" id="Amsterdam_font" role="button" aria-disabled="true"
-         style="color:#F75425; background-color:#fff;"><h3><b>Meal Kid 시작하기</h3></b></button></a>
-    </div>
-</body>
+
+{% block content%}
+<img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
+<div class="col text-center">
+    <a href="{% url 'user:login' %}"><button class="btn btn3 btn-secondary btn-lg active" id="Amsterdam_font" role="button" aria-disabled="true"
+        style="color:#F75425; background-color:#fff;"><h3><b>Meal Kid 시작하기</h3></b></button></a>
+</div>
+{% endblock %}
