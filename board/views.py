@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from .models import Post, Board, Comment
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -35,7 +35,7 @@ def post(request, post_id): # 게시물 상세 조회 함수
     
     # 댓글 페이징 처리
     page = request.GET.get('page', '1')  # 페이지
-    paginator = Paginator(comments_list, 10)  # 페이지당 10개씩 보여주기
+    paginator = Paginator(comments_list, 5)  # 페이지당 5개씩 보여주기
     comments_obj = paginator.get_page(page)
     context = {'post':post, 'comments_list':comments_obj, 'page':page}
 
@@ -47,6 +47,7 @@ def post(request, post_id): # 게시물 상세 조회 함수
             comment.post = Post.objects.get(pk=post_id)
             comment.regdate = timezone.now()
             comment.save()
+            return HttpResponseRedirect('/board/' + str(post.id))
         else:
             return render(request, 'board/post.html', context)
     return render(request, 'board/post.html', context)

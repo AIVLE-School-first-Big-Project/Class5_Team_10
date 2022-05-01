@@ -1,35 +1,29 @@
 {% load static %}
-<link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-<script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
-<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
-
-<style>
-    @font-face{
-        src: url("../../static/font/Amsterdam.ttf");
-        font-family: "Amsterdam"; 
-     }
-    #Amsterdam_font{
-    font-family: "Amsterdam";
-    }
-</style>
+<!DOCTYPE html>
 
 <html lang="ko">
 <head>
-    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+    <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/> <!-- 기호 사용 -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
 </head>
-<body>
 <!-- header -->
-{% include "header.html" %}
 <!-- 네비게이션바 -->
-{% include "navbar.html" %}
+{% comment %} {% include "navbar.html" %} {% endcomment %}
+<body class="body">
+{% include "header.html" %}
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 {% block content %}
 {% endblock %}
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
 <!-- Bootstrap JS -->
-
+{% block script%}
+{% endblock%}
 </body>
 </html>

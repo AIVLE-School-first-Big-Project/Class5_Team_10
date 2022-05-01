@@ -1,23 +1,124 @@
 {% include "base.html" %}
-<div class="container my-3">    
-    <form action="{% url 'board:post_create' %}" method="post" class="post-form my-3" enctype="multipart/form-data">
+
+<div class="row mt-5"></div>
+<div class="container my-3">
+    <form action="{% url 'board:post_create' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <table>
-        </table>
-        <div class='form-group'>
-            <label for='title'>제목</label>
-            <input type="text" class="form-control" name="title" required>
-            <label for='title'>카테고리</label>
-            <select name='category'>
-                <option value='공지'>공지</option>
-                <option value='영양'>영양</option>
-                <option value='Q&A'>Q&A</option>
-                <option value='Q&A'>기타</option>
-            </select><br><br>
-            <label for='content'>내용</label>
-            <textarea name='content' required></textarea>
-            <input type="file" name="image">
-            <input type="submit" value="등록하기" class="btn btn-primary">
+        <div class="row mt-5">
+            <div class="col"></div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                        <div class="form-control navbar_color text-center text-white"><b>제목</b></div>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control navbar_edge_color text-center" name="title" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row mt-3">
+            <div class="col"></div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                        <div class="form-control navbar_color text-center text-white"><b>카테고리</b></div>
+                    </div>
+                    <div class="col-8">
+                        <select name='category' class="form-control navbar_edge_color text-center">
+                            <option value='공지' class="header_color text-white">공지</option>
+                            <option value='영양' class="header_color text-white">영양</option>
+                            <option value='Q&A' class="header_color text-white">Q&A</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row mt-3">
+            <div class="col"></div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                        <div class="form-control navbar_color text-center text-white"><b>이미지</b></div>
+                    </div>
+                    <div class="col-8">
+                        <input type="file" name="image">
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row mt-3">
+            <div class="col"></div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                        <div class="form-control navbar_color text-center text-white"><b>내용</b></div>
+                    </div>
+                    <div class="col-8">
+                        {% comment %} <textarea class="navbar_edge_color autosize" name='content' required
+                        onkeydown="resize(this)" onkeyup="resize(this)"></textarea> {% endcomment %}
+                        <textarea wrap="hard" class="textarea_board navbar_edge_color" name='content' required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row mt-3">
+            <div class="col"></div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <div class="row justify-content-start pl-3">
+                            <a class='btn btn-outline-secondary text-white navbar_color' data-toggle='modal' data-target='#modal'>
+                                <b>이전</b></a>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="row justify-content-end pr-3">
+                            <input type="submit" value="등록하기" style="font-weight : bold" class="btn text-white navbar_color">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
         </div>
     </form>
 </div>
+
+<div class='modal fade' id='modal' tabindex='-1'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <strong>돌아가기</strong>
+                <button type='button' class='close' data-dismiss='modal'>
+                    <span>x</span>
+                </button>
+            </div>
+            <div class='modal-body text-center'>
+                <p>이전 단계로 돌아가시겠습니까?</p>
+                <small>
+                    현재 진행단계의 변경사항이 저장되지 않습니다.
+                </small>
+            </div>
+            <div class='modal-footer justify-content-center'>
+                <button class='btn btn-outline-secondary' data-dismiss='modal'>아니오</button>
+                <a href='../../' class='btn btn-secondary'>&nbsp;&nbsp;&nbsp;예&nbsp;&nbsp;&nbsp;</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function resize(obj) {
+      obj.style.height = "1px";
+      obj.style.height = (obj.scrollHeight)+"px";
+    }
+</script>
