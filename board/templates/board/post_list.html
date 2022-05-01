@@ -5,18 +5,18 @@
     <form class="mt-5" method="GET">
         <div class="col">
             <div class="form-row pl-1 pr-1">
-                <select class="form-select col-2 header_edge_color text-center" name="type">
+                <select class="form-select col-2 header_edge_color text-center rounded" name="type">
                     <option value="title" selected>제목</option>
                     <option value="content">내용</option>
                     <option value="category">카테고리</option>
                 </select>
                 <input type="text" id="search_kw" name="kw" value="{{ kw|default_if_none:'' }}" 
-                class="form-control form-control-md col-9 header_edge_color text-center" placeholder="검색어를 입력해주세요.">
+                class="form-control col-9 header_edge_color text-center" placeholder="검색어를 입력해주세요.">
                 <button class="btn col-1 header_edge_color" type="submit" id="search_btn" sytle="margin-top: 5px;"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <table class="table mt-2">
                 <thead>
-                <tr class="navbar_color text-center">
+                <tr class="navbar_color text-center rounded">
                     <th class="text-center text-white">번호</th>
                     <th class="text-center text-white">카테고리</th>
                     <th class="text-center text-white">제목</th>
