@@ -79,9 +79,15 @@ def meal(request):
             if evening_diet: context['evening_diet'] = evening_diet
             else: pass
 
-            nut_breakfast = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='아침')
-            nut_lunch = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='점심')
-            nut_dinner = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='저녁')
+            nut_breakfast = 0
+            nut_lunch = 0
+            nut_dinner = 0
+            try: nut_breakfast = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='아침')
+            except: pass
+            try: nut_lunch = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='점심')
+            except: pass
+            try: nut_dinner = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='저녁')
+            except: pass
 
             intake2 = {}
             intake2['breakfast'] = [0]*7
@@ -91,53 +97,179 @@ def meal(request):
             intake2['lunch_per'] = [0]*7
             intake2['dinner_per'] = [0]*7
 
-            for nut in nut_breakfast:
-                intake2['breakfast'][0] += nut.nutrition.energy
-                intake2['breakfast'][1] += nut.nutrition.carbohydrate
-                intake2['breakfast'][2] += nut.nutrition.protein
-                intake2['breakfast'][3] += nut.nutrition.fat
-                intake2['breakfast'][4] += nut.nutrition.sodium * 0.4
-                intake2['breakfast'][5] += nut.nutrition.calcium
-                intake2['breakfast'][6] += nut.nutrition.iron
-                intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 
-                intake2['breakfast_per'][1] += nut.nutrition.carbohydrate * 100 / 300
-                intake2['breakfast_per'][2] += nut.nutrition.protein * 100 / 45
-                intake2['breakfast_per'][3] += nut.nutrition.fat * 100 / 50
-                intake2['breakfast_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500
-                intake2['breakfast_per'][5] += nut.nutrition.calcium * 100 / 800
-                intake2['breakfast_per'][6] += nut.nutrition.iron * 100 / 15
+            if nut_breakfast:
+                energy = 0  # 2000
+                carbohydrate = 0  # 300
+                protein = 0  # 45
+                fat = 0  # 50
+                sodium = 0  # 1500
+                calcium = 0  # 800
+                iron = 0  # 15
+                good_food_breakfast = []
+                bad_food_breakfast = []
 
-            for nut in nut_lunch:
-                intake2['lunch'][0] += nut.nutrition.energy
-                intake2['lunch'][1] += nut.nutrition.carbohydrate
-                intake2['lunch'][2] += nut.nutrition.protein
-                intake2['lunch'][3] += nut.nutrition.fat
-                intake2['lunch'][4] += nut.nutrition.sodium * 0.4 
-                intake2['lunch'][5] += nut.nutrition.calcium
-                intake2['lunch'][6] += nut.nutrition.iron
-                intake2['lunch_per'][0] += nut.nutrition.energy * 100 / 2000
-                intake2['lunch_per'][1] += nut.nutrition.carbohydrate * 100 / 300
-                intake2['lunch_per'][2] += nut.nutrition.protein * 100 / 45
-                intake2['lunch_per'][3] += nut.nutrition.fat * 100 / 50
-                intake2['lunch_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
-                intake2['lunch_per'][5] += nut.nutrition.calcium * 100 / 800
-                intake2['lunch_per'][6] += nut.nutrition.iron * 100 / 15
+                for nut in nut_breakfast:
+                    intake2['breakfast'][0] += nut.nutrition.energy * nut.portions
+                    intake2['breakfast'][1] += nut.nutrition.carbohydrate * nut.portions
+                    intake2['breakfast'][2] += nut.nutrition.protein * nut.portions
+                    intake2['breakfast'][3] += nut.nutrition.fat * nut.portions
+                    intake2['breakfast'][4] += nut.nutrition.sodium * 0.4 * nut.portions
+                    intake2['breakfast'][5] += nut.nutrition.calcium * nut.portions
+                    intake2['breakfast'][6] += nut.nutrition.iron * nut.portions
+                    intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions 
+                    intake2['breakfast_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
+                    intake2['breakfast_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
+                    intake2['breakfast_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
+                    intake2['breakfast_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500 * nut.portions
+                    intake2['breakfast_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
+                    intake2['breakfast_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+                    energy += nut.nutrition.energy * nut.portions
+                    carbohydrate += nut.nutrition.carbohydrate * nut.portions
+                    protein += nut.nutrition.protein * nut.portions
+                    fat += nut.nutrition.fat * nut.portions
+                    sodium += nut.nutrition.sodium * nut.portions
+                    calcium += nut.nutrition.calcium * nut.portions
+                    iron += nut.nutrition.iron * nut.portions
+                
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_breakfast.append('칼로리')
+                else: bad_food_breakfast.append('칼로리')
 
-            for nut in nut_dinner:
-                intake2['dinner'][0] += nut.nutrition.energy
-                intake2['dinner'][1] += nut.nutrition.carbohydrate
-                intake2['dinner'][2] += nut.nutrition.protein
-                intake2['dinner'][3] += nut.nutrition.fat 
-                intake2['dinner'][4] += nut.nutrition.sodium * 0.4 
-                intake2['dinner'][5] += nut.nutrition.calcium
-                intake2['dinner'][6] += nut.nutrition.iron
-                intake2['dinner_per'][0] += nut.nutrition.energy * 100 / 2000
-                intake2['dinner_per'][1] += nut.nutrition.carbohydrate * 100 / 300
-                intake2['dinner_per'][2] += nut.nutrition.protein * 100 / 45
-                intake2['dinner_per'][3] += nut.nutrition.fat * 100 / 50
-                intake2['dinner_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
-                intake2['dinner_per'][5] += nut.nutrition.calcium * 100 / 800
-                intake2['dinner_per'][6] += nut.nutrition.iron * 100 / 15
+                if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_breakfast.append('탄수화물')
+                else: bad_food_breakfast.append('탄수화물')
+                
+                if 45 * 0.2 <= protein and protein < 45 * 0.4: good_food_breakfast.append('단백질')
+                else: bad_food_breakfast.append('단백질')
+
+                if 50 * 0.2 <= fat and fat < 50 * 0.4: good_food_breakfast.append('지방')
+                else: bad_food_breakfast.append('지방')
+
+                if 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food_breakfast.append('나트륨')
+                else: bad_food_breakfast.append('나트륨')
+
+                if 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food_breakfast.append('칼슘')
+                else: bad_food_breakfast.append('칼슘')
+
+                if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food_breakfast.append('철분')
+                else: bad_food_breakfast.append('철분')
+
+                context['good_food_breakfast'] = good_food_breakfast
+                context['bad_food_breakfast'] = bad_food_breakfast
+
+            if nut_lunch:
+                energy = 0  # 2000
+                carbohydrate = 0  # 300
+                protein = 0  # 45
+                fat = 0  # 50
+                sodium = 0  # 1500
+                calcium = 0  # 800
+                iron = 0  # 15
+                good_food_lunch = []
+                bad_food_lunch = []
+
+                for nut in nut_lunch:
+                    intake2['lunch'][0] += nut.nutrition.energy * nut.portions
+                    intake2['lunch'][1] += nut.nutrition.carbohydrate * nut.portions
+                    intake2['lunch'][2] += nut.nutrition.protein * nut.portions
+                    intake2['lunch'][3] += nut.nutrition.fat * nut.portions
+                    intake2['lunch'][4] += nut.nutrition.sodium * 0.4 * nut.portions
+                    intake2['lunch'][5] += nut.nutrition.calcium * nut.portions
+                    intake2['lunch'][6] += nut.nutrition.iron * nut.portions
+                    intake2['lunch_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions
+                    intake2['lunch_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
+                    intake2['lunch_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
+                    intake2['lunch_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
+                    intake2['lunch_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500 * nut.portions
+                    intake2['lunch_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
+                    intake2['lunch_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+                    energy += nut.nutrition.energy * nut.portions
+                    carbohydrate += nut.nutrition.carbohydrate * nut.portions
+                    protein += nut.nutrition.protein * nut.portions
+                    fat += nut.nutrition.fat * nut.portions
+                    sodium += nut.nutrition.sodium * nut.portions
+                    calcium += nut.nutrition.calcium * nut.portions
+                    iron += nut.nutrition.iron * nut.portions
+                
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_lunch.append('칼로리')
+                else: bad_food_lunch.append('칼로리')
+
+                if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_lunch.append('탄수화물')
+                else: bad_food_lunch.append('탄수화물')
+                
+                if 45 * 0.2 <= protein and protein < 45 * 0.4: good_food_lunch.append('단백질')
+                else: bad_food_lunch.append('단백질')
+
+                if 50 * 0.2 <= fat and fat < 50 * 0.4: good_food_lunch.append('지방')
+                else: bad_food_lunch.append('지방')
+
+                if 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food_breakfast.append('나트륨')
+                else: bad_food_lunch.append('나트륨')
+
+                if 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food_lunch.append('칼슘')
+                else: bad_food_lunch.append('칼슘')
+
+                if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food_lunch.append('철분')
+                else: bad_food_lunch.append('철분')
+
+                context['good_food_lunch'] = good_food_lunch
+                context['bad_food_lunch'] = bad_food_lunch
+
+            if nut_dinner:
+                energy = 0  # 2000
+                carbohydrate = 0  # 300
+                protein = 0  # 45
+                fat = 0  # 50
+                sodium = 0  # 1500
+                calcium = 0  # 800
+                iron = 0  # 15
+                good_food_dinner = []
+                bad_food_dinner = []
+
+                for nut in nut_dinner:
+                    intake2['dinner'][0] += nut.nutrition.energy * nut.portions
+                    intake2['dinner'][1] += nut.nutrition.carbohydrate * nut.portions
+                    intake2['dinner'][2] += nut.nutrition.protein * nut.portions
+                    intake2['dinner'][3] += nut.nutrition.fat * nut.portions
+                    intake2['dinner'][4] += nut.nutrition.sodium * 0.4 * nut.portions
+                    intake2['dinner'][5] += nut.nutrition.calcium * nut.portions
+                    intake2['dinner'][6] += nut.nutrition.iron * nut.portions
+                    intake2['dinner_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions
+                    intake2['dinner_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
+                    intake2['dinner_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
+                    intake2['dinner_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
+                    intake2['dinner_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500 * nut.portions
+                    intake2['dinner_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
+                    intake2['dinner_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+                    energy += nut.nutrition.energy * nut.portions
+                    carbohydrate += nut.nutrition.carbohydrate * nut.portions
+                    protein += nut.nutrition.protein * nut.portions
+                    fat += nut.nutrition.fat * nut.portions
+                    sodium += nut.nutrition.sodium * nut.portions
+                    calcium += nut.nutrition.calcium * nut.portions
+                    iron += nut.nutrition.iron * nut.portions
+                
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_dinner.append('칼로리')
+                else: bad_food_dinner.append('칼로리')
+
+                if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_dinner.append('탄수화물')
+                else: bad_food_dinner.append('탄수화물')
+                
+                if 45 * 0.2 <= protein and protein < 45 * 0.4: good_food_dinner.append('단백질')
+                else: bad_food_dinner.append('단백질')
+
+                if 50 * 0.2 <= fat and fat < 50 * 0.4: good_food_dinner.append('지방')
+                else: bad_food_dinner.append('지방')
+
+                if 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food_breakfast.append('나트륨')
+                else: bad_food_dinner.append('나트륨')
+
+                if 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food_dinner.append('칼슘')
+                else: bad_food_dinner.append('칼슘')
+
+                if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food_dinner.append('철분')
+                else: bad_food_dinner.append('철분')
+
+                context['good_food_dinner'] = good_food_dinner
+                context['bad_food_dinner'] = bad_food_dinner
 
             j_intake = json.dumps(intake2)
 
@@ -193,9 +325,15 @@ def meal(request):
             if evening_diet: context['evening_diet'] = evening_diet
             else: pass
 
-            nut_breakfast = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='아침')
-            nut_lunch = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='점심')
-            nut_dinner = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='저녁')
+            nut_breakfast = 0
+            nut_lunch = 0
+            nut_dinner = 0
+            try: nut_breakfast = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='아침')
+            except: pass
+            try: nut_lunch = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='점심')
+            except: pass
+            try: nut_dinner = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='저녁')
+            except: pass
 
             intake2 = {}
             intake2['breakfast'] = [0]*7
@@ -205,53 +343,188 @@ def meal(request):
             intake2['lunch_per'] = [0]*7
             intake2['dinner_per'] = [0]*7
 
-            for nut in nut_breakfast:
-                intake2['breakfast'][0] += nut.nutrition.energy
-                intake2['breakfast'][1] += nut.nutrition.carbohydrate
-                intake2['breakfast'][2] += nut.nutrition.protein
-                intake2['breakfast'][3] += nut.nutrition.fat
-                intake2['breakfast'][4] += nut.nutrition.sodium * 0.4
-                intake2['breakfast'][5] += nut.nutrition.calcium
-                intake2['breakfast'][6] += nut.nutrition.iron
-                intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 
-                intake2['breakfast_per'][1] += nut.nutrition.carbohydrate * 100 / 300
-                intake2['breakfast_per'][2] += nut.nutrition.protein * 100 / 45
-                intake2['breakfast_per'][3] += nut.nutrition.fat * 100 / 50
-                intake2['breakfast_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500
-                intake2['breakfast_per'][5] += nut.nutrition.calcium * 100 / 800
-                intake2['breakfast_per'][6] += nut.nutrition.iron * 100 / 15
+            if nut_breakfast:
+                energy = 0  # 2000
+                carbohydrate = 0  # 300
+                protein = 0  # 45
+                fat = 0  # 50
+                sodium = 0  # 1500
+                calcium = 0  # 800
+                iron = 0  # 15
+                good_food_breakfast = []
+                bad_food_breakfast = []
 
-            for nut in nut_lunch:
-                intake2['lunch'][0] += nut.nutrition.energy
-                intake2['lunch'][1] += nut.nutrition.carbohydrate
-                intake2['lunch'][2] += nut.nutrition.protein
-                intake2['lunch'][3] += nut.nutrition.fat
-                intake2['lunch'][4] += nut.nutrition.sodium * 0.4 
-                intake2['lunch'][5] += nut.nutrition.calcium
-                intake2['lunch'][6] += nut.nutrition.iron
-                intake2['lunch_per'][0] += nut.nutrition.energy * 100 / 2000
-                intake2['lunch_per'][1] += nut.nutrition.carbohydrate * 100 / 300
-                intake2['lunch_per'][2] += nut.nutrition.protein * 100 / 45
-                intake2['lunch_per'][3] += nut.nutrition.fat * 100 / 50
-                intake2['lunch_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
-                intake2['lunch_per'][5] += nut.nutrition.calcium * 100 / 800
-                intake2['lunch_per'][6] += nut.nutrition.iron * 100 / 15
+                for nut in nut_breakfast:
+                    intake2['breakfast'][0] += nut.nutrition.energy * nut.portions
+                    intake2['breakfast'][1] += nut.nutrition.carbohydrate * nut.portions
+                    intake2['breakfast'][2] += nut.nutrition.protein * nut.portions
+                    intake2['breakfast'][3] += nut.nutrition.fat * nut.portions
+                    intake2['breakfast'][4] += nut.nutrition.sodium * 0.4 * nut.portions
+                    intake2['breakfast'][5] += nut.nutrition.calcium * nut.portions
+                    intake2['breakfast'][6] += nut.nutrition.iron * nut.portions
+                    intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions
+                    intake2['breakfast_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
+                    intake2['breakfast_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
+                    intake2['breakfast_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
+                    intake2['breakfast_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500 * nut.portions
+                    intake2['breakfast_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
+                    intake2['breakfast_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+                    energy += nut.nutrition.energy * nut.portions
+                    carbohydrate += nut.nutrition.carbohydrate * nut.portions
+                    protein += nut.nutrition.protein * nut.portions
+                    fat += nut.nutrition.fat * nut.portions
+                    sodium += nut.nutrition.sodium * nut.portions
+                    calcium += nut.nutrition.calcium * nut.portions
+                    iron += nut.nutrition.iron * nut.portions
+                
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_breakfast.append('칼로리')
+                else: bad_food_breakfast.append('칼로리')
 
-            for nut in nut_dinner:
-                intake2['dinner'][0] += nut.nutrition.energy
-                intake2['dinner'][1] += nut.nutrition.carbohydrate
-                intake2['dinner'][2] += nut.nutrition.protein
-                intake2['dinner'][3] += nut.nutrition.fat 
-                intake2['dinner'][4] += nut.nutrition.sodium * 0.4 
-                intake2['dinner'][5] += nut.nutrition.calcium
-                intake2['dinner'][6] += nut.nutrition.iron
-                intake2['dinner_per'][0] += nut.nutrition.energy * 100 / 2000
-                intake2['dinner_per'][1] += nut.nutrition.carbohydrate * 100 / 300
-                intake2['dinner_per'][2] += nut.nutrition.protein * 100 / 45
-                intake2['dinner_per'][3] += nut.nutrition.fat * 100 / 50
-                intake2['dinner_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500
-                intake2['dinner_per'][5] += nut.nutrition.calcium * 100 / 800
-                intake2['dinner_per'][6] += nut.nutrition.iron * 100 / 15
+                if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_breakfast.append('탄수화물')
+                else: bad_food_breakfast.append('탄수화물')
+                
+                if 45 * 0.2 <= protein and protein < 45 * 0.4: good_food_breakfast.append('단백질')
+                else: bad_food_breakfast.append('단백질')
+
+                if 50 * 0.2 <= fat and fat < 50 * 0.4: good_food_breakfast.append('지방')
+                else: bad_food_breakfast.append('지방')
+
+                if 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food_breakfast.append('나트륨')
+                else: bad_food_breakfast.append('나트륨')
+
+                if 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food_breakfast.append('칼슘')
+                else: bad_food_breakfast.append('칼슘')
+
+                if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food_breakfast.append('철분')
+                else: bad_food_breakfast.append('철분')
+
+                context['good_food_breakfast'] = good_food_breakfast
+                context['bad_food_breakfast'] = bad_food_breakfast
+
+            if nut_lunch:
+                energy = 0  # 2000
+                carbohydrate = 0  # 300
+                protein = 0  # 45
+                fat = 0  # 50
+                sodium = 0  # 1500
+                calcium = 0  # 800
+                iron = 0  # 15
+                good_food_lunch = []
+                bad_food_lunch = []
+
+                for nut in nut_lunch:
+                    intake2['lunch'][0] += nut.nutrition.energy * nut.portions
+                    intake2['lunch'][1] += nut.nutrition.carbohydrate * nut.portions
+                    intake2['lunch'][2] += nut.nutrition.protein * nut.portions
+                    intake2['lunch'][3] += nut.nutrition.fat * nut.portions
+                    intake2['lunch'][4] += nut.nutrition.sodium * 0.4  * nut.portions
+                    intake2['lunch'][5] += nut.nutrition.calcium * nut.portions
+                    intake2['lunch'][6] += nut.nutrition.iron * nut.portions
+                    intake2['lunch_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions
+                    intake2['lunch_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
+                    intake2['lunch_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
+                    intake2['lunch_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
+                    intake2['lunch_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500 * nut.portions
+                    intake2['lunch_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
+                    intake2['lunch_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+                    energy += nut.nutrition.energy * nut.portions
+                    carbohydrate += nut.nutrition.carbohydrate * nut.portions
+                    protein += nut.nutrition.protein * nut.portions
+                    fat += nut.nutrition.fat * nut.portions
+                    sodium += nut.nutrition.sodium * nut.portions
+                    calcium += nut.nutrition.calcium * nut.portions
+                    iron += nut.nutrition.iron * nut.portions
+                energy_result = '칼로리(' + str(round(energy, 2)) + '/2000)'
+                print(energy_result)
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_lunch.append(energy_result)
+                else: bad_food_lunch.append(energy_result)
+
+                if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_lunch.append('탄수화물')
+                else: bad_food_lunch.append('탄수화물')
+                
+                if 45 * 0.2 <= protein and protein < 45 * 0.4: good_food_lunch.append('단백질')
+                else: bad_food_lunch.append('단백질')
+
+                if 50 * 0.2 <= fat and fat < 50 * 0.4: good_food_lunch.append('지방')
+                else: bad_food_lunch.append('지방')
+
+                if 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food_breakfast.append('나트륨')
+                else: bad_food_lunch.append('나트륨')
+
+                if 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food_lunch.append('칼슘')
+                else: bad_food_lunch.append('칼슘')
+
+                if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food_lunch.append('철분')
+                else: bad_food_lunch.append('철분')
+
+                context['good_food_lunch'] = good_food_lunch
+                context['bad_food_lunch'] = bad_food_lunch
+
+            if nut_dinner:
+                energy = 0  # 2000
+                carbohydrate = 0  # 300
+                protein = 0  # 45
+                fat = 0  # 50
+                sodium = 0  # 1500
+                calcium = 0  # 800
+                iron = 0  # 15
+                good_food_dinner = []
+                bad_food_dinner = []
+
+                for nut in nut_dinner:
+                    intake2['dinner'][0] += nut.nutrition.energy * nut.portions
+                    intake2['dinner'][1] += nut.nutrition.carbohydrate * nut.portions
+                    intake2['dinner'][2] += nut.nutrition.protein * nut.portions
+                    intake2['dinner'][3] += nut.nutrition.fat * nut.portions
+                    intake2['dinner'][4] += nut.nutrition.sodium * 0.4 * nut.portions
+                    intake2['dinner'][5] += nut.nutrition.calcium * nut.portions
+                    intake2['dinner'][6] += nut.nutrition.iron * nut.portions
+                    intake2['dinner_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions
+                    intake2['dinner_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
+                    intake2['dinner_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
+                    intake2['dinner_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
+                    intake2['dinner_per'][4] += nut.nutrition.sodium * 100 * 0.4  / 1500 * nut.portions
+                    intake2['dinner_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
+                    intake2['dinner_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+                    energy += nut.nutrition.energy * nut.portions
+                    carbohydrate += nut.nutrition.carbohydrate * nut.portions
+                    protein += nut.nutrition.protein * nut.portions
+                    fat += nut.nutrition.fat * nut.portions
+                    sodium += nut.nutrition.sodium * nut.portions
+                    calcium += nut.nutrition.calcium * nut.portions
+                    iron += nut.nutrition.iron * nut.portions
+                
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_dinner.append('칼로리')
+                else: bad_food_dinner.append('칼로리')
+
+                if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_dinner.append('탄수화물')
+                else: bad_food_dinner.append('탄수화물')
+                
+                if 45 * 0.2 <= protein and protein < 45 * 0.4: good_food_dinner.append('단백질')
+                else: bad_food_dinner.append('단백질')
+
+                if 50 * 0.2 <= fat and fat < 50 * 0.4: good_food_dinner.append('지방')
+                else: bad_food_dinner.append('지방')
+
+                if 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food_breakfast.append('나트륨')
+                else: bad_food_dinner.append('나트륨')
+
+                if 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food_dinner.append('칼슘')
+                else: bad_food_dinner.append('칼슘')
+
+                if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food_dinner.append('철분')
+                else: bad_food_dinner.append('철분')
+
+                print('value:', energy, '%:', energy * 100 / 2000, 'start', 2000 * 0.2, 'end', 2000 * 0.4)
+                print('value:', carbohydrate, '%:', carbohydrate * 100 / 300, 'start', 300 * 0.2, 'end', 300 * 0.4)
+                print('value:', protein, '%:', protein * 100 / 45, 'start', 45 * 0.2, 'end', 45 * 0.4)
+                print('value:', fat, '%:', fat * 100 / 50, 'start', 50 * 0.2, 'end', 50 * 0.4)
+                print('value:', sodium, '%:', sodium * 0.4 * 100 / 1500, 'start', 1500 * 0.2, 'end', 1500 * 0.4)
+                print('value:', calcium, '%:', calcium * 100 / 800, 'start', 800 * 0.2, 'end', 800 * 0.4)
+                print('value:', iron, '%:', iron * 100 / 15, 'start', 15 * 0.2, 'end', 15 * 0.4)
+
+                context['good_food_dinner'] = good_food_dinner
+                context['bad_food_dinner'] = bad_food_dinner
 
             j_intake = json.dumps(intake2)
 
