@@ -107,6 +107,8 @@ def meal(request):
                 iron = 0  # 15
                 good_food_breakfast = []
                 bad_food_breakfast = []
+                good_kcal_breakfast = 0
+                bad_kcal_breakfast = 0
 
                 for nut in nut_breakfast:
                     intake2['breakfast'][0] += nut.nutrition.energy * nut.portions
@@ -131,8 +133,8 @@ def meal(request):
                     calcium += nut.nutrition.calcium * nut.portions
                     iron += nut.nutrition.iron * nut.portions
                 
-                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_breakfast.append('칼로리')
-                else: bad_food_breakfast.append('칼로리')
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal_breakfast = round(energy, 2)
+                else: bad_kcal_breakfast = round(energy, 2)
 
                 if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_breakfast.append('탄수화물')
                 else: bad_food_breakfast.append('탄수화물')
@@ -154,6 +156,8 @@ def meal(request):
 
                 context['good_food_breakfast'] = good_food_breakfast
                 context['bad_food_breakfast'] = bad_food_breakfast
+                context['good_kcal_breakfast'] = good_kcal_breakfast
+                context['bad_kcal_breakfast'] = bad_kcal_breakfast
 
             if nut_lunch:
                 energy = 0  # 2000
@@ -165,6 +169,8 @@ def meal(request):
                 iron = 0  # 15
                 good_food_lunch = []
                 bad_food_lunch = []
+                good_kcal_lunch = 0
+                bad_kcal_lunch = 0
 
                 for nut in nut_lunch:
                     intake2['lunch'][0] += nut.nutrition.energy * nut.portions
@@ -189,8 +195,8 @@ def meal(request):
                     calcium += nut.nutrition.calcium * nut.portions
                     iron += nut.nutrition.iron * nut.portions
                 
-                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_lunch.append('칼로리')
-                else: bad_food_lunch.append('칼로리')
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal_lunch = round(energy, 2)
+                else: bad_kcal_lunch = round(energy, 2)
 
                 if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_lunch.append('탄수화물')
                 else: bad_food_lunch.append('탄수화물')
@@ -212,6 +218,8 @@ def meal(request):
 
                 context['good_food_lunch'] = good_food_lunch
                 context['bad_food_lunch'] = bad_food_lunch
+                context['good_kcal_lunch'] = good_kcal_lunch
+                context['bad_kcal_lunch'] = bad_kcal_lunch
 
             if nut_dinner:
                 energy = 0  # 2000
@@ -223,6 +231,8 @@ def meal(request):
                 iron = 0  # 15
                 good_food_dinner = []
                 bad_food_dinner = []
+                good_kcal_dinner = 0
+                bad_kcal_dinner = 0
 
                 for nut in nut_dinner:
                     intake2['dinner'][0] += nut.nutrition.energy * nut.portions
@@ -247,8 +257,8 @@ def meal(request):
                     calcium += nut.nutrition.calcium * nut.portions
                     iron += nut.nutrition.iron * nut.portions
                 
-                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_dinner.append('칼로리')
-                else: bad_food_dinner.append('칼로리')
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal_dinner = round(energy, 2)
+                else: bad_kcal_dinner = round(energy, 2)
 
                 if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_dinner.append('탄수화물')
                 else: bad_food_dinner.append('탄수화물')
@@ -270,6 +280,8 @@ def meal(request):
 
                 context['good_food_dinner'] = good_food_dinner
                 context['bad_food_dinner'] = bad_food_dinner
+                context['good_kcal_dinner'] = good_kcal_dinner
+                context['bad_kcal_dinner'] = bad_kcal_dinner
 
             j_intake = json.dumps(intake2)
 
@@ -353,6 +365,8 @@ def meal(request):
                 iron = 0  # 15
                 good_food_breakfast = []
                 bad_food_breakfast = []
+                good_kcal_breakfast = 0
+                bad_kcal_breakfast = 0
 
                 for nut in nut_breakfast:
                     intake2['breakfast'][0] += nut.nutrition.energy * nut.portions
@@ -362,7 +376,7 @@ def meal(request):
                     intake2['breakfast'][4] += nut.nutrition.sodium * 0.4 * nut.portions
                     intake2['breakfast'][5] += nut.nutrition.calcium * nut.portions
                     intake2['breakfast'][6] += nut.nutrition.iron * nut.portions
-                    intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions
+                    intake2['breakfast_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions 
                     intake2['breakfast_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
                     intake2['breakfast_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
                     intake2['breakfast_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
@@ -377,8 +391,8 @@ def meal(request):
                     calcium += nut.nutrition.calcium * nut.portions
                     iron += nut.nutrition.iron * nut.portions
                 
-                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_breakfast.append('칼로리')
-                else: bad_food_breakfast.append('칼로리')
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal_breakfast = round(energy, 2)
+                else: bad_kcal_breakfast = round(energy, 2)
 
                 if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_breakfast.append('탄수화물')
                 else: bad_food_breakfast.append('탄수화물')
@@ -400,6 +414,8 @@ def meal(request):
 
                 context['good_food_breakfast'] = good_food_breakfast
                 context['bad_food_breakfast'] = bad_food_breakfast
+                context['good_kcal_breakfast'] = good_kcal_breakfast
+                context['bad_kcal_breakfast'] = bad_kcal_breakfast
 
             if nut_lunch:
                 energy = 0  # 2000
@@ -411,13 +427,15 @@ def meal(request):
                 iron = 0  # 15
                 good_food_lunch = []
                 bad_food_lunch = []
+                good_kcal_lunch = 0
+                bad_kcal_lunch = 0
 
                 for nut in nut_lunch:
                     intake2['lunch'][0] += nut.nutrition.energy * nut.portions
                     intake2['lunch'][1] += nut.nutrition.carbohydrate * nut.portions
                     intake2['lunch'][2] += nut.nutrition.protein * nut.portions
                     intake2['lunch'][3] += nut.nutrition.fat * nut.portions
-                    intake2['lunch'][4] += nut.nutrition.sodium * 0.4  * nut.portions
+                    intake2['lunch'][4] += nut.nutrition.sodium * 0.4 * nut.portions
                     intake2['lunch'][5] += nut.nutrition.calcium * nut.portions
                     intake2['lunch'][6] += nut.nutrition.iron * nut.portions
                     intake2['lunch_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions
@@ -434,10 +452,9 @@ def meal(request):
                     sodium += nut.nutrition.sodium * nut.portions
                     calcium += nut.nutrition.calcium * nut.portions
                     iron += nut.nutrition.iron * nut.portions
-                energy_result = '칼로리(' + str(round(energy, 2)) + '/2000)'
-                print(energy_result)
-                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_lunch.append(energy_result)
-                else: bad_food_lunch.append(energy_result)
+                
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal_lunch = round(energy, 2)
+                else: bad_kcal_lunch = round(energy, 2)
 
                 if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_lunch.append('탄수화물')
                 else: bad_food_lunch.append('탄수화물')
@@ -459,6 +476,8 @@ def meal(request):
 
                 context['good_food_lunch'] = good_food_lunch
                 context['bad_food_lunch'] = bad_food_lunch
+                context['good_kcal_lunch'] = good_kcal_lunch
+                context['bad_kcal_lunch'] = bad_kcal_lunch
 
             if nut_dinner:
                 energy = 0  # 2000
@@ -470,6 +489,8 @@ def meal(request):
                 iron = 0  # 15
                 good_food_dinner = []
                 bad_food_dinner = []
+                good_kcal_dinner = 0
+                bad_kcal_dinner = 0
 
                 for nut in nut_dinner:
                     intake2['dinner'][0] += nut.nutrition.energy * nut.portions
@@ -494,8 +515,8 @@ def meal(request):
                     calcium += nut.nutrition.calcium * nut.portions
                     iron += nut.nutrition.iron * nut.portions
                 
-                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_food_dinner.append('칼로리')
-                else: bad_food_dinner.append('칼로리')
+                if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal_dinner = round(energy, 2)
+                else: bad_kcal_dinner = round(energy, 2)
 
                 if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food_dinner.append('탄수화물')
                 else: bad_food_dinner.append('탄수화물')
@@ -515,16 +536,10 @@ def meal(request):
                 if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food_dinner.append('철분')
                 else: bad_food_dinner.append('철분')
 
-                print('value:', energy, '%:', energy * 100 / 2000, 'start', 2000 * 0.2, 'end', 2000 * 0.4)
-                print('value:', carbohydrate, '%:', carbohydrate * 100 / 300, 'start', 300 * 0.2, 'end', 300 * 0.4)
-                print('value:', protein, '%:', protein * 100 / 45, 'start', 45 * 0.2, 'end', 45 * 0.4)
-                print('value:', fat, '%:', fat * 100 / 50, 'start', 50 * 0.2, 'end', 50 * 0.4)
-                print('value:', sodium, '%:', sodium * 0.4 * 100 / 1500, 'start', 1500 * 0.2, 'end', 1500 * 0.4)
-                print('value:', calcium, '%:', calcium * 100 / 800, 'start', 800 * 0.2, 'end', 800 * 0.4)
-                print('value:', iron, '%:', iron * 100 / 15, 'start', 15 * 0.2, 'end', 15 * 0.4)
-
                 context['good_food_dinner'] = good_food_dinner
                 context['bad_food_dinner'] = bad_food_dinner
+                context['good_kcal_dinner'] = good_kcal_dinner
+                context['bad_kcal_dinner'] = bad_kcal_dinner
 
             j_intake = json.dumps(intake2)
 
