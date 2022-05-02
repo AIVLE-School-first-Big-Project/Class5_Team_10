@@ -781,83 +781,147 @@ $(document).ready(function() {
     let canvas = document.getElementById('myChart')
     let ctx = canvas.getContext('2d')
     let labels = ['칼로리','탄수화물','단백질','지방','나트륨','칼슘','철분']
-    let intake = {{ intake|safe }}
+    let int = {{ intake|safe}}
 
-    console.log(intake)
+    var recom = [2000,300,45,50,1500,800,15]
+    var recom2 = ['Kcal','g','g','g','mg','mg','mg']
 
-    let myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                axis: 'y',
-                label: '아침',
-				data: intake.breakfast_per,
-				backgroundColor: [
-                    'rgba(255, 0, 0, 0.5)'
-                ],
-				hoverBackgroundColor: [
-                    'rgb(255, 0, 0)'
-                ]
-			},{
-                axis: 'y',
-                label: '점심',
-				data: intake.lunch_per,
-				backgroundColor: [
-                    'rgba(255, 255, 0, 0.5)'
-                ],
-				hoverBackgroundColor: [
-                    'rgb(255, 255, 0)'
-                ]
-			},{
-                axis: 'y',
-                label: '저녁',
-				data: intake.dinner_per,
-				backgroundColor: [
-                    'rgba(0, 255, 0, 0.5)'
-                ],
-				hoverBackgroundColor: [
-                    'rgb(0, 255, 0)'
-                ]
-			}]
-        },
+    var intake = []
+    intake.push(int.breakfast_per)
+    intake.push(int.lunch_per)
+    intake.push(int.dinner_per)
 
-        options: {
-            responsive: false,
-            type: 'bar',
-            indexAxis: 'y',
-            plugins: {
-                title: {
-                    display: true,
-                    position: 'bottom',
-                    text: '일일 권장섭취량 (%)'
-                },
+    var intake2 = []
+    intake2.push(int.breakfast)
+    intake2.push(int.lunch)
+    intake2.push(int.dinner)
+
+  
+    var data = {
+      labels: labels,
+        datasets: [{
+          label: '아침',
+          data: intake[0],
+          backgroundColor: [
+            'rgba(255, 0, 0, 0.5)'
+          ],
+          hoverBackgroundColor: [
+            'rgb(255, 0, 0)'
+          ]
+        },{
+          label: '점심',
+          data: intake[1],
+          backgroundColor: [
+            'rgba(255, 255, 0, 0.5)'
+          ],
+          hoverBackgroundColor: [
+            'rgb(255, 255, 0)'
+          ]
+        },{
+          label: '저녁',
+          data: intake[2],
+          backgroundColor: [
+            'rgba(0, 255, 0, 0.5)'
+          ],
+          hoverBackgroundColor: [
+            'rgb(0, 255, 0)'
+          ]
+        }]
+    }
+  
+    var options = {
+        responsive: false,
+        
+        indexAxis: 'y',
+
+        plugins: {
+
+            title: {
+            display: true,
+            position: 'bottom',
+            text: '일일 권장섭취량 (%)'
             },
-            scales: {
-                x: {
-                    stacked: true,
-                    //max:100,
-                    ticks: {
-                        callback: function(value, index, ticks) {
-                            return value+'%'
-                        }
-                    },
-                    grid: {
-                        lineWidth: 1
-                    },
-                },
-                y: {
-                    stacked: true,                                      
-                    ticks: {
-                        display: true, //this will remove only the label
-                    },
-                    grid: {
-                        lineWidth: 1
-                    }
-                },
-            }
-        }
 
+
+    
+            tooltip: {
+                callbacks: {
+                    afterTitle: function(context) {
+                        i = context[0].dataIndex;
+                        return "권장섭취량 : "+recom[i]+recom2[i];
+                    },
+                    label: function(context) {
+                        
+                        i = context.dataIndex;
+                        j = context.datasetIndex;
+                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake[j][i])) + "% )";
+                    },
+                    footer: function(context) {
+                        i = context[0].dataIndex;
+                        x=0; y=0;
+                        for(k=0;k<3;k++){
+                            x += intake2[k][i];
+                            y +=intake[k][i];
+                        }
+
+                        return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )";
+                    },
+                },
+                footerColor: function(context) {
+
+                    if(context.tooltipItems[0]){
+                        i = context.tooltipItems[0].dataIndex;
+
+                        y=0;
+
+                        for(k=0;k<3;k++){
+                            y+=intake[k][i];
+                        }
+
+                        
+                        if(y <50 || y > 150){
+                            return 'rgb(255,0,0,0.9)';
+                        }
+                        else if(y <70 || y > 120){
+                            return 'rgb(255,255,0,0.8)';
+                        }
+                        else {
+                            return 'rgb(0,255,0,0.8)';
+                        }
+                    }
+                    else return 'white';
+                },
+                backgroundColor: 'rgb(0,0,0,0.75)'
+            },
+        },
+  
+        scales: {
+          x: {
+            stacked: true,
+            ticks: {
+              callback: function(value, index, ticks) {
+                return value+'%'
+              }
+            },
+            grid: {
+                lineWidth: 1
+            },
+          },
+          y: {
+            stacked: true,
+            grid: {
+                lineWidth: 1
+            },
+          },
+        }
+    }
+  
+    let myChart = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+  
+      options: options
+  
     })
 
     
