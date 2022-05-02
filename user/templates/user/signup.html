@@ -2,7 +2,8 @@
 {% block content %}
 <div class='container'>
     <div class='row my-5'>
-        <div class='col'>
+        <div class='col'></div>
+        <div class='col-6'>
             <form action='./' method='POST'>
                 {% csrf_token %}
                 <div class='row mx-5'>
@@ -27,25 +28,26 @@
                                 placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
                             <small class='mt-1 text-danger'> {{password_error_msg}} </small>
                         </div>
-                        <div class='row mb-4'>
+                        <div class='row mb-2'>
                             <h6 class='font-wieght-bold'>이름</h6>
                             <input type='text' class='form-control' name='name' id='user_name'
                                 value="{{ form.name.value | default_if_none:'' }}" placeholder=' 이름을 입력하세요.' required>
                             <h6 class='font-wieght-bold' id='user_name_check'></h6>
                         </div>
-                        <div class='row mb-4'>
+                        <div class='row mb-3'>
                             <h6 class='font-wieght-bold'>이메일</h6>
-                            <input type='text' class='form-control' name='email' id='email' placeholder=' 이메일을 입력하세요.'>
+                            <input type='text' class='form-control' name='email' id='email' placeholder=' 이메일을 입력하세요.' required>
                             <small class='mt-1 text-danger' id='email_check_msg'> {{email_error_msg}} </small>
+                        </div>
+                        <div class='row justify-content-between'>
+                            <a class='btn btn-outline-secondary mr-1' data-toggle='modal' data-target='#modal'>이전</a>
+                            <button class='btn btn-secondary' id='add_user_button'>회원가입</button>
                         </div>
                     </div>
                 </div>		
-                <div class='row mx-3 justify-content-around'>
-                    <a class='btn btn-outline-secondary col mr-1' data-toggle='modal' data-target='#modal'>이전</a>
-                    <button class='btn btn-outline-secondary col' id='add_user_button'>회원가입</button>
-                </div>
             </form>
         </div>
+        <div class='col'></div>
     </div>
 </div>
 <div class='modal fade' id='modal' tabindex='-1'>
@@ -70,36 +72,32 @@
         </div>
     </div>
 </div>
-
-
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+{% endblock content %}
+{% block script %}
 <script>
 function id_check() {
-    let user_id = document.getElementById('user_id').value
-    let msg_div = document.getElementById('user_id_check_div')
-    let msg = document.getElementById('id_check_msg')
+    let user_id = $('#user_id').val()
+    let msg_div = $('#user_id_check_div')
+    let msg = $('#id_check_msg')
 
-    const ajax = axios({
+    $.ajax({
         url: './id_check',
         method: 'get',
-        params: {'user_id': user_id},
-        
-    })
-    ajax.then(function (result) {
-        check_result = result['data']['result']
-        console.log(check_result)
+        data: {'user_id': user_id},
+    }).done(function(result) {
+        check_result = result['result']
         if (check_result == 'fail') {
-            msg.removeAttribute('class')
-            msg.setAttribute('class', 'text-danger')
-            msg.innerHTML = '이미 존재하는 아이디입니다.'
+            msg.removeAttr('class')
+            msg.attr('class', 'text-danger')
+            msg.html('이미 존재하는 아이디입니다.')
             msg_div.append(msg)
         } else {
-            msg.removeAttribute('class')
-            msg.setAttribute('class', 'text-primary')
-            msg.innerHTML = '사용가능한 아이디입니다.'
+            msg.removeAttr('class')
+            msg.attr('class', 'text-primary')
+            msg.html('사용가능한 아이디입니다.')
             msg_div.append(msg)
         }
     })
 }
 </script>
-{% endblock content %}
+{% endblock script %}

@@ -1,0 +1,55 @@
+body {
+    color: rgb(255, 255, 255);
+}
+div.profile-aria{
+    /*레이아웃 설정*/
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%)
+}
+li {
+    /*list 가로 배열*/
+    float: left; 
+    /* 문장 앞에 있는 마커 설정을 없앰; */
+    list-style: none; 
+    margin: 10px; 
+    /* 줄바꿈 설정 */
+    display: block;
+}
+
+div.profile {
+    width: 150px; 
+    height: 200px; 
+    border-radius: 70%;
+    background: transparent;
+}
+
+img.profile-card{
+    width: 150px; 
+    height: 150px;
+    border-radius: 25%;
+    object-fit: cover;
+    border-color: black;
+    border: 2px;
+}
+img.profile-card-plus{
+    width: 150px; 
+    height: 150px;
+    border-radius: 25%;
+    object-fit: cover;
+}
+p.profile-card {
+    color: rgb(0, 0, 0); 
+    text-align: center;
+}
+div.button {
+    /* width: 120px;
+    height: 30px;
+    margin-left: 45%;  */
+    margin-top: 50%;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0);
+    color:rgb(0, 0, 0)
+}
