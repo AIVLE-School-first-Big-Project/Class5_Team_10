@@ -1,10 +1,14 @@
+{% extends "base.html" %}
 {% load static %}
-{% include "base.html" %}
 
 {% block content%}
-<img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
-<div class="col text-center">
-    <button class="btn btn-outline-secondary" onclick="window.location.href='/user/login'"
-        style="color:#F75425;"><h3><b>Meal Kid 시작하기</h3></b></button>
+<div class="row">
+    <img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
+</div>
+<div class="row">
+    <div class="col text-center">
+        <button class="btn btn-outline-secondary" onclick="window.location.href='/user/login'"
+            style="color:#F75425;"><h3><b>Meal Kid 시작하기</h3></b></button>
+    </div>
 </div>
 {% endblock %}

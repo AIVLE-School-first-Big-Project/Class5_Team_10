@@ -1,5 +1,5 @@
+{% extends "base.html" %}
 {% load static %}
-{% include "base.html" %}
 <!-- 데이트피커 -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -566,8 +566,9 @@
 </div>
 {% endblock %}
 
+{% block style %}
 <style>
-body {
+.container {
   font-family : 'Cafe24Dongdong'
 }
 
@@ -650,6 +651,7 @@ body {
 }
 
 </style>
+{% endblock %}
 
 {% block script %}
 
