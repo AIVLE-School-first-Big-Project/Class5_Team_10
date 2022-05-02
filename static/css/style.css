@@ -32,7 +32,7 @@
 
 .main_btn:hover {
     background-color: #ffede5;
-    border: #ff926c 1px solid;
+    border: #ff926c 2px solid;
     color: #ff926c;
     font-weight: bold;
 }
@@ -45,7 +45,7 @@
 
 .sub_btn:hover {
     background-color: #ff926c;
-    border: #ff926c 1px solid;
+    border: #ff926c 2px solid;
     color: white;
     font-weight: bold;
 }
