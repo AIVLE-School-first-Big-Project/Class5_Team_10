@@ -134,7 +134,9 @@ def kid_select(request):
     context = {
         'kid_set' : kid_set,
     }
-    return render(request, 'user/select.html', context)
+    print(kid_set)
+    # return render(request, 'user/select.html', context)
+    return render(request, 'user/test1.html', context)
 
 
 # 회원 정보 수정
@@ -143,17 +145,29 @@ def user_update(request):
     user = request.user
     if request.method == 'POST':
         form = UpdateUserForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, '회원정보가 수정되었습니다.')
-            return redirect('user:kid_select')
-        else:
-            email_error_msg = '이메일 양식이 맞지 않습니다.'
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        if password1 != password2:
+            password_error_msg = '비밀번호가 일치하지 않습니다. 다시 입력해주세요.'
             context = {
-                'form' : form,
-                'email_error_msg' : email_error_msg,
+                'form': form,
+                'password_error_msg': password_error_msg,
             }
-            return render(request, 'user/user_update.html', context)  
+            return render(request, 'user/user_update.html', context)
+        else:
+            if form.is_valid():
+                form.save()
+                user = authenticate(username=id, password=password1)  # 사용자 인증
+                auth_login(request, user)
+                messages.success(request, '회원정보가 수정되었습니다.')
+                return redirect('user:kid_select')
+            else:
+                email_error_msg = '이메일 양식이 맞지 않습니다.'
+                context = {
+                    'form' : form,
+                    'email_error_msg' : email_error_msg,
+                }
+                return render(request, 'user/user_update.html', context)  
     else:
         form = UpdateUserForm()
     context = {
@@ -161,68 +175,6 @@ def user_update(request):
         'user' : user,
     }
     return render(request, 'user/user_update.html', context)
-
-
-
-# 아이 정보 수정
-# def kid_update(request):
-#     user_id = request.session['_auth_user_id']
-#     kid_set = Kid.objects.filter(user_id = user_id)
-#     KidRegisterFormSet = formset_factory(KidRegisterForm, extra=0)
-#     if request.method == 'POST':
-#         formset = KidRegisterFormSet(request.POST, request.FILES)
-#         if formset.is_valid():
-#             formset.save()
-#             messages.success(request, '아이정보가 수정되었습니다.')
-#             # do something with the formset.cleaned_data
-#             return redirect('/')
-#         else:
-#             context = {
-#                 'formset' : formset,
-#             }
-#             return render(request, 'user/kid_update.html', context)
-#     else:
-#         formset = KidRegisterFormSet(initial=[
-#             {"name" : kid.name, 
-#              "birthday" : kid.birthday,
-#              "img" : kid.img, 
-#              "height" : kid.height, 
-#              "weight" : kid.weight}
-#              for kid in kid_set
-#         ])
-#     context = {'formset' : formset}
-#     return render(request, 'user/kid_update.html', context)
-
-# 아이 정보 수정
-@login_message_required
-def kid_update(request):
-    user_id = request.session['_auth_user_id']
-    user = User.objects.get(pk = user_id)
-    KidRegisterFormSet = inlineformset_factory(User, Kid, extra=0, fields=(
-        'name', 'birthday', 'img', 'height', 'weight'
-    ))
-    print('1')
-    if request.method == 'POST':
-        formset = KidRegisterFormSet(request.POST, request.FILES, instance=user)
-        print('2')
-        if formset.is_valid():
-            formset.save()
-            messages.success(request, '아이정보가 수정되었습니다.')
-            # do something with the formset.cleaned_data
-            return redirect('/')
-    else:
-        print('3')
-        formset = KidRegisterFormSet(instance=user)
-    context = {'formset' : formset}
-    
-    ##테스트
-    for form in formset:
-        print(form.as_table())
-    ###
-    print('4')
-    
-    
-    return render(request, 'user/kid_update.html', context)
 
 
 # 회원탈퇴
@@ -243,7 +195,7 @@ def CustomLogout(request):
 
 
 # 아이디 찾기 메일링 서비스
-@login_message_required
+@logout_message_required
 def ForgotIDView(request):
     context = {}
     if request.method == 'POST':
@@ -262,40 +214,13 @@ def ForgotIDView(request):
                 method_email.send(fail_silently=False)
                 return render(request, 'user/find_username_done.html', context)
         except:
-            messages.info(request, "등록된 이메일이 없습니다.")
+            email_error_msg = '일치하는 이메일이 없습니다.'
+            context = {
+                'email_error_msg' : email_error_msg,
+            }
+            return render(request, 'user/find_username_form.html', context)
     context = {}
     return render(request, 'user/find_username_form.html', context)
-
-
-# 아이 정보 수정
-@login_message_required
-def kid_update_test(request):
-    user_id = request.session['_auth_user_id']
-    kid_set = Kid.objects.filter(user_id = user_id)
-    KidRegisterFormSet = formset_factory(KidRegisterForm, extra=0)
-    if request.method == 'POST':
-        formset = KidRegisterFormSet(request.POST, request.FILES)
-        if formset.is_valid():
-            formset.save()
-            messages.success(request, '아이정보가 수정되었습니다.')
-            # do something with the formset.cleaned_data
-            return redirect('/')
-        else:
-            context = {
-                'formset' : formset,
-            }
-            return render(request, 'user/kid_update_test.html', context)
-    else:
-        formset = KidRegisterFormSet(initial=[
-            {"name" : kid.name, 
-             "birthday" : kid.birthday,
-             "img" : kid.img, 
-             "height" : kid.height, 
-             "weight" : kid.weight}
-             for kid in kid_set
-        ])
-    context = {'formset' : formset}
-    return render(request, 'user/kid_update_test.html', context)
 
 
 # 아이 정보 삭제
@@ -319,7 +244,7 @@ def kid_update_each(request):
             messages.success(request, '아이 정보가 수정되었습니다.')
             return redirect('meal:meal')
     else:
-        form = UpdateKidForm()
+        form = UpdateKidForm(instance=kid)
     context = {
         'form' : form,
         'kid' : kid,

@@ -1,51 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
-{% if form.errors %}
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <div id="form_errors">
-            {% for key, value in form.errors.items %}
-                <strong>{{ value }}</strong>
-            {% endfor %}
-        </div>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+<div class="container">
+    <div class='row my-3'></div>
+    <div class="col-6 py-3 d-flex justify-content-center" style="float: none; margin:0 auto;">
+        <h4>비밀번호와 이메일만 수정이 가능합니다</h4>
     </div>
-{% endif %}
-<div>
+    <div class="col-6" style="float: none; margin:0 auto;">
     <form method="POST" action=".">
         {% csrf_token %}
-        <div>
-            <div>
-                <h3>
-                    비밀번호와 이메일만 수정이 가능합니다.
-                </h3>
-                <div>
-                    <h6>이름</h6>
-                    <div>{{ user.name }}</div>
-                </div>
-                <div>
-                    <h6>아이디</h6>
-                    <div>{{ user.id }}</div>
-                </div>
-                <div>
-                    <label for="password">비밀번호</label>
-                    <input type="password" name="password1" id="password" 
-                        value ="{{ form.password.value|default_if_none:'' }}" required placeholder="">
-                </div>
-                <h6 class='font-wieght-bold'>비밀번호 확인</h6>
-                <input type='password' class='form-control' name='password2' id='password_check'
-                    placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
-                <small class='mt-1 text-danger'> {{password_error_msg}} </small>
-                <div>
-                    <label for="email">이메일</label>
-                    <input type="text" name="email" id="email"
-                        value="{{ form.email.value|default_if_none:'' }}" required>
-                </div>
+        <div class="row mx-5 my-0 py-2">
+            <div class="col-2 px-0"><h6>이름</h6></div>
+            <div class="col-4" style="float: none; margin:0 auto;">{{ user.name }}</div>
+        </div>        
+        <div class="row mx-5 my-0 pb-2">
+            <div class="col-2 px-0"><h6>아이디</h6></div>
+            <div class="col-4" style="float: none; margin:0 auto;">{{ user.id }}</div>
+        </div>
+        <div class="row mx-5 my-0 pb-2">
+            <h6 for="password">비밀번호</h6>
+            <div class="input-group">
+                <input class="form-control" type="password" name="password1" id="password" 
+                    value ="{{ form.password.value|default_if_none:'' }}" required placeholder="">
             </div>
         </div>
-        <button type="submit"><span style="text-decoration: double;">수정 완료</span></button>
-        <button><span style="text-decoration: double;"> <a href="{% url 'user:member_del' %}" style = "color : #fff" >탈퇴하기</a></span></button>
+        <div class="row mx-5 my-0 pb-2">
+            <h6 class='font-wieght-bold'>비밀번호 확인</h6>
+            <div class="input-group">
+                <input class='form-control' type='password' name='password2' id='password_check'
+                    placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
+            </div>
+            <small class='mt-1 text-danger'> {{password_error_msg}} </small>
+        </div>
+        <div class="row mx-5 my-0 pb-3">
+            <h6 for="email">이메일</h6>
+            <div class="input-group">
+                <input class="form-control" type="text" name="email" id="email"
+                    value="{{ form.email.value|default_if_none:'' }}" required>
+            </div>
+            <small class='mt-1 text-danger'> {{email_error_msg}} </small>
+        </div>
+        <div class="row mx-5 my-0 pb-2">
+            <button class='btn btn-secondary form-control' type="submit">수정 완료</button>
+        </div>
+        <div class="row mx-5 my-0 pb-2 justify-content-end">
+            <small>
+                <a href="{% url 'user:member_del' %}">탈퇴하기</a>
+        <!-- <button type="button"><a href="{% url 'user:member_del' %}">탈퇴하기</a></button> -->
     </form>
+    </div>
 </div>
 {% endblock content %}

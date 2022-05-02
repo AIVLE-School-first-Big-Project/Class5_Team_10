@@ -1,46 +1,51 @@
 {% extends "base.html" %}
 {% block content %}
-<!-- {% if id_error_msg or password_error_msg %}
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <div id="form_errors">
-                <strong>{{ id_error_msg }}</strong>
-                <strong>{{ password_error_msg }}</strong>
-        </div>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-{% endif %} -->
-<!-- {% block messages %} {% if messages %}
-{% for message in messages %} {{ message|capfirst }} {% endfor %}
-{% endif %} {% endblock messages %} -->
 <div class='container'>
-    <div class='row my-5'>
-        <div class='col'>
-            <form method="POST" action=".">
-                {% csrf_token %}
-                <div class='row mx-5'>
-                    <div class='col mt-4'>
-                        <div id='user_id_div'>
-                            <label for="id">사용자ID</label>
-                            <input type="text" name="username" id="id"
+    <div class='row my-5'></div>
+    <div class='col-6' style="float: none; margin:0 auto;">
+        <form method="POST" action=".">
+            {% csrf_token %}
+            <div class='row mx-5'>
+                <div class='col mt-4'>
+                    <div class="row my-0 pb-2" id='user_id_div'>
+                        <h6 class="font-weight-bold" for="id">사용자ID</h6>
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="username" id="id"
                                 value="{{ form.username.value|default_if_none:'' }}" required>
-                            <small class='mt-1 text-danger'>{{ id_error_msg }}</small>
                         </div>
-                        <div>
-                            <label for="password">비밀번호</label>
-                            <input type="password" name="password" id="password"
+                    </div>
+                    <div class="row my-0 py-0"
+                        <small class='text-danger'>{{ id_error_msg }}</small>
+                    </div>
+                    <div class="row my-0 pb-2" >
+                        <h6 class="font-weight-bold" for="password">비밀번호</h6>
+                        <div class="input-group">
+                            <input class="form-control" type="password" name="password" id="password"
                                 value="{{ form.password.value|default_if_none:'' }}" required>
-                            <small class='mt-1 text-danger'>{{ password_error_msg }}</small>
                         </div>              
                     </div>
+                    <div class="row my-0 py-0">
+                        <small class='mt-1 text-danger'>{{ password_error_msg }}</small>
+                    </div>
+                    <div class="row my-0 pb-5 justify-content-end">
+                        <small>
+                            <a href="{% url 'user:forgot_id' %}">아이디 찾기</a>
+                            |
+                            <a href="{% url 'user:password_reset' %}">비밀번호 찾기</a>
+                        </small>
+                    </div>
+                    <div class="row my-0 pb-3">
+                        <button class="btn btn-secondary form-control" type="submit">로그인</button>
+                    </div>
+                    <div class="row my-0" >
+                        <button class="btn btn-outline-secondary form-control" type="button"><a href="{% url 'user:signup' %}">회원가입</a></button>
+                    </div>
+                    <!-- <div class="row justify-content-between pt-2">    
+                        
+                    </div> -->
                 </div>
-            <span>    
-                <button type="submit">로그인</button>
-            </form>
-                <button><a href="{% url 'user:signup' %}">회원가입</a></button>
-            </span>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock content %}
