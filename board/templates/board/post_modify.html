@@ -1,142 +1,83 @@
-{% comment %} {% include "base.html" %}
-<div class="container">
-    <form action="{% url 'board:post_modify' post.id %}" method="post" class="post-form my-3" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class='form-group'>
-            <label for='title'>제목</label>
-            <input type="text" class="form-control" name="title" required value="{{post.title}}">
-            <label for='title'>카테고리</label>
-            <select name='category'>
-                <option value='공지'>공지</option>
-                <option value='영양'>영양</option>
-                <option value='Q&A'>Q&A</option>
-                <option value='Q&A'>기타</option>
-            </select><br><br>
-            {% if post.img %}
-            <a href='/'><img class="image" src="{{ post.img.url }}"/></a>
-            {% endif %}
-            <label for='content'>내용</label>
-            <textarea name='content' required>{{ post.content }}</textarea>
-            <input type="file" name="image">
-            <label><input type="checkbox" name="check" value="1"> 사진을 삭제하시겠습니까?</label>
-            <input type="submit" value="수정하기" class="btn btn-primary">
-            
-        </div>
-    </form>
-</div> {% endcomment %}
-
 {% include "base.html" %}
 
 <div class="row mt-5"></div>
-<div class="container my-3">
+<div class="container my-3 rounded">
     <form action="{% url 'board:post_modify' post.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="row mt-5">
+        <div class="row mt-5 justify-content-center" style="color:#808080"><b><h1>게시물 수정하기</h1></b></div>
+        <div class="row mt-5"></div>
+        <div class="row">
             <div class="col"></div>
-            <div class="col-8">
+            <div class="col-10">
                 <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <div class="form-control navbar_color text-center text-white"><b>제목</b></div>
-                    </div>
-                    <div class="col-8">
-                        <input type="text" class="form-control navbar_edge_color text-center" name="title"
-                        value="{{post.title}}" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
-        </div>
-        <div class="row mt-3">
-            <div class="col"></div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <div class="form-control navbar_color text-center text-white"><b>카테고리</b></div>
-                    </div>
-                    <div class="col-8">
-                        <select name='category' class="form-control navbar_edge_color text-center">
-                            <option value='{{ post.board.ctg }}' class="header_color text-white">{{ post.board.ctg }}</option>
-                            <option value='공지' class="header_color text-white b">공지</option>
-                            <option value='영양' class="header_color text-white n">영양</option>
-                            <option value='Q&A' class="header_color text-white q">Q&A</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
-        </div>
-        <div class="row mt-3">
-            <div class="col"></div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <div class="form-control navbar_color text-center text-white"><b>이미지</b></div>
-                    </div>
-                    <div class="col-8">
-                        <input type="file" name="image">
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
-        </div>
-        <div class="row mt-3">
-            <div class="col"></div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <div class="text-center text-white"></div>
-                    </div>
-                    <div class="col-8">
-                        {% if post.img %}
-                            <img class="image" src="{{ post.img.url }}"/>
-                            <div class="mt-1"><input type="checkbox" name="check" value="1" id="image">
-                                <label for="image">기존 사진을 삭제하시겠습니까?</label></div>
-                        {% else %}
-                            <div class="form-control navbar_edge_color">
-                                <div class="text-center">이전 이미지가 없습니다.</div>
+                    <div class="col"></div>
+                    <div class="col-10 rounded navbar_edge_color p-4" style="border: #ff7449 5px double;">
+                        <div class="row mt-2">
+                            <div class="col-2">
+                                <div class="form-control navbar_color text-center text-white"><b>제목</b></div>
                             </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
-        </div>
-        <div class="row mt-3">
-            <div class="col"></div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-2">
-                        <div class="form-control navbar_color text-center text-white"><b>내용</b></div>
-                    </div>
-                    <div class="col-8">
-                        {% comment %} <textarea class="navbar_edge_color autosize" name='content' required
-                        onkeydown="resize(this)" onkeyup="resize(this)"></textarea> {% endcomment %}
-                        <textarea wrap="hard" class="textarea_board navbar_edge_color" name='content' required>{{ post.content }}</textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="col"></div>
-        </div>
-        <div class="row mt-3">
-            <div class="col"></div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-2"></div>
-                    <div class="col-5">
-                        <div class="row justify-content-start pl-3">
-                            <a class='btn btn-outline-secondary text-white navbar_color' data-toggle='modal' data-target='#modal'><b>이전</b></a>
+                            <div class="col">
+                                <input type="text" class="form-control navbar_edge_color text-center" name="title"
+                                value="{{post.title}}" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-2">
+                                <div class="form-control navbar_color text-center text-white"><b>카테고리</b></div>
+                            </div>
+                            <div class="col">
+                                <select name='category' class="form-control navbar_edge_color text-center">
+                                    <option value='{{ post.board.ctg }}' class="header_color text-white">{{ post.board.ctg }}</option>
+                                    <option value='공지' class="header_color text-white b">공지</option>
+                                    <option value='영양' class="header_color text-white n">영양</option>
+                                    <option value='Q&A' class="header_color text-white q">Q&A</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-2">
+                                <div class="form-control navbar_color text-center text-white"><b>이미지</b></div>
+                            </div>
+                            <div class="col">
+                                <input type="file" name="image">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-2"></div>
+                            <div class="col">
+                                {% if post.img %}
+                                    <img class="image" src="{{ post.img.url }}"/>
+                                    <div class="mt-1"><input type="checkbox" name="check" value="1" id="image">
+                                        <label for="image">기존 사진을 삭제하시겠습니까?</label></div>
+                                {% else %}
+                                    <div class="form-control navbar_edge_color">
+                                        <div class="text-center">이전 이미지가 없습니다.</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-2">
+                                <div class="form-control navbar_color text-center text-white"><b>내용</b></div>
+                            </div>
+                            <div class="col">
+                                <textarea wrap="hard" class="textarea_board navbar_edge_color" name='content' required>{{ post.content }}</textarea>
+                            </div>
+                        </div>
+                        <div class="row mt-2  justify-content-between pl-3 pb-3">
+                            <div class="col-2">
+                                <div class="row">
+                                    <a class='btn btn-outline-secondary text-white navbar_color' data-toggle='modal' data-target='#modal'><b>이전</b></a>
+                                    </div>
+                                </div>
+                            <div class="col">
+                                <div class="row justify-content-end pr-3">
+                                    <input type="submit" value="수정하기" style="font-weight : bold" class="btn btn-outline-secondary text-white navbar_color">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-5">
-                        <div class="row justify-content-end pr-3">
-                            <input type="submit" value="수정하기" style="font-weight : bold" class="btn text-white navbar_color">
-                        </div>
-                    </div>
+                    <div class="col"></div>
                 </div>
             </div>
             <div class="col"></div>

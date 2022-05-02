@@ -12,7 +12,7 @@
                 </select>
                 <input type="text" id="search_kw" name="kw" value="{{ kw|default_if_none:'' }}" 
                 class="form-control col-9 header_edge_color text-center" placeholder="검색어를 입력해주세요.">
-                <button class="btn col-1 header_edge_color" type="submit" id="search_btn" sytle="margin-top: 5px;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btn btn-outline-secondary col-1 header_edge_color" type="submit" id="search_btn" sytle="margin-top: 5px;"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <table class="table mt-2">
                 <thead>
@@ -90,7 +90,7 @@
         <div class="col">
             {% if request.user.is_staff %}
                 <div class="row justify-content-end pr-3">
-                    <a href="{% url 'board:post_create' %}" class="btn text-white navbar_color">글쓰기</a>
+                    <a href="{% url 'board:post_create' %}" class="btn btn-outline-secondary text-white navbar_color">글쓰기</a>
                 </div>
             {% endif %}
         </div>
