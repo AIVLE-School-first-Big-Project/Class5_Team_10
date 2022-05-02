@@ -3,6 +3,11 @@
     background-color: #ff926c;
 }
 
+footer {
+    color: white;
+    background-color: #ff926c;
+}
+
 .navbar_color {
     background-color: #ff7449;
 }
@@ -46,6 +51,7 @@
 .sub_btn:hover {
     background-color: #ff926c;
     border: #ff926c 2px solid;
+<<<<<<< HEAD
     color: white;
     font-weight: bold;
 }
@@ -74,6 +80,8 @@
 .num_btn:hover {
     background-color: #ff7449;
     border: #ff7449 2px solid;
+=======
+>>>>>>> main
     color: white;
     font-weight: bold;
 }
