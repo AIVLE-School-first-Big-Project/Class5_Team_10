@@ -1,9 +1,5 @@
 {% load static %}
-<link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
-<script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
-<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
     <meta charset="utf-8">
@@ -15,20 +11,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/> <!-- 기호 사용 -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
+    {% block style %}
+    {% endblock %}
+    <!-- JS -->
+    {% block script%}
+    {% endblock%}
 </head>
-<!-- header -->
-<!-- 네비게이션바 -->
-{% comment %} {% include "navbar.html" %} {% endcomment %}
 <body class="body">
+<!-- header -->
 {% include "header.html" %}
+<!-- 네비게이션바 -->
+{% include "navbar.html" %}
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 {% block content %}
 {% endblock %}
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
 <footer>
 </footer>
-<!-- Bootstrap JS -->
-{% block script%}
-{% endblock%}
 </body>
 </html>

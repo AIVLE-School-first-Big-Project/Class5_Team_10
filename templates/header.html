@@ -14,8 +14,8 @@
          <div class='row justify-content-end'>
             {% if user.is_authenticated %}
                <a class="mr-3 text-light"><b>{{ user.username }}님 환영합니다.</b></a>
-               <a href="/songjeongwoo.selfdevelopment/user/mypage" class="mr-3 text-light" id="mypageLink">
-                  <b>마이페이지</b>
+               <a href="{% url 'user:user_update' %}" class="mr-3 text-light" id="mypageLink"> 
+                 <b>마이페이지</b>
                </a>
                <a href="{% url 'user:logout' %}" class="mr-3 text-light" id="logOutLink">
                   <b>로그아웃</b>
@@ -32,4 +32,4 @@
       </div>
    </div>
 </header>
-{% include "navbar.html" %}
+<!-- {% include "navbar.html" %} -->

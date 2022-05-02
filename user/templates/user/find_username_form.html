@@ -1,21 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-<div>
-    <h1>아이디를 잊어버리셨나요?</h1>
-    <p>이메일 주소를 입력하시면 아이디를 보내드립니다.</p>
-</div>
-<div>
-    <form method="POST">
-    {% csrf_token %}
-        <div>
-            이메일: <input type="email" name="email">
-        </div>
-        <div>
-            <input type="Submit" name="email_submit" value="전송">
-        </div>
-        {% for message in messages %}
-        {{ message }}
-        {% endfor %}
-    </form>
-</div>
+<div class="container">
+    <div class='row my-3'></div>
+    <div class="col-6 pt-3 d-flex justify-content-center" style="float: none; margin:0 auto;">
+        <h4>아이디를 잊어버리셨나요?</h4>
+    </div>
+    <div class="col-6 pt-0 d-flex justify-content-center" style="float: none; margin:0 auto;">
+        <h6>이메일 주소를 입력하시면 아이디를 보내드립니다.</h6>
+    </div>
+    <div class='row my-4'></div>
+    <div class="col-6" style="float: none; margin:0 auto;">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row mx-5 my-0 pb-3">
+                <h6 for="email">이메일</h6>
+                <div class="input-group">
+                    <input class="form-control" type="email" name="email" id="email"
+                        value="{{ form.email.value|default_if_none:'' }}" required>
+                </div>
+                <small class='mt-1 text-danger'> {{email_error_msg}} </small>
+            </div>
+            <div class="row mx-5 my-0 pb-2">
+                <button class='btn btn-secondary form-control' type="submit">전송</button>
+            </div>
 {% endblock %}
