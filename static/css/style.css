@@ -82,12 +82,23 @@ input[type=checkbox]:checked:before {
     border-radius: 40px;
 } 
 
-@font-face{
-    src: url("../../static/font/Amsterdam.ttf");
-    font-family: "Amsterdam"; 
-    }
-#Amsterdam_font{
-font-family: "Amsterdam";
+@font-face {
+    font-family: 'JGaegujaengyi-Bold-KO';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/JGaegujaengyi-Bold-KO.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cafe24Dongdong';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Dongdong.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+.nanumgothic * {
+ font-family: 'Nanum Gothic', sans-serif;
 }
 
 /* board */
