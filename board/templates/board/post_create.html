@@ -1,5 +1,6 @@
-{% include "base.html" %}
+{% extends "base.html" %}
 
+{% block content %}
 <div class="row mt-5"></div>
 <div class="container my-3 rounded">
     <form action="{% url 'board:post_create' %}" method="post" enctype="multipart/form-data">
@@ -26,9 +27,9 @@
                             </div>
                             <div class="col">
                                 <select name='category' class="form-control navbar_edge_color text-center">
-                                    <option value='공지' class="header_color text-white">공지</option>
-                                    <option value='영양' class="header_color text-white">영양</option>
-                                    <option value='Q&A' class="header_color text-white">Q&A</option>
+                                    <option value='공지' class="">공지</option>
+                                    <option value='영양' class="">영양</option>
+                                    <option value='Q&A' class="">Q&A</option>
                                 </select>
                             </div>
                         </div>
@@ -51,13 +52,13 @@
                         <div class="row mt-2  justify-content-between pl-3 pb-3">
                             <div class="col-2">
                                 <div class="row">
-                                    <a class='btn btn-outline-secondary text-white navbar_color' data-toggle='modal' data-target='#modal'>
+                                    <a class='btn post_btn' data-toggle='modal' data-target='#modal'>
                                         <b>이전</b></a>
                                     </div>
                                 </div>
                             <div class="col">
                                 <div class="row justify-content-end">
-                                    <input type="submit" value="등록하기" style="font-weight : bold" class="btn btn-outline-secondary text-white navbar_color mr-3">
+                                    <input type="submit" value="등록하기" style="font-weight : bold" class="btn post_btn mr-3">
                                 </div>
                             </div>
                         </div>
@@ -86,15 +87,19 @@
                 </small>
             </div>
             <div class='modal-footer justify-content-center'>
-                <button class='btn btn-outline-secondary' data-dismiss='modal'>아니오</button>
+                <button class='btn post_btn' data-dismiss='modal'>아니오</button>
                 <a href='../../' class='btn btn-secondary'>&nbsp;&nbsp;&nbsp;예&nbsp;&nbsp;&nbsp;</a>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block script%}
 <script>
     function resize(obj) {
       obj.style.height = "1px";
       obj.style.height = (obj.scrollHeight)+"px";
     }
 </script>
+{% endblock %}

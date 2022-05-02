@@ -1,10 +1,20 @@
+{% extends "base.html" %}
 {% load static %}
-{% include "base.html" %}
 
 {% block content%}
+<style>
+    body {   
+
+        font-family: 'JGaegujaengyi-Bold-KO';
+    
+    }
+</style>
 <img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
 <div class="col text-center">
-    <button class="btn btn-outline-secondary" onclick="window.location.href='/user/login'"
-        style="color:#F75425;"><h3><b>Meal Kid 시작하기</h3></b></button>
+    {% if user.is_authenticated %}
+    <button class="btn sub_btn" onclick="window.location.href='/user/select_kid'" style="border: 5px #ff926c double;"><h3><b>Meal Kid 시작하기</h3></b></button>
+    {% else %}
+    <button class="btn sub_btn" onclick="window.location.href='/user/login'" style="border: 5px #ff926c double;"><h3><b>Meal Kid 시작하기</h3></b></button>
+    {% endif %}
 </div>
 {% endblock %}

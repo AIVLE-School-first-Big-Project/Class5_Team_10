@@ -32,7 +32,7 @@
 
 .main_btn:hover {
     background-color: #ffede5;
-    border: #ff926c 1px solid;
+    border: #ff926c 2px solid;
     color: #ff926c;
     font-weight: bold;
 }
@@ -45,10 +45,46 @@
 
 .sub_btn:hover {
     background-color: #ff926c;
-    border: #ff926c 1px solid;
+    border: #ff926c 2px solid;
     color: white;
     font-weight: bold;
 }
+
+.post_btn {
+    background-color: #ff7449;
+    border: #ff7449 2px solid;
+    color: white;
+    font-weight: bold;
+}
+
+.post_btn:hover {
+    background-color: #ffede5;
+    border: #ff7449 2px solid;
+    color: #ff7449;
+    font-weight: bold;
+}
+
+.num_btn {
+    background-color: #ffede5;
+    border: #ff7449 2px solid;
+    color: #ff7449;
+    font-weight: bold;
+}
+
+.num_btn:hover {
+    background-color: #ff7449;
+    border: #ff7449 2px solid;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    background-color: #ff7449 !important;
+    border: #ff7449 2px solid !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
 
 /* input[type=checkbox] {
     -moz-appearance:none;

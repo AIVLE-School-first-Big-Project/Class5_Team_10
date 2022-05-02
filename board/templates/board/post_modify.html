@@ -1,5 +1,6 @@
-{% include "base.html" %}
+{% extends "base.html" %}
 
+{% block content %}
 <div class="row mt-5"></div>
 <div class="container my-3 rounded">
     <form action="{% url 'board:post_modify' post.id %}" method="post" enctype="multipart/form-data">
@@ -67,12 +68,12 @@
                         <div class="row mt-2  justify-content-between pl-3 pb-3">
                             <div class="col-2">
                                 <div class="row">
-                                    <a class='btn btn-outline-secondary text-white navbar_color' data-toggle='modal' data-target='#modal'><b>이전</b></a>
+                                    <a class='btn post_btn' data-toggle='modal' data-target='#modal'><b>이전</b></a>
                                     </div>
                                 </div>
                             <div class="col">
                                 <div class="row justify-content-end pr-3">
-                                    <input type="submit" value="수정하기" style="font-weight : bold" class="btn btn-outline-secondary text-white navbar_color">
+                                    <input type="submit" value="수정하기" style="font-weight : bold" class="btn post_btn">
                                 </div>
                             </div>
                         </div>
@@ -107,7 +108,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block script %}
 <script>
     let previous = $('select').val()
     console.log(previous)
@@ -122,3 +125,4 @@
     }
     $('.' + previous).remove()
 </script>
+{% endblock %}

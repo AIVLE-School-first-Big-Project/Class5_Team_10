@@ -1,4 +1,20 @@
-{% include "base.html" %}
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .icon_btn {
+        border: #ff926c 1px solid;
+        color: #ff926c;
+        font-weight: bold;
+    }
+    
+    .icon_btn:hover {
+        background-color: #ff926c;
+        border: #ff926c 1px solid;
+        color: white;
+        font-weight: bold;
+    }
+</style>
 
 <div class="container my-3">
     <div class="row mt-5"></div>
@@ -11,8 +27,8 @@
                     <option value="category">카테고리</option>
                 </select>
                 <input type="text" id="search_kw" name="kw" value="{{ kw|default_if_none:'' }}" 
-                class="form-control col-9 header_edge_color text-center" placeholder="검색어를 입력해주세요.">
-                <button class="btn btn-outline-secondary col-1 header_edge_color" type="submit" id="search_btn" sytle="margin-top: 5px;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                class="form-control col-9 header_edge_color text-center" placeholder="검색어를 입력해주세요." style="border: 1px solid #ff7449; color:ff7449;">
+                <button class="btn icon_btn col-1" type="submit" id="search_btn" sytle="margin-top: 5px;"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <table class="table mt-2">
                 <thead>
@@ -49,23 +65,23 @@
         <!-- 이전페이지 -->
         {% if post_list.has_previous %}
         <li class="page-item">
-            <a class="page-link header_edge_color" style="color: black;" href="?type={{ type }}&kw={{ kw }}&page={{ post_list.previous_page_number }}">이전</a>
+            <a class="page-link post_btn"  href="?type={{ type }}&kw={{ kw }}&page={{ post_list.previous_page_number }}">이전</a>
         </li>
         {% else %}
         <li class="page-item">
-            <a class="page-link header_edge_color" style="color: black;" aria-disabled="true" href="#">이전</a>
+            <a class="page-link post_btn" aria-disabled="true" href="#">이전</a>
         </li>
         {% endif %}
         <!-- 페이지리스트 -->
         {% for page_number in post_list.paginator.page_range %}
         {% if page_number >= post_list.number|add:-5 and page_number <= post_list.number|add:5 %}
         {% if page_number == post_list.number %}
-        <li class="page-item" aria-current="page">
-            <a class="page-link header_color navbar_edge_color text-white" href="?type={{ type }}&kw={{ kw }}&page={{ page_number }}">{{ page_number }}</a>
+        <li class="page-item active" aria-current="page">
+            <a class="page-link num_btn" href="?type={{ type }}&kw={{ kw }}&page={{ page_number }}">{{ page_number }}</a>
         </li>
         {% else %}
         <li class="page-item">
-            <a class="page-link header_color navbar_edge_color text-white" href="?type={{ type }}&kw={{ kw }}&page={{ page_number }}">{{ page_number }}</a>
+            <a class="page-link num_btn" href="?type={{ type }}&kw={{ kw }}&page={{ page_number }}">{{ page_number }}</a>
         </li>
         {% endif %}
         {% endif %}
@@ -73,12 +89,12 @@
         <!-- 다음페이지 -->
         {% if post_list.has_next %}
         <li class="page-item">
-            <a class="page-link header_edge_color" href="?type={{ type }}&kw={{ kw }}&page={{ post_list.next_page_number }}"
-                tabindex="-1" style="color: black;">다음</a>
+            <a class="page-link post_btn" href="?type={{ type }}&kw={{ kw }}&page={{ post_list.next_page_number }}"
+                tabindex="-1">다음</a>
         </li>
         {% else %}
         <li class="page-item">
-            <a class="page-link header_edge_color" tabindex="-1" aria-disabled="true" href="#" style="color: black;">다음</a>
+            <a class="page-link post_btn" tabindex="-1" aria-disabled="true" href="#">다음</a>
         </li>
         {% endif %}
     </ul>
@@ -90,13 +106,16 @@
         <div class="col">
             {% if request.user.is_staff %}
                 <div class="row justify-content-end pr-3">
-                    <a href="{% url 'board:post_create' %}" class="btn btn-outline-secondary text-white navbar_color">글쓰기</a>
+                    <a href="{% url 'board:post_create' %}" class="btn post_btn">글쓰기</a>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
 
+
+{% block script %}
 <script type="text/javascript">
     target = window.location.search.split('&')[0].split('=')[1]
     var type = document.getElementsByTagName('option')
@@ -106,3 +125,4 @@
         }
     }
 </script>
+{% endblock %}
