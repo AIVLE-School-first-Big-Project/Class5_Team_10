@@ -4,7 +4,7 @@
 {% block content%}
 <img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
 <div class="col text-center">
-    <a href="{% url 'user:login' %}"><button class="btn btn3 btn-secondary btn-lg active" id="Amsterdam_font" role="button" aria-disabled="true"
-        style="color:#F75425; background-color:#fff;"><h3><b>Meal Kid 시작하기</h3></b></button></a>
+    <button class="btn btn-outline-secondary" onclick="window.location.href='/user/login'"
+        style="color:#F75425;"><h3><b>Meal Kid 시작하기</h3></b></button>
 </div>
 {% endblock %}
