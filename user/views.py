@@ -111,12 +111,35 @@ def CustomLogin(request):
 def kid_register(request):
     if request.method == "POST":
         form = KidRegisterForm(request.POST, request.FILES)
-        print(request)
+        context = {'form' : form}
+        try:
+            
+            form['birthday'].validate()
+        except:
+            birthday_error_msg = "올바른 생년월일을 입력하세요"
+            context['birthday_error_msg'] = birthday_error_msg
+        try:
+            form['height'].validate()
+        except:
+            height_error_msg = "올바른 키를 입력하세요"
+            context['height_error_msg'] = height_error_msg
+        try:
+            form['weigth'].validate()
+        except:
+            weight_error_msg = "올바른 몸무게를 입력하세요"
+            context['weight_error_msg'] = weight_error_msg
+        try:
+            form['img'].validate()
+        except:
+            img_error_msg = "올바른 사진을 입력하세요"
+            context['img_error_msg'] = img_error_msg
         if form.is_valid():
             kid_regit = form.save(commit=False)
             kid_regit.user = request.user
             kid_regit.save()
             return redirect('user:kid_select')
+        else:
+            render(request, 'user/register.html', context)
     else:
         form = KidRegisterForm()
     context = {

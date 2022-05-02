@@ -19,8 +19,9 @@
     }
 </script>
 <div class="container">
+    <div class="row"></div>
     <div class="profile-aria">
-        <div class="row">
+        <div class="row pb-2 my-2">
             {% for kid in kid_set %}
             <div class="mx-3 profile" onclick="selecting( {{ kid.id }} )">
                 <img src="{{ kid.img.url }}" class="profile-card" id="kid_{{ kid.id }}"/>
@@ -32,12 +33,11 @@
                 
             </div>
             {% endfor %}
-        </div>        
+        </div>
+        <div class="row justify-content-center"></div>        
         <!-- 아이 추가 버튼 -->
         <div class="col text-center">
-            <button class="btn btn-secondary">
-                <a href="{% url 'user:kid_register' %}">아이 정보 등록하기</a>
-            </button>
+            <button class="btn main_btn" onclick="location.href='{% url "user:kid_register" %}';">아이 정보 등록하기</button>
         </div>
     </div>
 </div>
