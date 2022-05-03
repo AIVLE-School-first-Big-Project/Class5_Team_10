@@ -329,11 +329,14 @@
             </div>
             <form id="breakfast_form" class="modal-body text-center" method="post" enctype="multipart/form-data">
                 <img id="breakfast_previewImg" src="{% static 'image/식판.png' %}" alt="이미지가 존재하지 않습니다."/>
-                <input type="file" id="breakfast_fileBtn" accept=".jpg, .png"/>
+                <label for="breakfast_fileBtn" class="btn main_btn">
+                    <i class="fa-solid fa-upload"></i>&nbsp;업로드
+                </label>
+                <input id="breakfast_fileBtn" type="file" accept=".jpg, .png" style="display:none"/>
             </form>
             <div class="modal-footer justify-content-center">
                 <button class="btn sub_btn" data-dismiss="modal">취소</button>
-                <button class="btn main_btn" id="breakfast_upload">&nbsp;&nbsp;&nbsp;업로드&nbsp;&nbsp;&nbsp;</button>
+                <button class="btn main_btn" id="breakfast_upload">&nbsp;&nbsp;&nbsp;확인&nbsp;&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
@@ -349,11 +352,14 @@
             </div>
             <form id="lunch_form"  class="modal-body text-center">
                 <img id="lunch_previewImg" src="{% static 'image/식판.png' %}" alt="이미지가 존재하지 않습니다."/>
-                <input type="file" id="lunch_fileBtn" accept=".jpg, .png"/>
+                <label for="lunch_fileBtn" class="btn main_btn">
+                    <i class="fa-solid fa-upload"></i>&nbsp;업로드
+                </label>
+                <input id="lunch_fileBtn" type="file" accept=".jpg, .png" style="display:none"/>
             </form>
             <div class="modal-footer justify-content-center">
                 <button class="btn sub_btn" data-dismiss="modal">취소</button>
-                <button class="btn main_btn" id="lunch_upload">&nbsp;&nbsp;&nbsp;업로드&nbsp;&nbsp;&nbsp;</button>
+                <button class="btn main_btn" id="lunch_upload">&nbsp;&nbsp;&nbsp;확인&nbsp;&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
@@ -369,11 +375,14 @@
             </div>
             <form id="dinner_form"  class="modal-body text-center">
                 <img id="dinner_previewImg" src="{% static 'image/식판.png' %}" alt="이미지가 존재하지 않습니다."/>
-                <input type="file" id="dinner_fileBtn" accept=".jpg, .png"/>
+                <label for="dinner_fileBtn" class="btn main_btn">
+                    <i class="fa-solid fa-upload"></i>&nbsp;업로드
+                </label>
+                <input id="dinner_fileBtn" type="file" accept=".jpg, .png" style="display:none"/>
             </form>
             <div class="modal-footer justify-content-center">
                 <button class="btn sub_btn" data-dismiss="modal">취소</button>
-                <button class="btn main_btn" id="dinner_upload">&nbsp;&nbsp;&nbsp;업로드&nbsp;&nbsp;&nbsp;</button>
+                <button class="btn main_btn" id="dinner_upload">&nbsp;&nbsp;&nbsp;확인&nbsp;&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
@@ -620,18 +629,6 @@
 }
 
 /* 모달 */
-.modal-content {
-    background-color: #ffede5;
-}
-
-.modal-header {
-    border-bottom: #ff7449 1px solid;
-}
-
-.modal-footer {
-    border-top: #ff7449 1px solid;
-}
-
 .search_result {
     height: 20rem;
     border-top: #ff7449 1px solid;
