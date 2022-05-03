@@ -840,6 +840,7 @@ $(document).ready(function() {
     
             tooltip: {
                 callbacks: {
+                    titleAlign: 'center',
                     afterTitle: function(context) {
                         i = context[0].dataIndex;
                         return "권장섭취량 : "+recom[i]+recom2[i];
@@ -873,10 +874,10 @@ $(document).ready(function() {
                         }
 
                         
-                        if(y <50 || y > 150){
+                        if( y > 120){
                             return 'rgb(255,0,0,0.9)';
                         }
-                        else if(y <70 || y > 120){
+                        else if(y <70){
                             return 'rgb(255,255,0,0.8)';
                         }
                         else {
