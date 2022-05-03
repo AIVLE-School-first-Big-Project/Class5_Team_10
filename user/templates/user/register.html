@@ -60,11 +60,11 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class='row mb-2 justify-content-between'>
-                            <img class="img mb-2" src="{% static 'image/아이기본사진.png' %}" alt="이미지없음"/>
+                            <img class="img mb-2" src="{% static 'image/kid_profile_default.png' %}" alt="이미지없음"/>
                         </div>
                         <div class='row mb-2 justify-content-start'>
                             <input type="file" name="img" id="kid_img_btn" accept=".jpg, .png" 
-                                value="{% static 'image/아이기본사진.png' %}">
+                                value="{{ form.img.value }}">
                             <small class='mt-1 text-danger'> {{img_error_msg}} </small>
                         </div>
                         <div class='row mb-2' id=kid_name_div>
