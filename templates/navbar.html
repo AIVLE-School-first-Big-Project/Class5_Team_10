@@ -1,3 +1,8 @@
+<style>
+    #cafe {
+        font-family: 'Cafe24Dongdong';
+    }
+</style>
 {% if user.is_authenticated %}
 <div class="navbar mx-auto justify-content-center navbar_color" id="navbarNavDropdown">
     <div class='col'></div>
@@ -5,18 +10,18 @@
             <div class="row justify-content-center">
                 <div class="dropdown">
                     <a class="nav-link sub_btn dropdown-toggle text-black text-white" role="button"
-                    id="dropdownMenuLink" data-toggle="dropdown" data-bs-toggle="dropdown"
+                    id="cafe" data-toggle="dropdown" data-bs-toggle="dropdown"
                     style="border:none; border-radius: 40px;">
                         <b>내 아이</b>
                     </a>
                     <div class="col">
                     <div class="dropdown-menu row justify-content-center header_color">
-                        <a class="dropdown-item main_btn" href="{% url 'user:kid_select' %}">내 아이 보기</a></a>
-                        <a class="dropdown-item main_btn" href="{% url 'user:kid_register' %}">내 아이 등록하기</a>
+                        <a class="dropdown-item main_btn" href="{% url 'user:kid_select' %}" id="cafe">내 아이 보기</a></a>
+                        <a class="dropdown-item main_btn" href="{% url 'user:kid_register' %}" id="cafe">내 아이 등록하기</a>
                     </div>
                 </div>
             </div>
-            <a class="nav-link sub_btn text-black text-white" href="{% url 'board:post_list' %}" style="border:none; border-radius: 40px;"><b>게시판</b></a>
+            <a class="nav-link sub_btn text-black text-white" href="{% url 'board:post_list' %}" style="border:none; border-radius: 40px;" id="cafe"><b>게시판</b></a>
         </div>
     </div>
     <div class='col'></div>

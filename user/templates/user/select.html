@@ -1,18 +1,6 @@
 {% extends "base.html" %}
+
 {% block content %}
-<script>
-    function selecting(kid_id) {
-        sessionStorage.removeItem('kid_id')
-        sessionStorage.setItem('kid_id', kid_id)
-        $.ajax({
-            url: 'kid',
-            method: 'post',
-            data: {kid_id: kid_id}
-        }).done(function() {
-            location.href='http://127.0.0.1:8000/meal/meal'
-        })
-    }
-</script>
 <div>
     {% for kid in kid_set %}
     <div> 
@@ -26,3 +14,18 @@
     {% endfor %}
 <div>
 {% endblock content %}
+{% block script %}
+<script>
+    function selecting(kid_id) {
+        sessionStorage.removeItem('kid_id')
+        sessionStorage.setItem('kid_id', kid_id)
+        $.ajax({
+            url: 'kid',
+            method: 'post',
+            data: {kid_id: kid_id}
+        }).done(function() {
+            location.href='http://127.0.0.1:8000/meal/meal'
+        })
+    }
+</script>
+{% endblock %}

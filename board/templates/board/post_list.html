@@ -14,6 +14,9 @@
         color: white;
         font-weight: bold;
     }
+    #GD {
+        font-family: 'Nanum Gothic', sans-serif;
+    }
 </style>
 
 <div class="container my-3">
@@ -43,7 +46,7 @@
                 <tbody class="table_bottom">
                     {% if post_list %}
                     {% for post in post_list %}
-                    <tr class="text-center text-black table_bottom" style="cursor:pointer;" onclick="location.href='/board/{{ post.id }}/'">
+                    <tr class="text-center text-black table_bottom" id="GD" style="cursor:pointer;" onclick="location.href='/board/{{ post.id }}/'">
                         <td class="table_bottom">{{ forloop.counter }}</td>
                         <td class="table_bottom">{{ post.board.ctg }}</td>
                         <td class="table_bottom">{{ post.title }}</td>
@@ -53,7 +56,7 @@
                     {% endfor %}
                     {% else %}
                     <tr class="table_bottom">
-                        <td class="text-center" colspan="10"><h5>공지가 없습니다.</h5></td>
+                        <td class="text-center" colspan="10" id="GD"><h5>공지가 없습니다.</h5></td>
                     </tr>
                     {% endif %}
                 </tbody>

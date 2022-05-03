@@ -1,6 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    input[type=checkbox] {
+        -moz-appearance:none;
+        -webkit-appearance:none;
+        -o-appearance:none;
+        outline: none;
+        content: none;	
+    }
+    
+    input[type=checkbox]:before {
+        font-family: "FontAwesome";
+        content: "\f00c";
+        font-size: 15px;
+        color: transparent !important;
+        background: #ff7449;
+        width: 2rem;
+        height: 1rem;
+        border: 1px solid grey;
+        margin-right: 7px;
+    }
+    
+    input[type=checkbox]:checked:before {
+        color: white !important;
+    }
+</style>
 <div class="row mt-5"></div>
 <div class="container my-3 rounded">
     <form action="{% url 'board:post_modify' post.id %}" method="post" enctype="multipart/form-data">
@@ -40,16 +65,23 @@
                                 <div class="form-control navbar_color text-center text-white"><b>이미지</b></div>
                             </div>
                             <div class="col">
-                                <input type="file" name="image">
+                                <form>
+                                    <label for="file" class="custom-file-upload btn sub_btn">
+                                        <i class="fa-solid fa-upload"></i>업로드
+                                    </label>
+                                    <input id="file" type="file" name="image" onchange="hey()" style="display:none"/>
+                                </form>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-2"></div>
                             <div class="col">
                                 {% if post.img %}
-                                    <img class="image" src="{{ post.img.url }}"/>
+                                    <div class="container rounded" style="border: 1px white solid">
+                                        <img class="image" src="{{ post.img.url }}"/>
+                                    </div>
                                     <div class="mt-1"><input type="checkbox" name="check" value="1" id="image">
-                                        <label for="image">기존 사진을 삭제하시겠습니까?</label></div>
+                                        <label for="image" style="color:#808080">기존 사진을 삭제하시겠습니까?</label></div>
                                 {% else %}
                                     <div class="form-control navbar_edge_color">
                                         <div class="text-center">이전 이미지가 없습니다.</div>
@@ -124,5 +156,10 @@
         previous = 'q'
     }
     $('.' + previous).remove()
+
+    function hey() {
+        let name = $('#file')[0].files[0].name
+        $('label').text(name)
+    }
 </script>
 {% endblock %}
