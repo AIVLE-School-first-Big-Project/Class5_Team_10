@@ -23,13 +23,19 @@
     <div class="row pb-2 my-2 justify-content-center">
         {% for kid in kid_set %}
         <div class="mx-3 profile" onclick="selecting( {{ kid.id }} )">
+            {% if kid.img %}
             <img src="{{ kid.img.url }}" class="profile-card" id="kid_{{ kid.id }}"/>
             <p class="profile-card">{{ kid.name }}</p>
+            {% else %}
+            <img src="{{ '../../static/images/kid_profile_default.PNG' }}" class="profile-card" id="kid_{{ kid.id }}"/>
+            <p class="profile-card">{{ kid.name }}</p>
+            {% endif %}
         </div>
         {% empty %}
         <div class="mx-3 profile">
-            <img src="../../static/image/kid_profile_default.PNG" class="profile-card"/>
-            
+            <a href="{% url "user:kid_register" %}">
+                <img src="../../static/images/kid_profile_default.PNG" class="profile-card"/>
+            </a>
         </div>
         {% endfor %}
     </div>

@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from tkinter import Widget
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -12,7 +13,7 @@ class UserCreationForm(UserCreationForm):
 
 
 class KidRegisterForm(forms.ModelForm):
-    img = forms.ImageField(initial='images/kid_profile_default.PNG')
+    # img = forms.ImageField(blank)
     class Meta:
         model = Kid
         fields = ("name", "birthday", "img", "height", "weight")

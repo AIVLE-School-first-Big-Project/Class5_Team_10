@@ -130,19 +130,6 @@ def kid_register(request):
             context['weight_error_msg'] = weight_error_msg
         except:
             pass
-        # try:
-        #     form.errors['img']
-        #     img_error_msg = "올바른 사진을 입력하세요"
-        #     context['img_error_msg'] = img_error_msg
-        # except:
-        #     pass
-        # try:
-        #     form.errors['img']
-        #     form['img'] = './static/image/아이기본사진.PNG'
-        # except:
-        #     pass
-        # if form['img'] == None:
-        #     form['img'] = './image/아이기본사진.png'
         if form.is_valid():
             kid_regit = form.save(commit=False)
             kid_regit.user = request.user
@@ -167,8 +154,7 @@ def kid_select(request):
         'kid_set' : kid_set,
     }
     print(kid_set)
-    # return render(request, 'user/select.html', context)
-    return render(request, 'user/test1.html', context)
+    return render(request, 'user/select_kid.html', context)
 
 
 # 회원 정보 수정
