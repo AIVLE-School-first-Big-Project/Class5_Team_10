@@ -8,21 +8,21 @@
                 {% csrf_token %}
                 <div class='row mx-5'>
                     <div class='col mt-4'>
-                        <div class='row  mb-2' id='user_id_check_div'>
+                        <div class='row  pb-1 mb-1' id='user_id_check_div'>
                             <h6 class='font-wieght-bold'>아이디</h6>
                             <div class='input-group'>
-                                <input type='text' class='form-control' name='id' id='user_id'
+                                <input type='text' class='form-control mr-1' name='id' id='user_id'
                                     value="{{ form.id.value | default_if_none:'' }}" placeholder=' 아이디를 입력하세요.' required>
-                                <button color=#feb737 type='button' class='btn btn-outline-secondary' onclick=id_check()>중복확인</button>
+                                <button color=#feb737 type='button' class='btn main_btn' onclick=id_check()>중복확인</button>
                             </div>
                             <small class='mt-1 text-danger' id='id_check_msg'> {{id_error_msg}} </small>
                         </div>
-                        <div class='row mb-2'>
+                        <div class='row my-1'>
                             <h6 class='font-wieght-bold'>비밀번호</h6>
                             <input type='password' class='form-control' name='password1' id='password'
                                 value="{{ form.password1.value | default_if_none:'' }}" placeholder=' 비밀번호를 입력하세요.' required>
                         </div>
-                        <div class='row mb-2'>
+                        <div class='row my-1'>
                             <h6 class='font-wieght-bold'>비밀번호 확인</h6>
                             <input type='password' class='form-control' name='password2' id='password_check'
                                 placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
@@ -40,8 +40,8 @@
                             <small class='mt-1 text-danger' id='email_check_msg'> {{email_error_msg}} </small>
                         </div>
                         <div class='row justify-content-between'>
-                            <a class='btn btn-outline-secondary mr-1' data-toggle='modal' data-target='#modal'>이전</a>
-                            <button class='btn btn-secondary' id='add_user_button'>회원가입</button>
+                            <a class='btn sub_btn mr-1' data-toggle='modal' data-target='#modal'>이전</a>
+                            <button class='btn main_btn' id='add_user_button'>회원가입</button>
                         </div>
                     </div>
                 </div>		

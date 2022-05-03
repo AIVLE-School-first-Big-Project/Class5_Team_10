@@ -19,26 +19,24 @@
     }
 </script>
 <div class="container">
-    <div class="profile-aria">
-        <div class="row">
-            {% for kid in kid_set %}
-            <div class="mx-3 profile" onclick="selecting( {{ kid.id }} )">
-                <img src="{{ kid.img.url }}" class="profile-card" id="kid_{{ kid.id }}"/>
-                <p class="profile-card">{{ kid.name }}</p>
-            </div>
-            {% empty %}
-            <div class="mx-3 profile">
-                <img src="../../static/image/plus.png" class="profile-card"/>
-                
-            </div>
-            {% endfor %}
-        </div>        
-        <!-- 아이 추가 버튼 -->
-        <div class="col text-center">
-            <button class="btn btn-secondary">
-                <a href="{% url 'user:kid_register' %}">아이 정보 등록하기</a>
-            </button>
+    <div class="row my-5"></div>
+    <div class="row pb-2 my-2 justify-content-center">
+        {% for kid in kid_set %}
+        <div class="mx-3 profile" onclick="selecting( {{ kid.id }} )">
+            <img src="{{ kid.img.url }}" class="profile-card" id="kid_{{ kid.id }}"/>
+            <p class="profile-card">{{ kid.name }}</p>
         </div>
+        {% empty %}
+        <div class="mx-3 profile">
+            <img src="../../static/image/kid_profile_default.PNG" class="profile-card"/>
+            
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row justify-content-center"></div>        
+    <!-- 아이 추가 버튼 -->
+    <div class="col text-center">
+        <button class="btn main_btn" onclick="location.href='{% url "user:kid_register" %}';">아이 정보 등록하기</button>
     </div>
 </div>
 {% endblock %}

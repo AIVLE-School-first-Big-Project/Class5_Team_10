@@ -12,7 +12,7 @@ class UserCreationForm(UserCreationForm):
 
 
 class KidRegisterForm(forms.ModelForm):
-
+    img = forms.ImageField(initial='images/kid_profile_default.PNG')
     class Meta:
         model = Kid
         fields = ("name", "birthday", "img", "height", "weight")

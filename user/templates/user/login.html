@@ -14,8 +14,8 @@
                                 value="{{ form.username.value|default_if_none:'' }}" required>
                         </div>
                     </div>
-                    <div class="row my-0 py-0"
-                        <small class='text-danger'>{{ id_error_msg }}</small>
+                    <div class="row my-0 py-0">
+                        <small class='pb-1 text-danger'>{{ id_error_msg }}</small>
                     </div>
                     <div class="row my-0 pb-2" >
                         <h6 class="font-weight-bold" for="password">비밀번호</h6>
@@ -25,7 +25,7 @@
                         </div>              
                     </div>
                     <div class="row my-0 py-0">
-                        <small class='mt-1 text-danger'>{{ password_error_msg }}</small>
+                        <small class='pb-1 text-danger'>{{ password_error_msg }}</small>
                     </div>
                     <div class="row my-0 pb-5 justify-content-end">
                         <small>
@@ -35,14 +35,11 @@
                         </small>
                     </div>
                     <div class="row my-0 pb-3">
-                        <button class="btn btn-secondary form-control" type="submit">로그인</button>
+                        <button class="btn main_btn form-control" type="submit">로그인</button>
                     </div>
                     <div class="row my-0" >
-                        <button class="btn btn-outline-secondary form-control" type="button"><a href="{% url 'user:signup' %}">회원가입</a></button>
+                        <button class="btn sub_btn form-control" type="button" onclick="location.href='{% url "user:signup" %}';">회원가입</button>
                     </div>
-                    <!-- <div class="row justify-content-between pt-2">    
-                        
-                    </div> -->
                 </div>
             </div>
         </form>
