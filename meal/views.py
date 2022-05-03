@@ -45,38 +45,38 @@ def meal(request):
             Nutrition.objects.bulk_create(tmp)
 
         try:
-            morning_meal = 0
+            breakfast_meal = 0
             lunch_meal = 0
-            evening_meal = 0
-            morning_diet = 0
+            dinner_meal = 0
+            breakfast_diet = 0
             lunch_diet = 0
-            evening_diet = 0
+            dinner_diet = 0
 
-            try: morning_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='아침')
+            try: breakfast_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='아침')
             except: pass
             try: lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='점심')
             except: pass
-            try: evening_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='저녁')
+            try: dinner_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='저녁')
             except: pass
 
-            try: morning_diet = Diet.objects.filter(meal=morning_meal[0])
+            try: breakfast_diet = Diet.objects.filter(meal=breakfast_meal[0])
             except: pass
             try: lunch_diet = Diet.objects.filter(meal=lunch_meal[0])
             except: pass
-            try: evening_diet = Diet.objects.filter(meal=evening_meal[0])
+            try: dinner_diet = Diet.objects.filter(meal=dinner_meal[0])
             except: pass
 
-            if morning_meal: context['morning_meal'] = morning_meal
+            if breakfast_meal: context['breakfast_meal'] = breakfast_meal
             else: pass
             if lunch_meal: context['lunch_meal'] = lunch_meal
             else: pass
-            if evening_meal: context['evening_meal'] = evening_meal
+            if dinner_meal: context['dinner_meal'] = dinner_meal
             else: pass
-            if morning_diet: context['morning_diet'] = morning_diet
+            if breakfast_diet: context['breakfast_diet'] = breakfast_diet
             else: pass
             if lunch_diet: context['lunch_diet'] = lunch_diet
             else: pass
-            if evening_diet: context['evening_diet'] = evening_diet
+            if dinner_diet: context['dinner_diet'] = dinner_diet
             else: pass
 
             nut_breakfast = 0
@@ -288,7 +288,7 @@ def meal(request):
             context['intake'] = j_intake
             context['kid'] = kid
 
-            if morning_meal or lunch_meal or evening_meal:
+            if breakfast_meal or lunch_meal or dinner_meal:
                 return render(request, 'meal/meal.html', context=context)
             else:
                 return render(request, 'meal/meal.html', context=context)
@@ -303,38 +303,38 @@ def meal(request):
         date = request.POST.get('datepicker')
         context['date'] = date
         try:
-            morning_meal = 0
+            breakfast_meal = 0
             lunch_meal = 0
-            evening_meal = 0
-            morning_diet = 0
+            dinner_meal = 0
+            breakfast_diet = 0
             lunch_diet = 0
-            evening_diet = 0
+            dinner_diet = 0
 
-            try: morning_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='아침')
+            try: breakfast_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='아침')
             except: pass
             try: lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='점심')
             except: pass
-            try: evening_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='저녁')
+            try: dinner_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='저녁')
             except: pass
 
-            try: morning_diet = Diet.objects.filter(meal=morning_meal[0])
+            try: breakfast_diet = Diet.objects.filter(meal=breakfast_meal[0])
             except: pass
             try: lunch_diet = Diet.objects.filter(meal=lunch_meal[0])
             except: pass
-            try: evening_diet = Diet.objects.filter(meal=evening_meal[0])
+            try: dinner_diet = Diet.objects.filter(meal=dinner_meal[0])
             except: pass
 
-            if morning_meal: context['morning_meal'] = morning_meal
+            if breakfast_meal: context['breakfast_meal'] = breakfast_meal
             else: pass
             if lunch_meal: context['lunch_meal'] = lunch_meal
             else: pass
-            if evening_meal: context['evening_meal'] = evening_meal
+            if dinner_meal: context['dinner_meal'] = dinner_meal
             else: pass
-            if morning_diet: context['morning_diet'] = morning_diet
+            if breakfast_diet: context['breakfast_diet'] = breakfast_diet
             else: pass
             if lunch_diet: context['lunch_diet'] = lunch_diet
             else: pass
-            if evening_diet: context['evening_diet'] = evening_diet
+            if dinner_diet: context['dinner_diet'] = dinner_diet
             else: pass
 
             nut_breakfast = 0
@@ -546,7 +546,7 @@ def meal(request):
             context['intake'] = j_intake
             context['kid'] = kid
 
-            if morning_meal or lunch_meal or evening_meal:
+            if breakfast_meal or lunch_meal or dinner_meal:
                 return render(request, 'meal/meal.html', context=context)
             else:
                 return render(request, 'meal/meal.html', context=context)
@@ -575,9 +575,9 @@ def meal_diet(request):
     except: pass
 
     meal_regdate = request.POST['date']
-    if request.POST['frame'] == 'morning_food_form': meal_time = '아침'
+    if request.POST['frame'] == 'breakfast_food_form': meal_time = '아침'
     elif request.POST['frame'] == 'lunch_food_form': meal_time = '점심'
-    elif request.POST['frame'] == 'evening_food_form': meal_time = '저녁'
+    elif request.POST['frame'] == 'dinner_food_form': meal_time = '저녁'
 
     food_results = request.POST['food_result'].split(',')
     portions = request.POST['portions'].split(',')
