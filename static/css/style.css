@@ -90,31 +90,6 @@ footer {
     font-weight: bold !important;
 }
 
-
-/* input[type=checkbox] {
-    -moz-appearance:none;
-    -webkit-appearance:none;
-    -o-appearance:none;
-    outline: none;
-    content: none;	
-}
-
-input[type=checkbox]:before {
-    font-family: "FontAwesome";
-    content: "\f00c";
-    font-size: 15px;
-    color: transparent !important;
-    background: #ff7449;
-    width: 2rem;
-    height: 1rem;
-    border: 1px solid grey;
-    margin-right: 7px;
-}
-
-input[type=checkbox]:checked:before {
-    color: white !important;
-} */
-
 .body {
     background-color: #ffede5;
 }
@@ -195,8 +170,9 @@ input[id="image"] {
     position: relative;
 }
 
-/* input[type=text] {
-    outline: none;
-    padding-left: 10px;
-    background-color: rgb(255, 255, 255);
+/* .custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 10px;
 } */

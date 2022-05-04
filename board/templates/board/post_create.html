@@ -38,7 +38,12 @@
                                 <div class="form-control navbar_color text-center text-white"><b>이미지</b></div>
                             </div>
                             <div class="col">
-                                <input type="file" name="image">
+                                <form>
+                                    <label for="file" class="custom-file-upload btn sub_btn">
+                                        <i class="fa-solid fa-upload"></i>업로드
+                                    </label>
+                                    <input id="file" type="file" name="image" onchange="hey()" style="display:none"/>
+                                </form>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -97,9 +102,9 @@
 
 {% block script%}
 <script>
-    function resize(obj) {
-      obj.style.height = "1px";
-      obj.style.height = (obj.scrollHeight)+"px";
+    function hey() {
+        let name = $('#file')[0].files[0].name
+        $('label').text(name)
     }
 </script>
 {% endblock %}

@@ -1,212 +1,264 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- 게시물 상세 조회 -->
-<div class="row mt-3"></div>
-<div class="row mt-3">
-    <div class="col"></div>
-    <div class="col-6">
-        <div class="container rounded" style="border: 2px solid #ff7449;">
-            <div class="row">
-                <div class="col-2 text-start pl-3 mt-3" style="color:#808080">
-                    <p><b>제목</b></p>
-                    <p><b>게시일</b></p>
-                    <p><b>카테고리</b></p>
-                    <hr class="navbar_color">
-                    <p><b>내용</b></p>
+<div class="container">
+    <!-- 게시물 상세 조회 -->
+    <div class="row mt-3"></div>
+    <div class="row mt-3">
+        <div class="col"></div>
+        <div class="col-8">
+            <div class="container rounded" style="border: 2px solid #ff7449;">
+                <div class="row">
+                    <div class="col-2 text-start pl-3 mt-3" style="color:#808080">
+                        <p><b>제목</b></p>
+                        <p><b>게시일</b></p>
+                        <p><b>카테고리</b></p>
+                        <hr class="navbar_color">
+                        <p><b>내용</b></p>
+                    </div>
+                    <div class="col-10 pl-3 mt-3" style="color:#808080">
+                        <p><b>{{ post.title }}</b></p>
+                        <p><b>{{ post.regdate | date:"Y-m-d" }}</b></p>
+                        <p><b>{{ post.board.ctg }}</b></p>
+                        <hr class="navbar_color">
+                        <div class="row">
+                            <div class="col">
+                                {% if post.img %}
+                                <img class="img-fluid img-thumbnail" src="{{ post.img.url }}" style="width: 50rem; height:30rem;">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p><b>{{ post.content }}</b></p>
+                            </div>    
+                        </div>
+                    </div>
                 </div>
-                <div class="col-10 pl-3 mt-3" style="color:#808080">
-                    <p><b>{{ post.title }}</b></p>
-                    <p><b>{{ post.regdate | date:"Y-m-d" }}</b></p>
-                    <p><b>{{ post.board.ctg }}</b></p>
-                    <hr class="navbar_color">
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+    <!-- 댓글 조회 -->
+    <div class="row mt-1 ">
+        <div class="col"></div>
+        <div class="col-8">
+            <div class="container rounded" style="border: 2px solid #ff7449;">
+                {% if comments_list %}
+                {% for comment in comments_list %}
+                <form action="{% url 'board:comment_modify' comment.id %}" method="POST">
                     <div class="row">
-                        <div class="col">
-                            {% if post.img %}
-                            <img class="img-fluid img-thumbnail" src="{{ post.img.url }}" style="width: 50rem; height:30rem;">
-                            {% endif %}
+                        <div class="col-1 mt-1" style="color:#808080">
+                            <small><b>{{ comment.user.username }}</b></small>
+                        </div>
+                        <div class="col-5 mt-1" style="color:#808080">
+                            <small><b>{{ comment.regdate }}</b></small>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
-                            <p><b>{{ post.content }}</b></p>
-                        </div>    
+                        <form method="post" id="comment_submit">
+                            <div class="col-8 text-white mt-1">
+                                <input type="text" class="comment w-75 rounded" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required style="font-size:5px;">
+                            </div>
+                            <div class="col d-flex justify-content-end">
+                                {% if request.user.username == comment.user.username %}
+                                    <a href="javascript:void(0)" class="comment_modify btn post_btn mr-2" id="{{comment.id}}" style="width:3rem; height:2rem; font-size: 10px">수정</a>
+                                    
+                                    <a href="javascript:void(0)" class="comment_submit btn post_btn mr-2" id="{{comment.id}}_submit"
+                                        style="width:3rem; height:2rem; font-size: 10px; display:none">완료</a>
+
+                                    <a href="javascript:void(0)" class="comment_cancel btn post_btn" id="{{comment.id}}_cancel" 
+                                    data-uri="{% url 'board:post' post.id %}" style="width:3rem; height:2rem; font-size: 10px; display:none">취소</a>
+                                    
+                                    <a href="javascript:void(0)" class="comment_delete btn post_btn" id="{{comment.id}}_delete"
+                                    data-uri="{% url 'board:comment_delete' comment.id %}" style="width:3rem; height:2rem; font-size: 10px">삭제</a>
+                                {% endif%}
+                            </div>
+                        </form>
                     </div>
+                    <hr class="navbar_color" style="width:100%; margin-bottom:0 boarder:1px;">
+                </form>
+                {% endfor %}
+                {% else %}
+                <div class="row justify-content-center mt-3" style="color:#808080"><b>등록된 댓글이 없습니다.</b></div>
+                {% endif %}
+                {% if user.is_authenticated %}
+                <form action="" method="POST">
+                    <div class="row mb-2">
+                    {% csrf_token %}
+                        <div class="col-8 mt-2 mb-1">
+                            <textarea wrap="hard" name="content" id="content" class="textarea_comment w-75" required></textarea>
+                        </div>
+                        <div class="col mt-2 mb-1 d-flex justify-content-end">
+                            <button class="btn post_btn comment_border" style="width:5rem; height:2rem; font-size: 5px;">댓글 등록</button>
+                        </div>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+
+    <div class="row mt-1">
+        <div class="col"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col">
+                    <a class='btn post_btn' href="{% url 'board:post_list' %}"><b>이전</b></a>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <!-- 게시물 수정 삭제 -->
+                    {% if request.user.is_staff %}
+                    <a href="{% url 'board:post_modify' post.id  %}" class="post_modify btn post_btn mr-3">수정</a>
+                    <a href="javascript:void(0)" class="post_delete btn post_btn"
+                    data-uri="{% url 'board:post_delete' post.id  %}">삭제</a>
+                    {% endif%}
                 </div>
             </div>
         </div>
+        <div class="col"></div>
     </div>
-    <div class="col"></div>
-</div>
 
-<!-- 댓글 조회 -->
-<div class="row mt-1 ">
-    <div class="col"></div>
-    <div class="col-6">
-        <div class="container rounded" style="border: 2px solid #ff7449;">
-            {% if comments_list %}
-            {% for comment in comments_list %}
-            <form action="{% url 'board:comment_modify' comment.id %}" method="POST">
-                <div class="row">
-                    <div class="col-1 mt-1" style="color:#808080">
-                        <small><b>{{ comment.user.username }}</b></small>
-                    </div>
-                    <div class="col-5 mt-1" style="color:#808080">
-                        <small><b>{{ comment.regdate }}</b></small>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8 text-white mt-1">
-                        <input type="text" class="comment w-75 rounded" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required style="font-size:5px;">
-                    </div>
-                    <div class="col d-flex justify-content-end">
-                        {% if request.user.username == comment.user.username %}
-                            <a href="javascript:void(0)" class="comment_modify btn post_btn mr-2" id="{{comment.id}}" style="width:3rem; height:2rem; font-size: 10px">수정</a>
-                            <button class="comment_submit btn post_btn mr-2" id="{{comment.id}}_submit" style="width:3rem; height:2rem; font-size: 10px; display:none">완료</button>
-                            <a href="javascript:void(0)" class="comment_cancel btn post_btn" id="{{comment.id}}_cancel" 
-                            data-uri="{% url 'board:post' post.id %}" style="width:3rem; height:2rem; font-size: 10px; display:none">취소</a>
-                            <a href="javascript:void(0)" class="comment_delete btn post_btn" id="{{comment.id}}_delete"
-                            data-uri="{% url 'board:comment_delete' comment.id %}" style="width:3rem; height:2rem; font-size: 10px">삭제</a>
-                        {% endif%}
-                    </div>
-                </div>
-                <hr class="navbar_color" style="width:100%; margin-bottom:0 boarder:1px;">
-            </form>
-            {% endfor %}
+
+    <!-- 댓글 페이징처리 -->
+    <div class="mt-3">
+        <ul class="pagination justify-content-center">
+            <!-- 이전페이지 -->
+            {% if comments_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link post_btn" href="?&page={{ comments_list.previous_page_number }}"
+                    tabindex="-1">이전</a>
+            </li>
             {% else %}
-            <div class="row justify-content-center mt-3" style="color:#808080"><b>등록된 댓글이 없습니다.</b></div>
+            <li class="page-item">
+                <a class="page-link post_btn" tabindex="-1" aria-disabled="true" href="#">이전</a>
+            </li>
             {% endif %}
-            {% if user.is_authenticated %}
-            <form action="" method="POST">
-                <div class="row mb-2">
-                {% csrf_token %}
-                    <div class="col-8 mt-2 mb-1">
-                        <textarea wrap="hard" name="content" id="content" class="textarea_comment w-75" required></textarea>
-                    </div>
-                    <div class="col mt-2 mb-1 d-flex justify-content-end">
-                        <button class="btn post_btn comment_border" style="width:5rem; height:2rem; font-size: 5px;">댓글 등록</button>
-                    </div>
-                </div>
-            </form>
+            <!-- 페이지리스트 -->
+            {% for page_number in comments_list.paginator.page_range %}
+            {% if page_number >= comments_list.number|add:-2.5 and page_number <= comments_list.number|add:7.5 %}
+            {% if page_number == comments_list.number %}
+            <li class="page-item active" aria-current="page" disabled>
+                <a class="page-link num_btn" href="?&page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link num_btn" href="?&page={{ page_number }}">{{ page_number }}</a>
+            </li>
             {% endif %}
+            {% endif %}
+            {% endfor %}
+            <!-- 다음페이지 -->
+            {% if comments_list.has_next %}
+            <li class="page-item">
+                <a class="page-link post_btn" href="?&page={{ comments_list.next_page_number }}"
+                    tabindex="1">다음</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link post_btn" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+</div>
+
+<div class='modal fade' id='modal' tabindex='-1'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <b></b>
+                <button type='button' class='close' data-dismiss='modal'>
+                    <span>x</span>
+                </button>
+            </div>
+            <div class='modal-body text-center'>
+                <p></p>
+                <small></small>
+            </div>
+            <div class='modal-footer justify-content-center'>
+                <button class='btn sub_btn' data-dismiss='modal'>아니오</button>
+                <button class='btn main_btn yes_btn'>&nbsp;&nbsp;&nbsp;예&nbsp;&nbsp;&nbsp;</button>
+            </div>
         </div>
     </div>
-    <div class="col"></div>
 </div>
-
-<div class="row mt-1">
-    <div class="col"></div>
-    <div class="col-6">
-        <div class="row">
-            <div class="col d-flex justify-content-start">
-                <a class='btn post_btn' data-toggle='modal' data-target='#modal'><b>이전</b></a>
-            </div>
-            <div class="col d-flex justify-content-end">
-                <!-- 게시물 수정 삭제 -->
-                {% if request.user.is_staff %}
-                <a href="javascript:void(0)" class="post_modify btn post_btn mr-3"
-                data-uri="{% url 'board:post_modify' post.id  %}">수정</a>
-                <a href="javascript:void(0)" class="post_delete btn post_btn"
-                data-uri="{% url 'board:post_delete' post.id  %}">삭제</a>
-                {% endif%}
-            </div>
-        </div>
-    </div>
-    <div class="col"></div>
-</div>
-
-
-<!-- 댓글 페이징처리 -->
-<div class="mt-3">
-    <ul class="pagination justify-content-center">
-        <!-- 이전페이지 -->
-        {% if comments_list.has_previous %}
-        <li class="page-item">
-            <a class="page-link post_btn" href="?&page={{ comments_list.previous_page_number }}"
-                tabindex="-1">이전</a>
-        </li>
-        {% else %}
-        <li class="page-item">
-            <a class="page-link post_btn" tabindex="-1" aria-disabled="true" href="#">이전</a>
-        </li>
-        {% endif %}
-        <!-- 페이지리스트 -->
-        {% for page_number in comments_list.paginator.page_range %}
-        {% if page_number >= comments_list.number|add:-2.5 and page_number <= comments_list.number|add:7.5 %}
-        {% if page_number == comments_list.number %}
-        <li class="page-item active" aria-current="page" disabled>
-            <a class="page-link num_btn" href="?&page={{ page_number }}">{{ page_number }}</a>
-        </li>
-        {% else %}
-        <li class="page-item">
-            <a class="page-link num_btn" href="?&page={{ page_number }}">{{ page_number }}</a>
-        </li>
-        {% endif %}
-        {% endif %}
-        {% endfor %}
-        <!-- 다음페이지 -->
-        {% if comments_list.has_next %}
-        <li class="page-item">
-            <a class="page-link post_btn" href="?&page={{ comments_list.next_page_number }}"
-                tabindex="1">다음</a>
-        </li>
-        {% else %}
-        <li class="page-item">
-            <a class="page-link post_btn" tabindex="-1" aria-disabled="true" href="#">다음</a>
-        </li>
-        {% endif %}
-    </ul>
-</div>
-<!-- 페이징처리 끝 -->
 {% endblock %}
 
 {% block script %}
 <script type='text/javascript'>
     $(document).ready(function() {
-        const delete_post = document.getElementsByClassName("post_delete");
-        Array.from(delete_post).forEach(function(element) {
-            element.addEventListener('click', function() {
-                if(confirm("정말로 삭제하시겠습니까?")) {
-                    location.href = this.dataset.uri
-                };
-            });
-        });
+        $('.post_delete').click(function() {
+            $('.modal-header b').text('게시물 삭제하기')
+            $('.modal-body p').html('<font color="red"><b>정말로 삭제하시겠습니까?<b></font>')
+            $('.modal-body small').remove()
+            $('#modal').modal('show')
 
-        const modify_post = document.getElementsByClassName("post_modify");
-        Array.from(modify_post).forEach(function(element) {
-            element.addEventListener('click', function() {
-                if(confirm("정말로 수정하시겠습니까?")) {
-                    location.href = this.dataset.uri
-                };
-            });
-        });
+            $('.modal-footer .yes_btn').click(function() {
+                location.href = $('.post_delete').attr('data-uri')
+            })
+        })
 
-        const delete_comment = document.getElementsByClassName("comment_delete");
-        Array.from(delete_comment).forEach(function(element) {
-            element.addEventListener('click', function() {
-                if(confirm("정말로 삭제하시겠습니까?")) {
-                    location.href = this.dataset.uri
-                };
-            });
-        });
+        $('.comment_delete').click(function() {
+            $('.modal-header b').text('댓글 삭제하기')
+            $('.modal-body p').html('<font color="red"><b>정말로 삭제하시겠습니까?<b></font>')
+            $('.modal-body small').remove()
+            $('#modal').modal('show')
 
-        const modify_comment = document.getElementsByClassName("comment_submit");
-        Array.from(modify_comment).forEach(function(element) {
-            element.addEventListener('click', function() {
-                if(confirm("정말로 수정하시겠습니까?")) {
-                    location.href = this.dataset.uri
-                };
-            });
-        });
+            $('.modal-footer .yes_btn').click(function() {
+                location.href = $('.comment_delete').attr('data-uri')
+            })
+        })
+        // let url = location.href
+        // url = url.replace('http://127.0.0.1:8000/board/', '')
+        // url = url.replace('/', '')
 
-        const comment_cancle = document.getElementsByClassName("comment_cancel");
-        Array.from(comment_cancle).forEach(function(element) {
-            element.addEventListener('click', function() {
-                if(confirm("정말로 취소하시겠습니까?")) {
-                    location.href = this.dataset.uri
-                };
-            });
-        });
+        let comment_id = $('.comment_modify').attr('id')
+
+        $('.comment_submit').click(function() {
+            let id = $(this).attr('id')
+            id = id.replace('_submit', '')
+            $('.modal-header b').text('댓글 수정하기')
+            $('.modal-body p').text('정말로 수정하시겠습니까?')
+            $('#modal').modal('show')
+
+            if ($('.comment').val()) {
+                $('.modal-footer .yes_btn').click(function() {
+                    $.ajax({
+                        url: '../post/comment/modify/' + comment_id,
+                        method: 'post',
+                        data: JSON.stringify({
+                            'comment_id': comment_id,
+                            'comment': $('.comment').val(),
+                        }),
+                        contentType: 'application/json',
+                    }).done(function(result) {
+                        $('#modal').modal('hide')
+                        location.href = './'
+                    })
+                })
+            } else {
+                $('.modal-body p').html('<font color="red"><b>댓글을 입력하세요.</b></font>')
+                $('.modal-footer .yes_btn').click(function() {
+                    $('#modal').modal('hide')
+                })
+            }
+        })
+
+            $('.comment_cancel').click(function() {
+                $('.modal-header b').text('댓글 수정 취소하기')
+                $('.modal-body p').html('<font color="red"><b>정말로 취소하시겠습니까?<b></font>')
+                $('.modal-body small').text('현재 진행단계의 변경사항이 저장되지 않습니다.')
+                $('#modal').modal('show')
+
+            $('.modal-footer .yes_btn').click(function() {
+                location.href = $('.comment_cancel').attr('data-uri')
+            })
+        })
 
         $(document).on('click', '.comment_modify', function() {
             input_id = '#' + $(this).attr('id') + "_input"

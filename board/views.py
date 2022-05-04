@@ -106,12 +106,14 @@ def post_delete(request, post_id):
     post.delete()
     return redirect('board:post_list')
 
-
+import json
 @csrf_exempt
 def comment_modify(request, comment_id):
+    req = json.loads(request.body)
+    comment_id = int(req['comment_id'])
     comment = get_object_or_404(Comment, pk=comment_id)
     post_id = comment.post.id
-    comment.content = request.POST.get('comment')
+    comment.content = req['comment']
     comment.moddate = timezone.now()
     comment.save()
     return redirect('board:post', post_id=post_id)

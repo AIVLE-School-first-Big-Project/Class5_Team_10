@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    {% for kid in kid_set %}
+    <div> 
+        <!-- 아이 사진 보여주기 -->
+        <div class="select_kid" onclick="selecting( {{ kid.id }} )">
+            <img src="{{ kid.img.url }}"  style="width: 10%; float: left; margin-right: 10px;"/>
+        <!-- 아이 이름과 나이 보여주기 -->
+            <p>{{ kid.name }}</p>
+        </div>
+    </div>
+    {% endfor %}
+<div>
+{% endblock content %}
+{% block script %}
+<script>
+    function selecting(kid_id) {
+        sessionStorage.removeItem('kid_id')
+        sessionStorage.setItem('kid_id', kid_id)
+        $.ajax({
+            url: 'kid',
+            method: 'post',
+            data: {kid_id: kid_id}
+        }).done(function() {
+            location.href='http://127.0.0.1:8000/meal/meal'
+        })
+    }
+</script>
+{% endblock %}
