@@ -7,16 +7,7 @@
         font-family: 'JGaegujaengyi-Bold-KO';
     }
 </style>
-<<<<<<< HEAD
-<!-- <img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
-<div class="col text-center">
-    {% if user.is_authenticated %}
-    <button class="btn sub_btn" onclick="window.location.href='/user/select_kid'" style="border: 5px #ff926c double;"><h3><b>Meal Kid 시작하기</h3></b></button>
-    {% else %}
-    <button class="btn sub_btn" onclick="window.location.href='/user/login'" style="border: 5px #ff926c double;"><h3><b>Meal Kid 시작하기</h3></b></button>
-    {% endif %} -->
-=======
->>>>>>> board
+
 <div class="row">
     <img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
 </div>
@@ -29,9 +20,6 @@
         <a class="btn sub_btn" href="{% url 'user:login' %}" id="JB" style="border: 5px #ff926c double; width:20rem;"><b><h1 class="mt-3">Meal Kid</h1></b></a>
         {% endif %}
     </div>
-<<<<<<< HEAD
-=======
     <div class="col"></div>
->>>>>>> board
 </div>
 {% endblock %}
