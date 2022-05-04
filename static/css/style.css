@@ -86,6 +86,41 @@ footer {
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
     background-color: #ff7449 !important;
     border: #ff7449 2px solid !important;
+}
+
+.modal-content {
+    background-color: #ffede5;
+}
+
+.modal-header {
+    border-bottom: #ff7449 1px solid;
+}
+
+.modal-footer {
+    border-top: #ff7449 1px solid;
+}
+
+/* input[type=checkbox] {
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    -o-appearance:none;
+    outline: none;
+    content: none;	
+}
+
+input[type=checkbox]:before {
+    font-family: "FontAwesome";
+    content: "\f00c";
+    font-size: 15px;
+    color: transparent !important;
+    background: #ff7449;
+    width: 2rem;
+    height: 1rem;
+    border: 1px solid grey;
+    margin-right: 7px;
+}
+
+input[type=checkbox]:checked:before {
     color: white !important;
     font-weight: bold !important;
 }
