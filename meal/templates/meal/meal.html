@@ -14,7 +14,11 @@
     </div>
     <div class="row mt-3 mb-3 ml-2 kid_pofile">
         <div class="col mt-4 ml-4">
-            <img class="img" id="profile" src="{{ kid.img.url }}"/>  
+            {% if kid.img %}
+            <img class="img" id="profile" src="{{ kid.img.url }}"/>
+            {% else %}
+            <img class="img" id="profile" src="{% static 'image/kid_profile_default.png' %}"/>
+            {% endif %}
         </div>
         <div class="col mt-5 ml-5">
             <div class="row"><h5>이름 : {{kid.name}}</h5></div>
@@ -928,14 +932,14 @@ $(document).ready(function() {
     let recom2 = ['Kcal','g','g','g','mg','mg','mg']
 
     let intake = []
-    intake.push(int.breakfast_per)
-    intake.push(int.lunch_per)
-    intake.push(int.dinner_per)
+    if (int.breakfast_per) intake.push(int.breakfast_per)
+    if (int.lunch_per) intake.push(int.lunch_per)
+    if (int.dinner_per) intake.push(int.dinner_per)
 
     let intake2 = []
-    intake2.push(int.breakfast)
-    intake2.push(int.lunch)
-    intake2.push(int.dinner)
+    if(int.breakfast) intake2.push(int.breakfast)
+    if(int.lunch) intake2.push(int.lunch)
+    if(int.dinner) intake2.push(int.dinner)
 
   
     let data = {
@@ -1002,18 +1006,13 @@ $(document).ready(function() {
                     },
                     footer: function(contexts) {
 
-                        
-                        let sum = 0;
-                        let x = 0;
-                        let y = 0;
-
                         console.log(contexts)
-                        
-                        contexts.forEach(function(context){
-                            sum += context.parsed.x;
-                        });
 
-                        return "총 : "+String(Math.round(sum)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
+                        x=0
+                        y=0
+                        
+
+                        return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
                     },
                 },
                 footerColor: function(context) {
