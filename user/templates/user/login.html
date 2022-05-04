@@ -10,7 +10,7 @@
                     <div class="row my-0 pb-2" id='user_id_div'>
                         <h6 class="font-weight-bold" for="id">사용자ID</h6>
                         <div class="input-group">
-                            <input class="form-control" type="text" name="username" id="id"
+                            <input class="form-control navbar_edge_color" type="text" name="username" id="id"
                                 value="{{ form.username.value|default_if_none:'' }}" required>
                         </div>
                     </div>
@@ -20,7 +20,7 @@
                     <div class="row my-0 pb-2" >
                         <h6 class="font-weight-bold" for="password">비밀번호</h6>
                         <div class="input-group">
-                            <input class="form-control" type="password" name="password" id="password"
+                            <input class="form-control navbar_edge_color" type="password" name="password" id="password"
                                 value="{{ form.password.value|default_if_none:'' }}" required>
                         </div>              
                     </div>
@@ -29,9 +29,9 @@
                     </div>
                     <div class="row my-0 pb-5 justify-content-end">
                         <small>
-                            <a href="{% url 'user:forgot_id' %}">아이디 찾기</a>
+                            <a href="{% url 'user:forgot_id' %}" style="color: coral;">아이디 찾기</a>
                             |
-                            <a href="{% url 'user:password_reset' %}">비밀번호 찾기</a>
+                            <a href="{% url 'user:password_reset' %}" style="color: coral;">비밀번호 찾기</a>
                         </small>
                     </div>
                     <div class="row my-0 pb-3">

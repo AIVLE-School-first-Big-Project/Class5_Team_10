@@ -19,14 +19,14 @@
         <div class="row mx-5 my-0 pb-2">
             <h6 for="password">비밀번호</h6>
             <div class="input-group">
-                <input class="form-control" type="password" name="password1" id="password" 
+                <input class="form-control navbar_edge_color" type="password" name="password1" id="password" 
                     value ="{{ form.password.value|default_if_none:'' }}" required placeholder="">
             </div>
         </div>
         <div class="row mx-5 my-0 pb-2">
             <h6 class='font-wieght-bold'>비밀번호 확인</h6>
             <div class="input-group">
-                <input class='form-control' type='password' name='password2' id='password_check'
+                <input class='form-control navbar_edge_color' type='password' name='password2' id='password_check'
                     placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
             </div>
             <small class='mt-1 text-danger'> {{password_error_msg}} </small>
@@ -34,7 +34,7 @@
         <div class="row mx-5 my-0 pb-3">
             <h6 for="email">이메일</h6>
             <div class="input-group">
-                <input class="form-control" type="text" name="email" id="email"
+                <input class="form-control navbar_edge_color" type="text" name="email" id="email"
                     value="{{ user.email }}" required>
             </div>
             <small class='mt-1 text-danger'> {{email_error_msg}} </small>
@@ -44,7 +44,7 @@
         </div>
         <div class="row mx-5 my-0 pb-2 justify-content-end">
             <small>
-                <a href="#" data-toggle="modal" data-target="#modal">탈퇴하기</a>
+                <a href="#" data-toggle="modal" data-target="#modal" style="color: coral;">탈퇴하기</a>
         <!-- <button type="button"><a href="{% url 'user:member_del' %}">탈퇴하기</a></button> -->
     </form>
     </div>
@@ -63,7 +63,7 @@
             </div>
             <div class='modal-footer justify-content-center'>
                 <button class='btn main_btn' data-dismiss='modal'>아니오</button>
-                <a href='{% url 'user:member_del' %}' class='btn sub_btn'>&nbsp;&nbsp;&nbsp;예&nbsp;&nbsp;&nbsp;</a>
+                <a href="{% url 'user:member_del' %}" class='btn sub_btn'>&nbsp;&nbsp;&nbsp;예&nbsp;&nbsp;&nbsp;</a>
             </div>
         </div>
     </div>
