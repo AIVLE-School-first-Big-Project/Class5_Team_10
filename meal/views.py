@@ -71,13 +71,13 @@ def nut_diet(nut_meal):
         intake['diet'][4] += nut.nutrition.sodium * 0.4 * nut.portions
         intake['diet'][5] += nut.nutrition.calcium * nut.portions
         intake['diet'][6] += nut.nutrition.iron * nut.portions
-        intake['diet_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions 
-        intake['diet_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
-        intake['diet_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
-        intake['diet_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
-        intake['diet_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500 * nut.portions
-        intake['diet_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
-        intake['diet_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+        intake['diet_per'][0] += nut.nutrition.energy * 100 / 1400 * nut.portions 
+        intake['diet_per'][1] += nut.nutrition.carbohydrate * 100 / 180 * nut.portions
+        intake['diet_per'][2] += nut.nutrition.protein * 100 / 20 * nut.portions
+        intake['diet_per'][3] += nut.nutrition.fat * 100 / 65 * nut.portions
+        intake['diet_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1200 * nut.portions
+        intake['diet_per'][5] += nut.nutrition.calcium * 100 / 600 * nut.portions
+        intake['diet_per'][6] += nut.nutrition.iron * 100 / 7 * nut.portions
         
         energy += nut.nutrition.energy * nut.portions
         carbohydrate += nut.nutrition.carbohydrate * nut.portions
