@@ -52,13 +52,11 @@
             {% endif %}
             {% if breakfast_meal %}
             <div class="row d-flex justify-content-center mb-3">
-                <!-- <button class="btn sub_btn breakfast_upload mr-1" disabled>아침 식단 업로드</button> -->
                 <button class="btn sub_btn breakfast_del_btn"><i class="fas fa-redo-alt"></i>&nbsp;다시하기</button>
             </div>
             {% else %}
             <div class="row d-flex justify-content-center mb-3">
                 <button class="btn main_btn breakfast_upload mr-1">아침 식단 업로드</button>
-                <!-- <button class="btn main_btn breakfast_del_btn" disabled><i class="fas fa-redo-alt"></i>&nbsp;다시하기</button> -->
             </div>
             {% endif %}
         </div>
@@ -577,6 +575,58 @@
     text-align: center;
 }
 
+.ui-widget {
+	font-family: Cafe24Dongdong;
+	font-size: 1em;
+}
+
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+	font-family: Cafe24Dongdong;
+	font-size: 1em;
+}
+
+.ui-widget-content {
+	border: 1px solid #dddddd;
+	background: #ffede5;
+	color: #333333;
+}
+
+.ui-widget-header {
+	border: 1px solid #ff7349;
+	background: #ff926c;
+	color: #333333;
+	font-weight: bold;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus,
+.ui-button:hover,
+.ui-button:focus {
+	border: 1px solid #cccccc;
+	background: #ffede5;
+	font-weight: normal;
+	color: #2b2b2b;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+	border: 1px solid #ff6030;
+	background: #ff7449;
+	font-weight: normal;
+	color: #ffffff;
+}
+
 .kid_pofile {
     border: #ff7449 2px solid;
     border-radius: 20px;
@@ -755,6 +805,7 @@ $(document).ready(function() {
     $("#datepicker").datepicker({
         dateFormat: 'yy-mm-dd', //달력 날짜 형태
         showOtherMonths: true, //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        selectOtherMonths: true,
         showMonthAfterYear:true, // 월- 년 순서가아닌 년도 - 월 순서
         changeYear: true, //option값 년 선택 가능
         changeMonth: true, //option값  월 선택 가능                           
@@ -772,55 +823,55 @@ $(document).ready(function() {
     let canvas = document.getElementById('myChart')
     let ctx = canvas.getContext('2d')
     let labels = ['칼로리','탄수화물','단백질','지방','나트륨','칼슘','철분']
-    let int = {{ intake|safe}}
+    let int = {{ intake|safe }}
 
-    var recom = [2000,300,45,50,1500,800,15]
-    var recom2 = ['Kcal','g','g','g','mg','mg','mg']
+    let recom = [1400,180,20,65,1200,600,7]
+    let recom2 = ['Kcal','g','g','g','mg','mg','mg']
 
-    var intake = []
+    let intake = []
     intake.push(int.breakfast_per)
     intake.push(int.lunch_per)
     intake.push(int.dinner_per)
 
-    var intake2 = []
+    let intake2 = []
     intake2.push(int.breakfast)
     intake2.push(int.lunch)
     intake2.push(int.dinner)
 
   
-    var data = {
+    let data = {
       labels: labels,
         datasets: [{
           label: '아침',
           data: intake[0],
           backgroundColor: [
-            'rgba(255, 0, 0, 0.5)'
+            'rgba(250,128,114)'
           ],
           hoverBackgroundColor: [
-            'rgb(255, 0, 0)'
+            'rgb(250,128,114,0.5)'
           ]
         },{
           label: '점심',
           data: intake[1],
           backgroundColor: [
-            'rgba(255, 255, 0, 0.5)'
+            'rgba(128,0,128)'
           ],
           hoverBackgroundColor: [
-            'rgb(255, 255, 0)'
+            'rgb(128,0,128,0.5)'
           ]
         },{
           label: '저녁',
           data: intake[2],
           backgroundColor: [
-            'rgba(0, 255, 0, 0.5)'
+            'rgba(135,206,235)'
           ],
           hoverBackgroundColor: [
-            'rgb(0, 255, 0)'
+            'rgb(135,206,235,0.5)'
           ]
         }]
     }
   
-    var options = {
+    let options = {
         responsive: false,
         
         indexAxis: 'y',
@@ -836,45 +887,54 @@ $(document).ready(function() {
 
     
             tooltip: {
+                enabled: true,
+                titleAlign: 'center',
                 callbacks: {
                     titleAlign: 'center',
                     afterTitle: function(context) {
-                        i = context[0].dataIndex;
-                        return "권장섭취량 : "+recom[i]+recom2[i];
+                        i = context[0].dataIndex
+                        return "권장섭취량 : "+recom[i]+recom2[i]
                     },
                     label: function(context) {
                         
-                        i = context.dataIndex;
-                        j = context.datasetIndex;
-                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake[j][i])) + "% )";
+                        i = context.dataIndex
+                        j = context.datasetIndex
+                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake[j][i])) + "% )"
                     },
-                    footer: function(context) {
-                        i = context[0].dataIndex;
-                        x=0; y=0;
-                        for(k=0;k<3;k++){
-                            x += intake2[k][i];
-                            y +=intake[k][i];
-                        }
+                    footer: function(contexts) {
 
-                        return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )";
+                        
+                        let sum = 0;
+                        let x = 0;
+                        let y = 0;
+
+                        console.log(contexts)
+                        
+                        contexts.forEach(function(context){
+                            sum += context.parsed.x;
+                        });
+
+                        return "총 : "+String(Math.round(sum)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
                     },
                 },
                 footerColor: function(context) {
 
                     if(context.tooltipItems[0]){
-                        i = context.tooltipItems[0].dataIndex;
+                        i = context.tooltipItems[0].dataIndex
+                        j = context.tooltipItems[0].datasetIndex
 
                         y=0;
 
-                        for(k=0;k<3;k++){
-                            y+=intake[k][i];
+
+                        for(k=0;k<j;k++){
+                            y+=intake[k][i]
                         }
 
                         
-                        if( y > 120){
+                        if( y > 125){
                             return 'rgb(255,0,0,0.9)';
                         }
-                        else if(y <70){
+                        else if(y <75){
                             return 'rgb(255,255,0,0.8)';
                         }
                         else {
