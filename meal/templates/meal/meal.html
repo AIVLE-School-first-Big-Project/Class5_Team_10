@@ -930,23 +930,23 @@ $(document).ready(function() {
 
     let recom = [1400,180,20,65,1200,600,7]
     let recom2 = ['Kcal','g','g','g','mg','mg','mg']
-
-    let intake = []
-    if (int.breakfast_per) intake.push(int.breakfast_per)
-    if (int.lunch_per) intake.push(int.lunch_per)
-    if (int.dinner_per) intake.push(int.dinner_per)
+    
+    let intake1 = []
+    intake1.push(int.breakfast_per)
+    intake1.push(int.lunch_per)
+    intake1.push(int.dinner_per)
 
     let intake2 = []
-    if(int.breakfast) intake2.push(int.breakfast)
-    if(int.lunch) intake2.push(int.lunch)
-    if(int.dinner) intake2.push(int.dinner)
+    intake2.push(int.breakfast)
+    intake2.push(int.lunch)
+    intake2.push(int.dinner)
 
   
     let data = {
       labels: labels,
         datasets: [{
           label: '아침',
-          data: intake[0],
+          data: intake1[0],
           backgroundColor: [
             'rgba(250,128,114)'
           ],
@@ -955,7 +955,7 @@ $(document).ready(function() {
           ]
         },{
           label: '점심',
-          data: intake[1],
+          data: intake1[1],
           backgroundColor: [
             'rgba(128,0,128)'
           ],
@@ -964,7 +964,7 @@ $(document).ready(function() {
           ]
         },{
           label: '저녁',
-          data: intake[2],
+          data: intake1[2],
           backgroundColor: [
             'rgba(135,206,235)'
           ],
@@ -992,8 +992,10 @@ $(document).ready(function() {
             tooltip: {
                 enabled: true,
                 titleAlign: 'center',
+                bodyAlign: 'center',
+                footerAlign: 'center',
+                xAlign: 'left',
                 callbacks: {
-                    titleAlign: 'center',
                     afterTitle: function(context) {
                         i = context[0].dataIndex
                         return "권장섭취량 : "+recom[i]+recom2[i]
@@ -1002,22 +1004,24 @@ $(document).ready(function() {
                         
                         i = context.dataIndex
                         j = context.datasetIndex
-                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake[j][i])) + "% )"
+                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake1[j][i])) + "% )"
                     },
                     footer: function(contexts) {
-
-                        console.log(contexts)
 
                         i = contexts[0].dataIndex
 
                         x=0
                         y=0
                         
-                        for(j=0;j<intake.length;j++){
-                            x += intake2[j][i]
-                            y += intake[j][i]
+                        for(j=0;j<3;j++){
+                            if(intake2[j]){
+                                x+=intake2[j][i]
+                            }
+                            if(intake1[j]){
+                                y+=intake1[j][i]
+                            }
                         }
-
+                        
                         return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
                     },
                 },
@@ -1025,15 +1029,14 @@ $(document).ready(function() {
 
                     if(context.tooltipItems[0]){
                         i = context.tooltipItems[0].dataIndex
-                        j = context.tooltipItems[0].datasetIndex
 
                         y=0;
 
-
-                        for(k=0;k<intake.length;k++){
-                            y+=intake[k][i]
+                        for(k=0;k<3;k++){
+                            if(intake1[k]){
+                                y+=intake1[k][i]
+                            }
                         }
-
                         
                         if( y > 125){
                             return 'rgb(255,0,0,0.9)';
