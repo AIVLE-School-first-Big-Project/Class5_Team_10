@@ -127,6 +127,10 @@ footer {
  font-family: 'Nanum Gothic', sans-serif;
 }
 
+#cafe {
+    font-family: 'Cafe24Dongdong';
+}
+
 /* board */
 .table_bottom {
     border-bottom:1px solid #ff7449;

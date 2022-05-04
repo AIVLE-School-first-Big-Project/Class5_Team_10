@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+<style>
+.img {
+    width: 12rem; 
+    height: 12rem;
+    border-radius: 25%;
+    object-fit: cover;
+}
+</style>
 <div class='container'>
     <div class='row my-5'>
         <div class='col'></div>
@@ -8,43 +16,52 @@
             <form action='.' method='POST' enctype='multipart/form-data'>
                 {% csrf_token %}
                 <div class='row mx-5'>
-                    <div class='col mt-4'>
+                    <div class='col'>
                         <div class='row'>
-                            <div class="col pl-0">
-                                <p class='font-weight-bold' for='kid_img'>아이 사진</p>
+                            <div class="col text-center">
+                                <p class='font-weight-bold' for='kid_img'><h2 id="cafe" style="color:#808080;"><b>우리 아이 사진</b></h2></p>
                             </div>
                         </div>
                         <div class='row mb-2 justify-content-between'>
-                            <img class="img mb-2" src="{{ kid.img.url }}"/>
-                        </div>
-                        <div class='row mb-4 justify-content-start'>
-                            <input type="file" name="img" id="kid_img_btn" accept=".jpg, .png"
-                                value="{{ kid.img.url }}">
+                            <div class="col">
+                                <div class="row align-content-center">
+                                    <img class="img d-flex justify-content-start" src="{{ kid.img.url }}"/>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-start">
+                                <div class="row align-content-end">
+                                    <label for="kid_img_btn" class="custom-file-upload btn sub_btn">
+                                        <i class="fa-solid fa-upload">업로드</i>
+                                    </label>
+                                    <input type="file" name="img" id="kid_img_btn" accept=".jpg, .png" style="display:none"
+                                    value="{{ form.img.value }}">
+                                </div>
+                            </div>
                         </div>
                         <div class="row my-2" id=kid_name_div>
-                            <label class="col-2 px-0 font-weight-bold">이름</label>
-                            <span class="col-4 pl-4">{{ kid.name }}</span>
+                            <label class="col-2 px-0 font-weight-bold"><h4 id="cafe" style="color:#808080;">이름</h4></label>
+                            <span class="col-4 pl-4"><h4 id="cafe" style="color:#808080;">{{ kid.name }}</h4></span>
                         </div>
                         <div class="row mb-2">
-                            <label class="col-2 px-0 font-weight-bold">생년월일</label>
-                            <span class='col-4 pl-4'>{{ kid.birthday }}</span>
+                            <label class="col-2 px-0 font-weight-bold"><h5 id="cafe" style="color:#808080;">생년월일</h5></label>
+                            <span class='col-4 pl-4'><h6 id="cafe" style="color:#808080;">{{ kid.birthday }}</h6></span>
                         </div>
                         <div class='row mb-2'>
-                            <label class='font-weight-bold' for='kid_height'>아이 신장</label>
+                            <label class='font-weight-bold' for='kid_height'><h6 id="cafe" style="color:#808080;">아이 신장</h6></label>
                             <input type='text' class='form-control navbar_edge_color' name='height' id='kid_height'
                                 placeholder='(cm)' required value="{{kid.height}}">
                         </div>
                         <div class='row mb-3'>
-                            <label class='font-weight-bold' for='kid_weight'>아이 체중</label>
+                            <label class='font-weight-bold' for='kid_weight'><h6 id="cafe" style="color:#808080;">아이 체중</h6></label>
                             <input type='text' class='form-control navbar_edge_color' name='weight' id='kid_weight' 
                                 placeholder='(kg)' required value="{{kid.weight}}">
                         </div>
                         <div class="row justify-content-between">
-                            <a class='btn sub_btn mr-1' data-toggle='modal' data-target='#modal'>이전</a>
-                            <button class="btn main_btn">수정완료</button>
+                            <a class='btn sub_btn mr-1' data-toggle='modal' data-target='#modal' id="cafe">이전</a>
+                            <button class="btn main_btn" id="cafe">수정완료</button>
                         </div>
                         <div class="row mt-3 pb-2 justify-content-end">
-                            <small><a href="#" data-toggle="modal" data-target="#modal_kid_del" style="color: coral;">아이정보삭제하기</a></small>
+                            <small><a href="#" data-toggle="modal" data-target="#modal_kid_del" id="cafe" style="color: coral;"><h6 class="btn sub_btn">아이 정보 삭제하기</h6></a></small>
                         </div>
                     </div>
                 </div>

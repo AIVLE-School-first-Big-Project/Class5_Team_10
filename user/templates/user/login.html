@@ -8,7 +8,7 @@
             <div class='row mx-5'>
                 <div class='col mt-4'>
                     <div class="row my-0 pb-2" id='user_id_div'>
-                        <h6 class="font-weight-bold" for="id">사용자ID</h6>
+                        <h4 class="font-weight-bold" for="id" id="cafe" style="color:#808080">사용자ID</h4>
                         <div class="input-group">
                             <input class="form-control navbar_edge_color" type="text" name="username" id="id"
                                 value="{{ form.username.value|default_if_none:'' }}" required>
@@ -18,7 +18,7 @@
                         <small class='pb-1 text-danger'>{{ id_error_msg }}</small>
                     </div>
                     <div class="row my-0 pb-2" >
-                        <h6 class="font-weight-bold" for="password">비밀번호</h6>
+                        <h4 class="font-weight-bold" for="password" id="cafe" style="color:#808080">비밀번호</h4>
                         <div class="input-group">
                             <input class="form-control navbar_edge_color" type="password" name="password" id="password"
                                 value="{{ form.password.value|default_if_none:'' }}" required>
@@ -35,10 +35,10 @@
                         </small>
                     </div>
                     <div class="row my-0 pb-3">
-                        <button class="btn main_btn form-control" type="submit">로그인</button>
+                        <button class="btn main_btn form-control" type="submit" id="cafe">로그인</button>
                     </div>
                     <div class="row my-0" >
-                        <button class="btn sub_btn form-control" type="button" onclick="location.href='{% url "user:signup" %}';">회원가입</button>
+                        <button class="btn sub_btn form-control" type="button" id="cafe" onclick="location.href='{% url "user:signup" %}';">회원가입</button>
                     </div>
                 </div>
             </div>

@@ -2,29 +2,29 @@
 {% block content %}
 <div class="container">
     <div class='row my-3'></div>
-    <div class="col-6 py-3 d-flex justify-content-center" style="float: none; margin:0 auto;">
-        <h4>비밀번호와 이메일만 수정이 가능합니다</h4>
+    <div class="col-6 py-3 d-flex justify-content-center" style="float: none; margin:0 auto; color:#808080;">
+        <h4 id="cafe">비밀번호와 이메일만 수정이 가능합니다</h4>
     </div>
     <div class="col-6" style="float: none; margin:0 auto;">
     <form method="POST" action=".">
         {% csrf_token %}
         <div class="row mx-5 my-0 py-2">
-            <div class="col-2 px-0"><h6>이름</h6></div>
-            <div class="col-4" style="float: none; margin:0 auto;">{{ user.name }}</div>
+            <div class="col-2 px-0" id="cafe" style="color:#808080"><h4>이름</h4></div>
+            <div class="col-4" id="cafe" style="float: none; margin:0 auto; color:#808080;"><h4>{{ user.name }}</h4></div>
         </div>        
         <div class="row mx-5 my-0 pb-2">
-            <div class="col-2 px-0"><h6>아이디</h6></div>
-            <div class="col-4" style="float: none; margin:0 auto;">{{ user.id }}</div>
+            <div class="col-2 px-0" id="cafe" style="color:#808080;"><h4>아이디</h4></div>
+            <div class="col-4" id="cafe" style="float: none; margin:0 auto; color:#808080;"><h4>{{ user.id }}</h4></div>
         </div>
         <div class="row mx-5 my-0 pb-2">
-            <h6 for="password">비밀번호</h6>
+            <h5 for="password" id="cafe" >비밀번호</h5>
             <div class="input-group">
                 <input class="form-control navbar_edge_color" type="password" name="password1" id="password" 
                     value ="{{ form.password.value|default_if_none:'' }}" required placeholder="">
             </div>
         </div>
         <div class="row mx-5 my-0 pb-2">
-            <h6 class='font-wieght-bold'>비밀번호 확인</h6>
+            <h5 class='font-wieght-bold' id="cafe">비밀번호 확인</h5>
             <div class="input-group">
                 <input class='form-control navbar_edge_color' type='password' name='password2' id='password_check'
                     placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
@@ -32,7 +32,7 @@
             <small class='mt-1 text-danger'> {{password_error_msg}} </small>
         </div>
         <div class="row mx-5 my-0 pb-3">
-            <h6 for="email">이메일</h6>
+            <h5 for="email" id="cafe">이메일</h5>
             <div class="input-group">
                 <input class="form-control navbar_edge_color" type="text" name="email" id="email"
                     value="{{ user.email }}" required>
@@ -40,11 +40,11 @@
             <small class='mt-1 text-danger'> {{email_error_msg}} </small>
         </div>
         <div class="row mx-5 my-0 pb-2">
-            <button class='btn main_btn form-control' type="submit">수정 완료</button>
+            <button class='btn main_btn form-control' id="cafe" type="submit">수정 완료</button>
         </div>
         <div class="row mx-5 my-0 pb-2 justify-content-end">
             <small>
-                <a href="#" data-toggle="modal" data-target="#modal" style="color: coral;">탈퇴하기</a>
+                <a href="#" data-toggle="modal" data-target="#modal" id="cafe" style="color: coral;"><h5>탈퇴하기</h5></a>
         <!-- <button type="button"><a href="{% url 'user:member_del' %}">탈퇴하기</a></button> -->
     </form>
     </div>

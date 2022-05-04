@@ -25,7 +25,7 @@
         <div class="mx-3 profile" onclick="selecting( {{ kid.id }} )">
             {% if kid.img %}
             <img src="{{ kid.img.url }}" class="profile-card" id="kid_{{ kid.id }}"/>
-            <p class="profile-card">{{ kid.name }}</p>
+            <p class="profile-card"><h4 class="text-center" id="cafe" style="color:#808080;">{{ kid.name }}</h4></p>
             {% else %}
             <img src="{{ '../../static/images/kid_profile_default.PNG' }}" class="profile-card" id="kid_{{ kid.id }}"/>
             <p class="profile-card">{{ kid.name }}</p>
@@ -33,7 +33,7 @@
         </div>
         {% empty %}
         <div class="mx-3 profile">
-            <a href="{% url "user:kid_register" %}">
+            <a href="{% url 'user:kid_register' %}">
                 <img src="../../static/images/kid_profile_default.PNG" class="profile-card"/>
             </a>
         </div>
@@ -42,7 +42,7 @@
     <div class="row justify-content-center"></div>        
     <!-- 아이 추가 버튼 -->
     <div class="col text-center">
-        <button class="btn main_btn" onclick="location.href='{% url "user:kid_register" %}';">아이 정보 등록하기</button>
+        <button class="btn main_btn" id="cafe" onclick="location.href= '{% url "user:kid_register" %}';">아이 등록하기</button>
     </div>
 </div>
 {% endblock %}
