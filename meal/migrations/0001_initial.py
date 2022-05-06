@@ -39,11 +39,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Meal',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('img', models.ImageField(null=True, upload_to=meal.models.user_directory_path)),
+                ('id', models.AutoField(
+                    primary_key=True, serialize=False)),
+                ('img', models.ImageField(
+                    null=True, upload_to=meal.models.user_directory_path)),
                 ('regdate', models.DateField()),
                 ('time', models.CharField(max_length=20)),
-                ('kid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user.Kid')),
+                ('kid', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='user.Kid')),
             ],
         ),
         migrations.CreateModel(
@@ -51,8 +55,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('portions', models.FloatField(default=1)),
-                ('meal', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='meal.Meal')),
-                ('nutrition', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='meal.Nutrition')),
+                ('meal', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='meal.Meal')),
+                ('nutrition', models.ForeignKey(
+                    on_delete=django.db.models.deletion.DO_NOTHING,
+                    to='meal.Nutrition')),
             ],
         ),
     ]

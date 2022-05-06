@@ -8,6 +8,7 @@ import os
 import csv
 import datetime
 from .ai import prediction
+from decorators import login_message_required
 
 
 # meal, diet 객체 가져오기
@@ -174,7 +175,7 @@ def nut_diet(nut_meal):
         lack_kcal, good_kcal, bad_kcal, lack_food, good_food, bad_food
 
 
-@csrf_exempt
+@login_message_required
 def meal(request):
     context = {}
 
@@ -364,7 +365,6 @@ def meal(request):
         return render(request, 'meal/meal.html', context=context)
 
 
-@csrf_exempt
 def meal_upload(request):
     meal_img = request.FILES.__getitem__('meal_img')
 
@@ -379,7 +379,6 @@ def meal_upload(request):
     return HttpResponse(results)
 
 
-@csrf_exempt
 def meal_diet(request):
     kid_id = request.POST['kid_id']
     try:
@@ -471,7 +470,6 @@ def del_meal_diet(request):
     return render(request, 'meal/meal.html')
 
 
-@csrf_exempt
 def food_list(request):
     foods = Nutrition.objects.all()
     food_name_list = []
@@ -480,7 +478,6 @@ def food_list(request):
     return HttpResponse(food_name_list)
 
 
-@csrf_exempt
 def search_food_list(request):
     req = json.loads(request.body)
     search_data = req['search_data']

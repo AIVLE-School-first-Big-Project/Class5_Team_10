@@ -3,8 +3,12 @@ from PIL import Image
 import numpy as np
 import json
 
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='meal/static/data/10_class_weight.pt')
+model = torch.hub.load(
+    'ultralytics/yolov5',
+    'custom',
+    path='meal/static/data/10_class_weight.pt')
 model.conf = 0.6
+
 
 def prediction(file):
     file = Image.open(file)

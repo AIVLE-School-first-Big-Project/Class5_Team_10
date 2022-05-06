@@ -1,9 +1,12 @@
 from django.db import models
 from user.models import Kid
 
+
 # Create your models here.
 def user_directory_path(instance, filename):
-    return 'meal_images/kid_{}/{}_{}{}'.format(instance.kid.id, instance.regdate, instance.time, '.png')
+    return 'meal_images/kid_{}/{}_{}{}'.format(
+        instance.kid.id, instance.regdate, instance.time, '.png')
+
 
 class Meal(models.Model):  # 식사
     id = models.AutoField(primary_key=True, null=False)
@@ -11,6 +14,7 @@ class Meal(models.Model):  # 식사
     regdate = models.DateField(null=False)
     time = models.CharField(max_length=20, null=False)
     kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
+
 
 class Nutrition(models.Model):  # 영양성분
     id = models.AutoField(primary_key=True, null=False)
@@ -33,11 +37,24 @@ class Nutrition(models.Model):  # 영양성분
 
     # csv 파일 db저장
     def __str__(self):
-        return '{} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}'.format(self.food,\
-            self.quantity, self.energy, self.carbohydrate,\
-            self.sugars, self.fat, self.protein, self.calcium,\
-                self.phosphorus, self.sodium, self.potassium, self.magnesium,\
-                    self.iron, self.zinc, self.cholesterol, self.transfat)
+        return '{} {} {} {} {} {} {} {} {} {} {} {} {} {} {} {}'.format(
+            self.food,
+            self.quantity,
+            self.energy,
+            self.carbohydrate,
+            self.sugars,
+            self.fat,
+            self.protein,
+            self.calcium,
+            self.phosphorus,
+            self.sodium,
+            self.potassium,
+            self.magnesium,
+            self.iron,
+            self.zinc,
+            self.cholesterol,
+            self.transfat)
+
 
 class Diet(models.Model):  # 식단
     id = models.AutoField(primary_key=True, null=False)
