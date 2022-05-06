@@ -1,12 +1,14 @@
-from gzip import READ
-from urllib import response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Meal, Nutrition, Diet
 from user.models import Kid
-import json, os, csv, datetime
+import json
+import os
+import csv
+import datetime
 from .ai import prediction
+
 
 # meal, diet 객체 가져오기
 def get_object(kid, date):
@@ -16,46 +18,75 @@ def get_object(kid, date):
     breakfast_diet = 0
     lunch_diet = 0
     dinner_diet = 0
-
     nut_breakfast = 0
     nut_lunch = 0
     nut_dinner = 0
 
-    try: breakfast_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='아침')
-    except: pass
-    try: lunch_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='점심')
-    except: pass
-    try: dinner_meal = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=date) & Meal.objects.filter(time='저녁')
-    except: pass
+    try:
+        breakfast_meal = Meal.objects.filter(kid=kid) &\
+            Meal.objects.filter(regdate=date) & Meal.objects.filter(time='아침')
+    except Exception:
+        pass
+    try:
+        lunch_meal = Meal.objects.filter(kid=kid) &\
+            Meal.objects.filter(regdate=date) & Meal.objects.filter(time='점심')
+    except Exception:
+        pass
+    try:
+        dinner_meal = Meal.objects.filter(kid=kid) &\
+            Meal.objects.filter(regdate=date) & Meal.objects.filter(time='저녁')
+    except Exception:
+        pass
 
-    try: breakfast_diet = Diet.objects.filter(meal=breakfast_meal[0])
-    except: pass
-    try: lunch_diet = Diet.objects.filter(meal=lunch_meal[0])
-    except: pass
-    try: dinner_diet = Diet.objects.filter(meal=dinner_meal[0])
-    except: pass
+    try:
+        breakfast_diet = Diet.objects.filter(meal=breakfast_meal[0])
+    except Exception:
+        pass
+    try:
+        lunch_diet = Diet.objects.filter(meal=lunch_meal[0])
+    except Exception:
+        pass
+    try:
+        dinner_diet = Diet.objects.filter(meal=dinner_meal[0])
+    except Exception:
+        pass
 
-    try: nut_breakfast = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='아침')
-    except: pass
-    try: nut_lunch = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='점심')
-    except: pass
-    try: nut_dinner = Diet.objects.filter(meal__regdate=date) & Diet.objects.filter(meal__kid=kid) & Diet.objects.filter(meal__time='저녁')
-    except: pass
+    try:
+        nut_breakfast = Diet.objects.filter(meal__regdate=date) &\
+            Diet.objects.filter(meal__kid=kid) &\
+            Diet.objects.filter(meal__time='아침')
+    except Exception:
+        pass
+    try:
+        nut_lunch = Diet.objects.filter(meal__regdate=date) &\
+            Diet.objects.filter(meal__kid=kid) &\
+            Diet.objects.filter(meal__time='점심')
+    except Exception:
+        pass
+    try:
+        nut_dinner = Diet.objects.filter(meal__regdate=date) &\
+            Diet.objects.filter(meal__kid=kid) &\
+            Diet.objects.filter(meal__time='저녁')
+    except Exception:
+        pass
 
-    return breakfast_meal, lunch_meal, dinner_meal, breakfast_diet, lunch_diet, dinner_diet, nut_breakfast, nut_lunch, nut_dinner
+    return breakfast_meal, lunch_meal, dinner_meal,\
+        breakfast_diet, lunch_diet, dinner_diet,\
+        nut_breakfast, nut_lunch, nut_dinner
+
 
 # 식단 별 영양성분
 def nut_diet(nut_meal):
     intake = {}
     intake['diet'] = [0]*7
     intake['diet_per'] = [0]*7
-    energy = 0  # 2000
-    carbohydrate = 0  # 300
-    protein = 0  # 45
-    fat = 0  # 50
-    sodium = 0  # 1500
-    calcium = 0  # 800
-    iron = 0  # 15
+    energy = 0  # 1400
+    carbohydrate = 0  # 180
+    protein = 0  # 20
+    fat = 0  # 65
+    sodium = 0  # 1200
+    calcium = 0  # 600
+    iron = 0  # 7
     good_food = []
     lack_food = []
     bad_food = []
@@ -71,14 +102,19 @@ def nut_diet(nut_meal):
         intake['diet'][4] += nut.nutrition.sodium * 0.4 * nut.portions
         intake['diet'][5] += nut.nutrition.calcium * nut.portions
         intake['diet'][6] += nut.nutrition.iron * nut.portions
-        intake['diet_per'][0] += nut.nutrition.energy * 100 / 1400 * nut.portions 
-        intake['diet_per'][1] += nut.nutrition.carbohydrate * 100 / 180 * nut.portions
-        intake['diet_per'][2] += nut.nutrition.protein * 100 / 20 * nut.portions
-        intake['diet_per'][3] += nut.nutrition.fat * 100 / 65 * nut.portions
-        intake['diet_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1200 * nut.portions
-        intake['diet_per'][5] += nut.nutrition.calcium * 100 / 600 * nut.portions
+        intake['diet_per'][0] +=\
+            nut.nutrition.energy * 100 / 1400 * nut.portions
+        intake['diet_per'][1] +=\
+            nut.nutrition.carbohydrate * 100 / 180 * nut.portions
+        intake['diet_per'][2] +=\
+            nut.nutrition.protein * 100 / 20 * nut.portions
+        intake['diet_per'][3] +=\
+            nut.nutrition.fat * 100 / 65 * nut.portions
+        intake['diet_per'][4] +=\
+            nut.nutrition.sodium * 100 * 0.4 / 1200 * nut.portions
+        intake['diet_per'][5] +=\
+            nut.nutrition.calcium * 100 / 600 * nut.portions
         intake['diet_per'][6] += nut.nutrition.iron * 100 / 7 * nut.portions
-        
         energy += nut.nutrition.energy * nut.portions
         carbohydrate += nut.nutrition.carbohydrate * nut.portions
         protein += nut.nutrition.protein * nut.portions
@@ -86,36 +122,57 @@ def nut_diet(nut_meal):
         sodium += nut.nutrition.sodium * nut.portions
         calcium += nut.nutrition.calcium * nut.portions
         iron += nut.nutrition.iron * nut.portions
-    
-    if energy < 2000 * 0.2: lack_kcal = round(energy, 2)
-    elif 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal = round(energy, 2)
-    else: bad_kcal = round(energy, 2)
+    if energy < 1400 * 0.2:
+        lack_kcal = round(energy, 2)
+    elif 1400 * 0.2 <= energy and energy < 1400 * 0.4:
+        good_kcal = round(energy, 2)
+    else:
+        bad_kcal = round(energy, 2)
 
-    if carbohydrate < 300 * 0.2: lack_food.append('탄수화물')
-    elif 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food.append('탄수화물')
-    else: bad_food.append('탄수화물')
-    
-    if protein < 45 * 0.2: lack_food.append('단백질')
-    elif 45 * 0.2 <= protein and protein < 45 * 0.4: good_food.append('단백질')
-    else: bad_food.append('단백질')
+    if carbohydrate < 180 * 0.2:
+        lack_food.append('탄수화물')
+    elif 180 * 0.2 <= carbohydrate and carbohydrate < 180 * 0.4:
+        good_food.append('탄수화물')
+    else:
+        bad_food.append('탄수화물')
+    if protein < 20 * 0.2:
+        lack_food.append('단백질')
+    elif 20 * 0.2 <= protein and protein < 20 * 0.4:
+        good_food.append('단백질')
+    else:
+        bad_food.append('단백질')
 
-    if fat < 50 * 0.2: lack_food.append('지방')
-    elif 50 * 0.2 <= fat and fat < 50 * 0.4: good_food.append('지방')
-    else: bad_food.append('지방')
+    if fat < 65 * 0.2:
+        lack_food.append('지방')
+    elif 65 * 0.2 <= fat and fat < 65 * 0.4:
+        good_food.append('지방')
+    else:
+        bad_food.append('지방')
 
-    if sodium < 1500 * 0.4 * 0.2: lack_food.append('나트륨')
-    elif 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food.append('나트륨')
-    else: bad_food.append('나트륨')
+    if sodium < 1200 * 0.4 * 0.2:
+        lack_food.append('나트륨')
+    elif 1200 * 0.4 * 0.2 <= sodium and sodium < 1200 * 0.4 * 0.4:
+        good_food.append('나트륨')
+    else:
+        bad_food.append('나트륨')
 
-    if calcium < 800 * 0.2: lack_food.append('칼슘')
-    elif 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food.append('칼슘')
-    else: bad_food.append('칼슘')
+    if calcium < 600 * 0.2:
+        lack_food.append('칼슘')
+    elif 600 * 0.2 <= calcium and calcium < 600 * 0.4:
+        good_food.append('칼슘')
+    else:
+        bad_food.append('칼슘')
 
-    if iron < 15 * 0.2: lack_food.append('철분')
-    elif 15 * 0.2 <= iron and iron < 15 * 0.4: good_food.append('철분')
-    else: bad_food.append('철분')
+    if iron < 7 * 0.2:
+        lack_food.append('철분')
+    elif 7 * 0.2 <= iron and iron < 7 * 0.4:
+        good_food.append('철분')
+    else:
+        bad_food.append('철분')
 
-    return intake['diet'], intake['diet_per'], lack_kcal, good_kcal, bad_kcal, lack_food, good_food, bad_food
+    return intake['diet'], intake['diet_per'],\
+        lack_kcal, good_kcal, bad_kcal, lack_food, good_food, bad_food
+
 
 @csrf_exempt
 def meal(request):
@@ -128,7 +185,8 @@ def meal(request):
             kid_id = int(kid_id)
             context['kid_id'] = kid_id
             kid = Kid.objects.get(id=kid_id)
-        except: pass
+        except Exception:
+            pass
 
         # 오늘 날짜 디폴트
         date = datetime.date.today().strftime('%Y-%m-%d')
@@ -136,44 +194,54 @@ def meal(request):
 
         # 영양성분 DB 존재여부
         nutirition = []
-        try: nutirition = Nutrition.objects.get(food='쌀밥')
-        except: pass
+        try:
+            nutirition = Nutrition.objects.get(food='쌀밥')
+        except Exception:
+            pass
         if nutirition == []:
             path = 'meal/static/data/nutrition_db.csv'
             file = open(path, 'r', encoding='UTF-8')
             reader = csv.reader(file)
             tmp = []
-            
             for row in reader:
-                tmp.append(Nutrition(food=row[0], quantity=row[1], energy=row[2],\
-                    carbohydrate=row[3], sugars=row[4], fat=row[5],\
-                        protein=row[6], calcium=row[7], phosphorus=row[8],\
-                            sodium=row[9], potassium=row[10], magnesium=row[11],\
-                                iron=row[12], zinc=row[13], cholesterol=row[14],\
-                                    transfat=row[15]))
+                tmp.append(Nutrition(food=row[0],
+                                     quantity=row[1], energy=row[2],
+                                     carbohydrate=row[3], sugars=row[4],
+                                     fat=row[5],
+                                     protein=row[6], calcium=row[7],
+                                     phosphorus=row[8],
+                                     sodium=row[9], potassium=row[10],
+                                     magnesium=row[11], iron=row[12],
+                                     zinc=row[13], cholesterol=row[14],
+                                     transfat=row[15]))
             Nutrition.objects.bulk_create(tmp)
 
         try:
-            breakfast_meal, lunch_meal, dinner_meal, breakfast_diet, lunch_diet, dinner_diet, nut_breakfast, nut_lunch, nut_dinner = get_object(kid, date)
+            breakfast_meal, lunch_meal, dinner_meal, breakfast_diet,\
+                lunch_diet, dinner_diet, nut_breakfast,\
+                nut_lunch, nut_dinner = get_object(kid, date)
 
-            if breakfast_meal: context['breakfast_meal'] = breakfast_meal
-            else: pass
-            if lunch_meal: context['lunch_meal'] = lunch_meal
-            else: pass
-            if dinner_meal: context['dinner_meal'] = dinner_meal
-            else: pass
-            if breakfast_diet: context['breakfast_diet'] = breakfast_diet
-            else: pass
-            if lunch_diet: context['lunch_diet'] = lunch_diet
-            else: pass
-            if dinner_diet: context['dinner_diet'] = dinner_diet
-            else: pass
+            if breakfast_meal:
+                context['breakfast_meal'] = breakfast_meal
+            if lunch_meal:
+                context['lunch_meal'] = lunch_meal
+            if dinner_meal:
+                context['dinner_meal'] = dinner_meal
+            if breakfast_diet:
+                context['breakfast_diet'] = breakfast_diet
+            if lunch_diet:
+                context['lunch_diet'] = lunch_diet
+            if dinner_diet:
+                context['dinner_diet'] = dinner_diet
 
             intake = {}
 
             if nut_breakfast:
-                intake['breakfast'], intake['breakfast_per'], lack_kcal_breakfast, good_kcal_breakfast, bad_kcal_breakfast,\
-                    lack_food_breakfast, good_food_breakfast, bad_food_breakfast = nut_diet(nut_breakfast)
+                intake['breakfast'], intake['breakfast_per'],\
+                    lack_kcal_breakfast, good_kcal_breakfast,\
+                    bad_kcal_breakfast, lack_food_breakfast,\
+                    good_food_breakfast,\
+                    bad_food_breakfast = nut_diet(nut_breakfast)
                 context['lack_kcal_breakfast'] = lack_kcal_breakfast
                 context['good_kcal_breakfast'] = good_kcal_breakfast
                 context['bad_kcal_breakfast'] = bad_kcal_breakfast
@@ -182,8 +250,10 @@ def meal(request):
                 context['bad_food_breakfast'] = bad_food_breakfast
 
             if nut_lunch:
-                intake['lunch'], intake['lunch_per'], lack_kcal_lunch, good_kcal_lunch, bad_kcal_lunch,\
-                    lack_food_lunch, good_food_lunch, bad_food_lunch = nut_diet(nut_lunch)
+                intake['lunch'], intake['lunch_per'],\
+                    lack_kcal_lunch, good_kcal_lunch, bad_kcal_lunch,\
+                    lack_food_lunch, good_food_lunch,\
+                    bad_food_lunch = nut_diet(nut_lunch)
                 context['lack_kcal_lunch'] = lack_kcal_lunch
                 context['good_kcal_lunch'] = good_kcal_lunch
                 context['bad_kcal_lunch'] = bad_kcal_lunch
@@ -192,8 +262,10 @@ def meal(request):
                 context['bad_food_lunch'] = bad_food_lunch
 
             if nut_dinner:
-                intake['dinner'], intake['dinner_per'], lack_kcal_dinner, good_kcal_dinner, bad_kcal_dinner,\
-                    lack_food_dinner, good_food_dinner, bad_food_dinner = nut_diet(nut_dinner)
+                intake['dinner'], intake['dinner_per'],\
+                    lack_kcal_dinner, good_kcal_dinner, bad_kcal_dinner,\
+                    lack_food_dinner, good_food_dinner,\
+                    bad_food_dinner = nut_diet(nut_dinner)
                 context['lack_kcal_dinner'] = lack_kcal_dinner
                 context['good_kcal_dinner'] = good_kcal_dinner
                 context['bad_kcal_dinner'] = bad_kcal_dinner
@@ -210,7 +282,8 @@ def meal(request):
                 return render(request, 'meal/meal.html', context=context)
             else:
                 return render(request, 'meal/meal.html', context=context)
-        except: pass
+        except Exception:
+            pass
         return render(request, 'meal/meal.html', context=context)
 
     # 날짜 선택할 경우
@@ -221,26 +294,31 @@ def meal(request):
         date = request.POST.get('datepicker')
         context['date'] = date
         try:
-            breakfast_meal, lunch_meal, dinner_meal, breakfast_diet, lunch_diet, dinner_diet, nut_breakfast, nut_lunch, nut_dinner = get_object(kid, date)
+            breakfast_meal, lunch_meal, dinner_meal,\
+                breakfast_diet, lunch_diet, dinner_diet,\
+                nut_breakfast, nut_lunch, nut_dinner = get_object(kid, date)
 
-            if breakfast_meal: context['breakfast_meal'] = breakfast_meal
-            else: pass
-            if lunch_meal: context['lunch_meal'] = lunch_meal
-            else: pass
-            if dinner_meal: context['dinner_meal'] = dinner_meal
-            else: pass
-            if breakfast_diet: context['breakfast_diet'] = breakfast_diet
-            else: pass
-            if lunch_diet: context['lunch_diet'] = lunch_diet
-            else: pass
-            if dinner_diet: context['dinner_diet'] = dinner_diet
-            else: pass
+            if breakfast_meal:
+                context['breakfast_meal'] = breakfast_meal
+            if lunch_meal:
+                context['lunch_meal'] = lunch_meal
+            if dinner_meal:
+                context['dinner_meal'] = dinner_meal
+            if breakfast_diet:
+                context['breakfast_diet'] = breakfast_diet
+            if lunch_diet:
+                context['lunch_diet'] = lunch_diet
+            if dinner_diet:
+                context['dinner_diet'] = dinner_diet
 
             intake = {}
 
             if nut_breakfast:
-                intake['breakfast'], intake['breakfast_per'], lack_kcal_breakfast, good_kcal_breakfast, bad_kcal_breakfast,\
-                    lack_food_breakfast, good_food_breakfast, bad_food_breakfast = nut_diet(nut_breakfast)
+                intake['breakfast'], intake['breakfast_per'],\
+                    lack_kcal_breakfast,\
+                    good_kcal_breakfast, bad_kcal_breakfast,\
+                    lack_food_breakfast, good_food_breakfast,\
+                    bad_food_breakfast = nut_diet(nut_breakfast)
                 context['lack_kcal_breakfast'] = lack_kcal_breakfast
                 context['good_kcal_breakfast'] = good_kcal_breakfast
                 context['bad_kcal_breakfast'] = bad_kcal_breakfast
@@ -249,8 +327,10 @@ def meal(request):
                 context['bad_food_breakfast'] = bad_food_breakfast
 
             if nut_lunch:
-                intake['lunch'], intake['lunch_per'], lack_kcal_lunch, good_kcal_lunch, bad_kcal_lunch,\
-                    lack_food_lunch, good_food_lunch, bad_food_lunch = nut_diet(nut_lunch)
+                intake['lunch'], intake['lunch_per'], lack_kcal_lunch,\
+                    good_kcal_lunch, bad_kcal_lunch,\
+                    lack_food_lunch, good_food_lunch,\
+                    bad_food_lunch = nut_diet(nut_lunch)
                 context['lack_kcal_lunch'] = lack_kcal_lunch
                 context['good_kcal_lunch'] = good_kcal_lunch
                 context['bad_kcal_lunch'] = bad_kcal_lunch
@@ -259,8 +339,10 @@ def meal(request):
                 context['bad_food_lunch'] = bad_food_lunch
 
             if nut_dinner:
-                intake['dinner'], intake['dinner_per'], lack_kcal_dinner, good_kcal_dinner, bad_kcal_dinner,\
-                    lack_food_dinner, good_food_dinner, bad_food_dinner = nut_diet(nut_dinner)
+                intake['dinner'], intake['dinner_per'], lack_kcal_dinner,\
+                    good_kcal_dinner, bad_kcal_dinner,\
+                    lack_food_dinner, good_food_dinner,\
+                    bad_food_dinner = nut_diet(nut_dinner)
                 context['lack_kcal_dinner'] = lack_kcal_dinner
                 context['good_kcal_dinner'] = good_kcal_dinner
                 context['bad_kcal_dinner'] = bad_kcal_dinner
@@ -277,8 +359,10 @@ def meal(request):
                 return render(request, 'meal/meal.html', context=context)
             else:
                 return render(request, 'meal/meal.html', context=context)
-        except: pass
+        except Exception:
+            pass
         return render(request, 'meal/meal.html', context=context)
+
 
 @csrf_exempt
 def meal_upload(request):
@@ -294,17 +378,22 @@ def meal_upload(request):
     results.append(str(foods_len))
     return HttpResponse(results)
 
+
 @csrf_exempt
 def meal_diet(request):
-    # 자녀 어떻게 선택?
     kid_id = request.POST['kid_id']
-    try: kid = Kid.objects.get(id=kid_id)
-    except: pass
+    try:
+        kid = Kid.objects.get(id=kid_id)
+    except Exception:
+        pass
 
     meal_regdate = request.POST['date']
-    if request.POST['frame'] == 'breakfast_food_form': meal_time = '아침'
-    elif request.POST['frame'] == 'lunch_food_form': meal_time = '점심'
-    elif request.POST['frame'] == 'dinner_food_form': meal_time = '저녁'
+    if request.POST['frame'] == 'breakfast_food_form':
+        meal_time = '아침'
+    elif request.POST['frame'] == 'lunch_food_form':
+        meal_time = '점심'
+    elif request.POST['frame'] == 'dinner_food_form':
+        meal_time = '저녁'
 
     food_results = request.POST['food_result'].split(',')
     portions = request.POST['portions'].split(',')
@@ -313,15 +402,19 @@ def meal_diet(request):
     meal_img = 0
     try:
         meal_img = request.FILES.__getitem__('meal_img')
-    except: pass
+    except Exception:
+        pass
     if meal_img:
         m = Meal(img=meal_img, regdate=meal_regdate, time=meal_time, kid=kid)
         m.save()
         # diet 객체 생성
         for i in range(len(food_results)):
-            if portions[i] == '1인분': portions[i] = 1
-            elif portions[i] == '0.5인분': portions[i] = 0.5
-            elif portions[i] == '1.5인분': portions[i] = 1.5
+            if portions[i] == '1인분':
+                portions[i] = 1
+            elif portions[i] == '0.5인분':
+                portions[i] = 0.5
+            elif portions[i] == '1.5인분':
+                portions[i] = 1.5
             nutrition = Nutrition.objects.get(food=food_results[i])
             d = Diet(meal=m, portions=portions[i], nutrition=nutrition)
             d.save()
@@ -330,23 +423,17 @@ def meal_diet(request):
         m.save()
         # diet 객체 생성
         for i in range(len(food_results)):
-            if portions[i] == '1인분': portions[i] = 1
-            elif portions[i] == '0.5인분': portions[i] = 0.5
-            elif portions[i] == '1.5인분': portions[i] = 1.5
+            if portions[i] == '1인분':
+                portions[i] = 1
+            elif portions[i] == '0.5인분':
+                portions[i] = 0.5
+            elif portions[i] == '1.5인분':
+                portions[i] = 1.5
             nutrition = Nutrition.objects.get(food=food_results[i])
             d = Diet(meal=m, portions=portions[i], nutrition=nutrition)
             d.save()
+    return redirect('./')
 
-    # ----------------------------------------------------------------------------
-
-    # # 음식에 대한 영양소
-    # for food in range(len(food_list)):
-    #     nutrition = Nutrition.objects.get(food=food_list[food])
-    #     print(nutrition)
-    #     print(nutrition.fat)  # 해당 음식의 지방
-
-    # return render(request, 'meal/meal.html') 
-    return redirect('./') 
 
 @csrf_exempt
 def del_meal_diet(request):
@@ -359,12 +446,18 @@ def del_meal_diet(request):
     kid_id = req['kid_id']
     kid = Kid.objects.get(id=kid_id)
 
-    m = Meal.objects.filter(kid=kid) & Meal.objects.filter(regdate=meal_regdate) & Meal.objects.filter(time=meal_time)
+    m = Meal.objects.filter(kid=kid) &\
+        Meal.objects.filter(regdate=meal_regdate) &\
+        Meal.objects.filter(time=meal_time)
     m.delete()
-    try: os.remove('media/meal_images/kid_{}/{}_{}{}'.format(kid.id, meal_regdate, meal_time, '.png'))
-    except: pass
+    try:
+        os.remove('media/meal_images/kid_{}/{}_{}{}'
+                  .format(kid.id, meal_regdate, meal_time, '.png'))
+    except Exception:
+        pass
 
     return render(request, 'meal/meal.html')
+
 
 @csrf_exempt
 def food_list(request):
