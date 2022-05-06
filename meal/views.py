@@ -99,7 +99,7 @@ def nut_diet(nut_meal):
         intake['diet'][1] += nut.nutrition.carbohydrate * nut.portions
         intake['diet'][2] += nut.nutrition.protein * nut.portions
         intake['diet'][3] += nut.nutrition.fat * nut.portions
-        intake['diet'][4] += nut.nutrition.sodium * 0.4 * nut.portions
+        intake['diet'][4] += nut.nutrition.sodium * nut.portions
         intake['diet'][5] += nut.nutrition.calcium * nut.portions
         intake['diet'][6] += nut.nutrition.iron * nut.portions
         intake['diet_per'][0] +=\
@@ -111,7 +111,7 @@ def nut_diet(nut_meal):
         intake['diet_per'][3] +=\
             nut.nutrition.fat * 100 / 65 * nut.portions
         intake['diet_per'][4] +=\
-            nut.nutrition.sodium * 100 * 0.4 / 1200 * nut.portions
+            nut.nutrition.sodium * 100 / 1200 * nut.portions
         intake['diet_per'][5] +=\
             nut.nutrition.calcium * 100 / 600 * nut.portions
         intake['diet_per'][6] += nut.nutrition.iron * 100 / 7 * nut.portions
@@ -149,9 +149,9 @@ def nut_diet(nut_meal):
     else:
         bad_food.append('지방')
 
-    if sodium < 1200 * 0.4 * 0.2:
+    if sodium < 1200 * 0.2:
         lack_food.append('나트륨')
-    elif 1200 * 0.4 * 0.2 <= sodium and sodium < 1200 * 0.4 * 0.4:
+    elif 1200 * 0.2 <= sodium and sodium < 1200 * 0.4:
         good_food.append('나트륨')
     else:
         bad_food.append('나트륨')
