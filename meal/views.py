@@ -80,13 +80,13 @@ def nut_diet(nut_meal):
     intake = {}
     intake['diet'] = [0]*7
     intake['diet_per'] = [0]*7
-    energy = 0  # 2000
-    carbohydrate = 0  # 300
-    protein = 0  # 45
-    fat = 0  # 50
-    sodium = 0  # 1500
-    calcium = 0  # 800
-    iron = 0  # 15
+    energy = 0  # 1400
+    carbohydrate = 0  # 180
+    protein = 0  # 20
+    fat = 0  # 65
+    sodium = 0  # 1200
+    calcium = 0  # 600
+    iron = 0  # 7
     good_food = []
     lack_food = []
     bad_food = []
@@ -122,50 +122,50 @@ def nut_diet(nut_meal):
         sodium += nut.nutrition.sodium * nut.portions
         calcium += nut.nutrition.calcium * nut.portions
         iron += nut.nutrition.iron * nut.portions
-    if energy < 2000 * 0.2:
+    if energy < 1400 * 0.2:
         lack_kcal = round(energy, 2)
-    elif 2000 * 0.2 <= energy and energy < 2000 * 0.4:
+    elif 1400 * 0.2 <= energy and energy < 1400 * 0.4:
         good_kcal = round(energy, 2)
     else:
         bad_kcal = round(energy, 2)
 
-    if carbohydrate < 300 * 0.2:
+    if carbohydrate < 180 * 0.2:
         lack_food.append('탄수화물')
-    elif 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4:
+    elif 180 * 0.2 <= carbohydrate and carbohydrate < 180 * 0.4:
         good_food.append('탄수화물')
     else:
         bad_food.append('탄수화물')
-    if protein < 45 * 0.2:
+    if protein < 20 * 0.2:
         lack_food.append('단백질')
-    elif 45 * 0.2 <= protein and protein < 45 * 0.4:
+    elif 20 * 0.2 <= protein and protein < 20 * 0.4:
         good_food.append('단백질')
     else:
         bad_food.append('단백질')
 
-    if fat < 50 * 0.2:
+    if fat < 65 * 0.2:
         lack_food.append('지방')
-    elif 50 * 0.2 <= fat and fat < 50 * 0.4:
+    elif 65 * 0.2 <= fat and fat < 65 * 0.4:
         good_food.append('지방')
     else:
         bad_food.append('지방')
 
-    if sodium < 1500 * 0.4 * 0.2:
+    if sodium < 1200 * 0.4 * 0.2:
         lack_food.append('나트륨')
-    elif 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4:
+    elif 1200 * 0.4 * 0.2 <= sodium and sodium < 1200 * 0.4 * 0.4:
         good_food.append('나트륨')
     else:
         bad_food.append('나트륨')
 
-    if calcium < 800 * 0.2:
+    if calcium < 600 * 0.2:
         lack_food.append('칼슘')
-    elif 800 * 0.2 <= calcium and calcium < 800 * 0.4:
+    elif 600 * 0.2 <= calcium and calcium < 600 * 0.4:
         good_food.append('칼슘')
     else:
         bad_food.append('칼슘')
 
-    if iron < 15 * 0.2:
+    if iron < 7 * 0.2:
         lack_food.append('철분')
-    elif 15 * 0.2 <= iron and iron < 15 * 0.4:
+    elif 7 * 0.2 <= iron and iron < 7 * 0.4:
         good_food.append('철분')
     else:
         bad_food.append('철분')
@@ -223,28 +223,16 @@ def meal(request):
 
             if breakfast_meal:
                 context['breakfast_meal'] = breakfast_meal
-            else:
-                pass
             if lunch_meal:
                 context['lunch_meal'] = lunch_meal
-            else:
-                pass
             if dinner_meal:
                 context['dinner_meal'] = dinner_meal
-            else:
-                pass
             if breakfast_diet:
                 context['breakfast_diet'] = breakfast_diet
-            else:
-                pass
             if lunch_diet:
                 context['lunch_diet'] = lunch_diet
-            else:
-                pass
             if dinner_diet:
                 context['dinner_diet'] = dinner_diet
-            else:
-                pass
 
             intake = {}
 
@@ -312,28 +300,16 @@ def meal(request):
 
             if breakfast_meal:
                 context['breakfast_meal'] = breakfast_meal
-            else:
-                pass
             if lunch_meal:
                 context['lunch_meal'] = lunch_meal
-            else:
-                pass
             if dinner_meal:
                 context['dinner_meal'] = dinner_meal
-            else:
-                pass
             if breakfast_diet:
                 context['breakfast_diet'] = breakfast_diet
-            else:
-                pass
             if lunch_diet:
                 context['lunch_diet'] = lunch_diet
-            else:
-                pass
             if dinner_diet:
                 context['dinner_diet'] = dinner_diet
-            else:
-                pass
 
             intake = {}
 
@@ -405,7 +381,6 @@ def meal_upload(request):
 
 @csrf_exempt
 def meal_diet(request):
-    # 자녀 어떻게 선택?
     kid_id = request.POST['kid_id']
     try:
         kid = Kid.objects.get(id=kid_id)
