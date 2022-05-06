@@ -41,7 +41,7 @@
     </div>
 
     <!-- 댓글 조회 -->
-    <div class="row mt-1 ">
+    <div class="row mt-1" id="comment_box">
         <div class="col"></div>
         <div class="col-8">
             <div class="container rounded" style="border: 2px solid #ff7449;">
@@ -215,55 +215,13 @@
                 location.href = $('.comment_delete').attr('data-uri')
             })
         })
-        // let url = location.href
-        // url = url.replace('http://127.0.0.1:8000/board/', '')
-        // url = url.replace('/', '')
 
         let comment_id = $('.comment_modify').attr('id')
 
-        // $('.comment_submit').click(function() {
-        //     let id = $(this).attr('id')
-        //     id = id.replace('_submit', '')
-        //     $('.modal-header b').text('댓글 수정하기')
-        //     $('.modal-body p').text('정말로 수정하시겠습니까?')
-        //     $('#modal').modal('show')
-
-        //     if ($('.comment').val()) {
-        //         $('.modal-footer .yes_btn').click(function() {
-        //             $.ajax({
-        //                 url: '../post/comment/modify/' + comment_id,
-        //                 method: 'post',
-        //                 data: JSON.stringify({
-        //                     'comment_id': comment_id,
-        //                     'comment': $('.comment').val(),
-        //                 }),
-        //                 contentType: 'application/json',
-        //             }).done(function(result) {
-        //                 $('#modal').modal('hide')
-        //                 location.href = './'
-        //             })
-        //         })
-        //     } else {
-        //         $('.modal-body p').html('<font color="red"><b>댓글을 입력하세요.</b></font>')
-        //         $('.modal-footer .yes_btn').click(function() {
-        //             $('#modal').modal('hide')
-        //         })
-        //     }
-        // })
-
-        //     $('.comment_cancel').click(function() {
-        //         $('.modal-header b').text('댓글 수정 취소하기')
-        //         $('.modal-body p').html('<font color="red"><b>정말로 취소하시겠습니까?<b></font>')
-        //         $('.modal-body small').text('현재 진행단계의 변경사항이 저장되지 않습니다.')
-        //         $('#modal').modal('show')
-
-        //     $('.modal-footer .yes_btn').click(function() {
-        //         location.href = $('.comment_cancel').attr('data-uri')
-        //     })
-        // })
         $('.comment_cancel').click(function() {
-            $(".comment_cancel").load(window.location.href)
+            location.href = './'
         })
+
 
         $(document).on('click', '.comment_modify', function() {
             input_id = '#' + $(this).attr('id') + "_input"

@@ -5,7 +5,6 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from .forms import PostForm, CommentForm
-from user.models import User
 import os
 
 
@@ -87,7 +86,7 @@ def post_modify(request, post_id): # 게시물 수정 함수
                     post.img = None
                     try:
                         os.remove('media/board_images/{}/{}_{}'.format(post.board.ctg, pre_img, '.png'))
-                    except:
+                    except Exception:
                         pass
             else:
                 post.img = pre_img
@@ -106,11 +105,9 @@ def post_delete(request, post_id):
     post.delete()
     return redirect('board:post_list')
 
-import json
+
 @csrf_exempt
 def comment_modify(request, comment_id):
-    # req = json.loads(request.body)
-    # comment_id = int(req['comment_id'])
     comment = get_object_or_404(Comment, pk=comment_id)
     post_id = comment.post.id
     comment.content = request.POST.get('comment')
