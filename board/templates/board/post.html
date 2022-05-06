@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <form method="post" id="comment_submit">
+                        <form method="POST" id="comment_submit" href="{% url 'board:comment_modify' comment.id %}">
                             <div class="col-8 text-white mt-1">
                                 <input type="text" class="comment w-75 rounded" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required style="font-size:5px;">
                             </div>
@@ -65,11 +65,13 @@
                                 {% if request.user.username == comment.user.username %}
                                     <a href="javascript:void(0)" class="comment_modify btn post_btn mr-2" id="{{comment.id}}" style="width:3rem; height:2rem; font-size: 10px">수정</a>
                                     
-                                    <a href="javascript:void(0)" class="comment_submit btn post_btn mr-2" id="{{comment.id}}_submit"
-                                        style="width:3rem; height:2rem; font-size: 10px; display:none">완료</a>
+                                    <button class="comment_submit btn post_btn mr-2" id="{{comment.id}}_submit"
+                                        style="width:3rem; height:2rem; font-size: 10px; display:none">완료</button>
+                                    <!-- <button class="btn post_btn comment_border" style="width:5rem; height:2rem; font-size: 5px;">댓글 등록</button> -->
+
 
                                     <a href="javascript:void(0)" class="comment_cancel btn post_btn" id="{{comment.id}}_cancel" 
-                                    data-uri="{% url 'board:post' post.id %}" style="width:3rem; height:2rem; font-size: 10px; display:none">취소</a>
+                                    style="width:3rem; height:2rem; font-size: 10px; display:none">취소</a>
                                     
                                     <a href="javascript:void(0)" class="comment_delete btn post_btn" id="{{comment.id}}_delete"
                                     data-uri="{% url 'board:comment_delete' comment.id %}" style="width:3rem; height:2rem; font-size: 10px">삭제</a>
@@ -219,45 +221,48 @@
 
         let comment_id = $('.comment_modify').attr('id')
 
-        $('.comment_submit').click(function() {
-            let id = $(this).attr('id')
-            id = id.replace('_submit', '')
-            $('.modal-header b').text('댓글 수정하기')
-            $('.modal-body p').text('정말로 수정하시겠습니까?')
-            $('#modal').modal('show')
+        // $('.comment_submit').click(function() {
+        //     let id = $(this).attr('id')
+        //     id = id.replace('_submit', '')
+        //     $('.modal-header b').text('댓글 수정하기')
+        //     $('.modal-body p').text('정말로 수정하시겠습니까?')
+        //     $('#modal').modal('show')
 
-            if ($('.comment').val()) {
-                $('.modal-footer .yes_btn').click(function() {
-                    $.ajax({
-                        url: '../post/comment/modify/' + comment_id,
-                        method: 'post',
-                        data: JSON.stringify({
-                            'comment_id': comment_id,
-                            'comment': $('.comment').val(),
-                        }),
-                        contentType: 'application/json',
-                    }).done(function(result) {
-                        $('#modal').modal('hide')
-                        location.href = './'
-                    })
-                })
-            } else {
-                $('.modal-body p').html('<font color="red"><b>댓글을 입력하세요.</b></font>')
-                $('.modal-footer .yes_btn').click(function() {
-                    $('#modal').modal('hide')
-                })
-            }
-        })
+        //     if ($('.comment').val()) {
+        //         $('.modal-footer .yes_btn').click(function() {
+        //             $.ajax({
+        //                 url: '../post/comment/modify/' + comment_id,
+        //                 method: 'post',
+        //                 data: JSON.stringify({
+        //                     'comment_id': comment_id,
+        //                     'comment': $('.comment').val(),
+        //                 }),
+        //                 contentType: 'application/json',
+        //             }).done(function(result) {
+        //                 $('#modal').modal('hide')
+        //                 location.href = './'
+        //             })
+        //         })
+        //     } else {
+        //         $('.modal-body p').html('<font color="red"><b>댓글을 입력하세요.</b></font>')
+        //         $('.modal-footer .yes_btn').click(function() {
+        //             $('#modal').modal('hide')
+        //         })
+        //     }
+        // })
 
-            $('.comment_cancel').click(function() {
-                $('.modal-header b').text('댓글 수정 취소하기')
-                $('.modal-body p').html('<font color="red"><b>정말로 취소하시겠습니까?<b></font>')
-                $('.modal-body small').text('현재 진행단계의 변경사항이 저장되지 않습니다.')
-                $('#modal').modal('show')
+        //     $('.comment_cancel').click(function() {
+        //         $('.modal-header b').text('댓글 수정 취소하기')
+        //         $('.modal-body p').html('<font color="red"><b>정말로 취소하시겠습니까?<b></font>')
+        //         $('.modal-body small').text('현재 진행단계의 변경사항이 저장되지 않습니다.')
+        //         $('#modal').modal('show')
 
-            $('.modal-footer .yes_btn').click(function() {
-                location.href = $('.comment_cancel').attr('data-uri')
-            })
+        //     $('.modal-footer .yes_btn').click(function() {
+        //         location.href = $('.comment_cancel').attr('data-uri')
+        //     })
+        // })
+        $('.comment_cancel').click(function() {
+            $(".comment_cancel").load(window.location.href)
         })
 
         $(document).on('click', '.comment_modify', function() {
