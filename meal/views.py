@@ -411,8 +411,14 @@ def meal_diet(request):
         for i in range(len(food_results)):
             if portions[i] == '1인분':
                 portions[i] = 1
+            elif portions[i] == '0.1인분':
+                portions[i] = 0.1
+            elif portions[i] == '0.3인분':
+                portions[i] = 0.3
             elif portions[i] == '0.5인분':
                 portions[i] = 0.5
+            elif portions[i] == '0.7인분':
+                portions[i] = 0.7
             elif portions[i] == '1.5인분':
                 portions[i] = 1.5
             nutrition = Nutrition.objects.get(food=food_results[i])
@@ -425,8 +431,14 @@ def meal_diet(request):
         for i in range(len(food_results)):
             if portions[i] == '1인분':
                 portions[i] = 1
+            elif portions[i] == '0.1인분':
+                portions[i] = 0.1
+            elif portions[i] == '0.3인분':
+                portions[i] = 0.3
             elif portions[i] == '0.5인분':
                 portions[i] = 0.5
+            elif portions[i] == '0.7인분':
+                portions[i] = 0.7
             elif portions[i] == '1.5인분':
                 portions[i] = 1.5
             nutrition = Nutrition.objects.get(food=food_results[i])

@@ -858,7 +858,10 @@ function meal_upload(meal) {
                             '<input class="col w-100 mr-1" disabled value=' + food + ' name="food"/>' +
                             '<select name="portions">' +
                                 '<option value="1인분">1인분</option>' +
+                                '<option value="0.1인분">0.1인분</option>' +
+                                '<option value="0.3인분">0.3인분</option>' +
                                 '<option value="0.5인분">0.5인분</option>' +
+                                '<option value="0.7인분">0.7인분</option>' +
                                 '<option value="1.5인분">1.5인분</option>' +
                             '</select>' +
                             '<button class="btn main_btn ml-1 del_food_btn" id="del_' + meal + food + '_btn">삭제</button>' +
@@ -1211,7 +1214,10 @@ $(document).ready(function() {
                     '<input class="col w-100 mr-1" disabled value=' + window.food_list[i] + ' name="food"/>' +
                     '<select name="portions">' +
                         '<option value="1인분">1인분</option>' +
+                        '<option value="0.1인분">0.1인분</option>' +
+                        '<option value="0.3인분">0.3인분</option>' +
                         '<option value="0.5인분">0.5인분</option>' +
+                        '<option value="0.7인분">0.7인분</option>' +
                         '<option value="1.5인분">1.5인분</option>' +
                     '</select>' +
                     '<button class="btn main_btn ml-1 del_food_btn" id="del_' + window.parent_food_form + window.food_list[i] + '_btn">삭제</button>' +
