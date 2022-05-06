@@ -57,8 +57,10 @@ def nut_diet(nut_meal):
     calcium = 0  # 800
     iron = 0  # 15
     good_food = []
+    lack_food = []
     bad_food = []
     good_kcal = 0
+    lack_kcal = 0
     bad_kcal = 0
 
     for nut in nut_meal:
@@ -69,13 +71,13 @@ def nut_diet(nut_meal):
         intake['diet'][4] += nut.nutrition.sodium * 0.4 * nut.portions
         intake['diet'][5] += nut.nutrition.calcium * nut.portions
         intake['diet'][6] += nut.nutrition.iron * nut.portions
-        intake['diet_per'][0] += nut.nutrition.energy * 100 / 2000 * nut.portions 
-        intake['diet_per'][1] += nut.nutrition.carbohydrate * 100 / 300 * nut.portions
-        intake['diet_per'][2] += nut.nutrition.protein * 100 / 45 * nut.portions
-        intake['diet_per'][3] += nut.nutrition.fat * 100 / 50 * nut.portions
-        intake['diet_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1500 * nut.portions
-        intake['diet_per'][5] += nut.nutrition.calcium * 100 / 800 * nut.portions
-        intake['diet_per'][6] += nut.nutrition.iron * 100 / 15 * nut.portions
+        intake['diet_per'][0] += nut.nutrition.energy * 100 / 1400 * nut.portions 
+        intake['diet_per'][1] += nut.nutrition.carbohydrate * 100 / 180 * nut.portions
+        intake['diet_per'][2] += nut.nutrition.protein * 100 / 20 * nut.portions
+        intake['diet_per'][3] += nut.nutrition.fat * 100 / 65 * nut.portions
+        intake['diet_per'][4] += nut.nutrition.sodium * 100 * 0.4 / 1200 * nut.portions
+        intake['diet_per'][5] += nut.nutrition.calcium * 100 / 600 * nut.portions
+        intake['diet_per'][6] += nut.nutrition.iron * 100 / 7 * nut.portions
         
         energy += nut.nutrition.energy * nut.portions
         carbohydrate += nut.nutrition.carbohydrate * nut.portions
@@ -85,28 +87,35 @@ def nut_diet(nut_meal):
         calcium += nut.nutrition.calcium * nut.portions
         iron += nut.nutrition.iron * nut.portions
     
-    if 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal = round(energy, 2)
+    if energy < 2000 * 0.2: lack_kcal = round(energy, 2)
+    elif 2000 * 0.2 <= energy and energy < 2000 * 0.4: good_kcal = round(energy, 2)
     else: bad_kcal = round(energy, 2)
 
-    if 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food.append('탄수화물')
+    if carbohydrate < 300 * 0.2: lack_food.append('탄수화물')
+    elif 300 * 0.2 <= carbohydrate and carbohydrate < 300 * 0.4: good_food.append('탄수화물')
     else: bad_food.append('탄수화물')
     
-    if 45 * 0.2 <= protein and protein < 45 * 0.4: good_food.append('단백질')
+    if protein < 45 * 0.2: lack_food.append('단백질')
+    elif 45 * 0.2 <= protein and protein < 45 * 0.4: good_food.append('단백질')
     else: bad_food.append('단백질')
 
-    if 50 * 0.2 <= fat and fat < 50 * 0.4: good_food.append('지방')
+    if fat < 50 * 0.2: lack_food.append('지방')
+    elif 50 * 0.2 <= fat and fat < 50 * 0.4: good_food.append('지방')
     else: bad_food.append('지방')
 
-    if 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food.append('나트륨')
+    if sodium < 1500 * 0.4 * 0.2: lack_food.append('나트륨')
+    elif 1500 * 0.4 * 0.2 <= sodium and sodium < 1500 * 0.4 * 0.4: good_food.append('나트륨')
     else: bad_food.append('나트륨')
 
-    if 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food.append('칼슘')
+    if calcium < 800 * 0.2: lack_food.append('칼슘')
+    elif 800 * 0.2 <= calcium and calcium < 800 * 0.4: good_food.append('칼슘')
     else: bad_food.append('칼슘')
 
-    if 15 * 0.2 <= iron and iron < 15 * 0.4: good_food.append('철분')
+    if iron < 15 * 0.2: lack_food.append('철분')
+    elif 15 * 0.2 <= iron and iron < 15 * 0.4: good_food.append('철분')
     else: bad_food.append('철분')
 
-    return intake['diet'], intake['diet_per'], good_kcal, bad_kcal, good_food, bad_food
+    return intake['diet'], intake['diet_per'], lack_kcal, good_kcal, bad_kcal, lack_food, good_food, bad_food
 
 @csrf_exempt
 def meal(request):
@@ -163,23 +172,32 @@ def meal(request):
             intake = {}
 
             if nut_breakfast:
-                intake['breakfast'], intake['breakfast_per'], good_kcal_breakfast, bad_kcal_breakfast, good_food_breakfast, bad_food_breakfast = nut_diet(nut_breakfast)
+                intake['breakfast'], intake['breakfast_per'], lack_kcal_breakfast, good_kcal_breakfast, bad_kcal_breakfast,\
+                    lack_food_breakfast, good_food_breakfast, bad_food_breakfast = nut_diet(nut_breakfast)
+                context['lack_kcal_breakfast'] = lack_kcal_breakfast
                 context['good_kcal_breakfast'] = good_kcal_breakfast
                 context['bad_kcal_breakfast'] = bad_kcal_breakfast
+                context['lack_food_breakfast'] = lack_food_breakfast
                 context['good_food_breakfast'] = good_food_breakfast
                 context['bad_food_breakfast'] = bad_food_breakfast
 
             if nut_lunch:
-                intake['lunch'], intake['lunch_per'], good_kcal_lunch, bad_kcal_lunch, good_food_lunch, bad_food_lunch = nut_diet(nut_lunch)
-                context['good_food_lunch'] = good_food_lunch
-                context['bad_food_lunch'] = bad_food_lunch
+                intake['lunch'], intake['lunch_per'], lack_kcal_lunch, good_kcal_lunch, bad_kcal_lunch,\
+                    lack_food_lunch, good_food_lunch, bad_food_lunch = nut_diet(nut_lunch)
+                context['lack_kcal_lunch'] = lack_kcal_lunch
                 context['good_kcal_lunch'] = good_kcal_lunch
                 context['bad_kcal_lunch'] = bad_kcal_lunch
+                context['lack_food_lunch'] = lack_food_lunch
+                context['good_food_lunch'] = good_food_lunch
+                context['bad_food_lunch'] = bad_food_lunch
 
             if nut_dinner:
-                intake['dinner'], intake['dinner_per'], good_kcal_dinner, bad_kcal_dinner, good_food_dinner, bad_food_dinner = nut_diet(nut_dinner)
+                intake['dinner'], intake['dinner_per'], lack_kcal_dinner, good_kcal_dinner, bad_kcal_dinner,\
+                    lack_food_dinner, good_food_dinner, bad_food_dinner = nut_diet(nut_dinner)
+                context['lack_kcal_dinner'] = lack_kcal_dinner
                 context['good_kcal_dinner'] = good_kcal_dinner
                 context['bad_kcal_dinner'] = bad_kcal_dinner
+                context['lack_food_dinner'] = lack_food_dinner
                 context['good_food_dinner'] = good_food_dinner
                 context['bad_food_dinner'] = bad_food_dinner
 
@@ -221,23 +239,32 @@ def meal(request):
             intake = {}
 
             if nut_breakfast:
-                intake['breakfast'], intake['breakfast_per'], good_kcal_breakfast, bad_kcal_breakfast, good_food_breakfast, bad_food_breakfast = nut_diet(nut_breakfast)
+                intake['breakfast'], intake['breakfast_per'], lack_kcal_breakfast, good_kcal_breakfast, bad_kcal_breakfast,\
+                    lack_food_breakfast, good_food_breakfast, bad_food_breakfast = nut_diet(nut_breakfast)
+                context['lack_kcal_breakfast'] = lack_kcal_breakfast
                 context['good_kcal_breakfast'] = good_kcal_breakfast
                 context['bad_kcal_breakfast'] = bad_kcal_breakfast
+                context['lack_food_breakfast'] = lack_food_breakfast
                 context['good_food_breakfast'] = good_food_breakfast
                 context['bad_food_breakfast'] = bad_food_breakfast
 
             if nut_lunch:
-                intake['lunch'], intake['lunch_per'], good_kcal_lunch, bad_kcal_lunch, good_food_lunch, bad_food_lunch = nut_diet(nut_lunch)
+                intake['lunch'], intake['lunch_per'], lack_kcal_lunch, good_kcal_lunch, bad_kcal_lunch,\
+                    lack_food_lunch, good_food_lunch, bad_food_lunch = nut_diet(nut_lunch)
+                context['lack_kcal_lunch'] = lack_kcal_lunch
                 context['good_kcal_lunch'] = good_kcal_lunch
                 context['bad_kcal_lunch'] = bad_kcal_lunch
+                context['lack_food_lunch'] = lack_food_lunch
                 context['good_food_lunch'] = good_food_lunch
                 context['bad_food_lunch'] = bad_food_lunch
 
             if nut_dinner:
-                intake['dinner'], intake['dinner_per'], good_kcal_dinner, bad_kcal_dinner, good_food_dinner, bad_food_dinner = nut_diet(nut_dinner)
+                intake['dinner'], intake['dinner_per'], lack_kcal_dinner, good_kcal_dinner, bad_kcal_dinner,\
+                    lack_food_dinner, good_food_dinner, bad_food_dinner = nut_diet(nut_dinner)
+                context['lack_kcal_dinner'] = lack_kcal_dinner
                 context['good_kcal_dinner'] = good_kcal_dinner
                 context['bad_kcal_dinner'] = bad_kcal_dinner
+                context['lack_food_dinner'] = lack_food_dinner
                 context['good_food_dinner'] = good_food_dinner
                 context['bad_food_dinner'] = bad_food_dinner
 

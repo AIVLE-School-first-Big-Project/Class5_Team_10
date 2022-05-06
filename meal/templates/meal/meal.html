@@ -14,7 +14,11 @@
     </div>
     <div class="row mt-3 mb-3 ml-2 kid_pofile">
         <div class="col mt-4 ml-4">
-            <img class="img" id="profile" src="{{ kid.img.url }}"/>  
+            {% if kid.img %}
+            <img class="img" id="profile" src="{{ kid.img.url }}"/>
+            {% else %}
+            <img class="img" id="profile" src="{% static 'image/kid_profile_default.png' %}"/>
+            {% endif %}
         </div>
         <div class="col mt-5 ml-5">
             <div class="row"><h5>이름 : {{kid.name}}</h5></div>
@@ -88,35 +92,50 @@
         </div>
         <div class="col ml-3 mb-3 frame" style="overflow-y: auto;">
         {% if breakfast_diet %}
-            {% if good_kcal_breakfast != 0 %}
-            <div class="row mt-5 justify-content-center text-center">
-                섭취&nbsp;<font color="blue"><b>{{ good_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(충분)
+            {% if lack_kcal_breakfast != 0 %}
+            <div class="row mt-1 mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<b style="color: #e8bd00;">{{ lack_kcal_breakfast }}</b><font color="gray">&nbsp;kcal</font>&nbsp;<div style="color: #e8bd00;">(부족)</div>
             </div>
-            <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-            {% elif bad_kcal_breakfast != 0 %}
-            <div class="row mt-5 justify-content-center text-center">
-                섭취&nbsp;<font color="red"><b>{{ bad_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(부족/과잉)
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+            <div class="row mt-2 mb-1 justify-content-center">
+                <div class="col d-flex justify-content-center">
+                    <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                </div>
             </div>
-            <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-            {% endif %}
-            {% if good_food_breakfast %}
+            {% elif good_kcal_breakfast != 0 %}
+            <div class="row mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<font color="blue"><b>{{ good_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="blue">(충분)</font>
+            </div>
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
             <div class="row mt-2 mb-1 justify-content-center">
                 <div class="col d-flex justify-content-center">
                     <img class="w-25" src="{% static 'image/잘한 식단 아이.png' %}" alt="로고 이미지"/>
                 </div>
             </div>
+            {% elif bad_kcal_breakfast != 0 %}
+            <div class="row mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<font color="red"><b>{{ bad_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="red">(과잉)</font>
+            </div>
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+            <div class="row mt-2 mb-1 justify-content-center">
+                <div class="col d-flex justify-content-center">
+                    <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                </div>
+            </div>
+            {% endif %}
+            {% if good_food_breakfast %}
+            <div class="row mt-2 mb-1 justify-content-center"><b><충분한 영양소></b></div>
                 {% for food in good_food_breakfast %}
-                <div class="row justify-content-center text-center">{{ food }}</div>
+                <div class="row justify-content-center text-center">{{ food }}<font color="blue">&nbsp;(충분)</font></div>
                 {% endfor %}
             {% else %}
-                <div class="row mt-2 justify-content-center">
-                    <div class="col d-flex justify-content-center">
-                        <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
-                    </div>
-                </div>
                 <div class="row mt-2 mb-2 justify-content-center text-center">아쉬운 식단이네요</div>
             {% endif %}    
-            {% if bad_food_breakfast %}    
+            {% if lack_food_breakfast %}    
+            <div class="row justify-content-center mt-1">
+                <button class="btn sub_btn breakfast_nu_result_btn">부족/과잉 영양성분 보기</button>
+            </div>
+            {% elif bad_food_breakfast %}    
             <div class="row justify-content-center mt-1">
                 <button class="btn sub_btn breakfast_nu_result_btn">부족/과잉 영양성분 보기</button>
             </div>
@@ -180,37 +199,52 @@
         </div>
         <div class="col ml-3 mb-3 frame" style="overflow-y: auto;">
         {% if lunch_diet %}
-            {% if good_kcal_lunch != 0 %}
-            <div class="row mt-5 justify-content-center text-center">
-                섭취&nbsp;<font color="blue"><b>{{ good_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(충분)
+            {% if lack_kcal_lunch != 0 %}
+            <div class="row mt-1 mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<b style="color: #e8bd00;">{{ lack_kcal_lunch }}</b><font color="gray">&nbsp;kcal</font>&nbsp;<div style="color: #e8bd00;">(부족)</div>
             </div>
-            <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-            {% elif bad_kcal_lunch != 0 %}
-            <div class="row mt-5 justify-content-center text-center">
-                섭취&nbsp;<font color="red"><b>{{ bad_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(부족/과잉)
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+            <div class="row mt-2 mb-1 justify-content-center">
+                <div class="col d-flex justify-content-center">
+                    <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                </div>
             </div>
-            <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-            {% endif %}
-            {% if good_food_lunch %}
+            {% elif good_kcal_lunch != 0 %}
+            <div class="row mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<font color="blue"><b>{{ good_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="blue">(충분)</font>
+            </div>
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
             <div class="row mt-2 mb-1 justify-content-center">
                 <div class="col d-flex justify-content-center">
                     <img class="w-25" src="{% static 'image/잘한 식단 아이.png' %}" alt="로고 이미지"/>
                 </div>
             </div>
+            {% elif bad_kcal_lunch != 0 %}
+            <div class="row mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<font color="red"><b>{{ bad_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="red">(과잉)</font>
+            </div>
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+            <div class="row mt-2 mb-1 justify-content-center">
+                <div class="col d-flex justify-content-center">
+                    <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                </div>
+            </div>
+            {% endif %}
+            {% if good_food_lunch %}
+            <div class="row mt-2 mb-1 justify-content-center"><b><충분한 영양소></b></div>
                 {% for food in good_food_lunch %}
-                <div class="row justify-content-center text-center">{{ food }}</div>
+                <div class="row justify-content-center text-center">{{ food }}<font color="blue">&nbsp;(충분)</font></div>
                 {% endfor %}
             {% else %}
-                <div class="row mt-2 justify-content-center">
-                    <div class="col d-flex justify-content-center">
-                        <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
-                    </div>
-                </div>
                 <div class="row mt-2 mb-2 justify-content-center text-center">아쉬운 식단이네요</div>
-            {% endif %}    
-            {% if bad_food_lunch %}    
+            {% endif %}
+            {% if lack_food_lunch %}
             <div class="row justify-content-center mt-1">
-                <button class="btn sub_btn lunch_nu_result_btn">부족/과잉 영양성분 보기</button>
+                <button class="btn sub_btn breakfast_nu_result_btn">부족/과잉 영양성분 보기</button>
+            </div>
+            {% elif bad_food_lunch %}
+            <div class="row justify-content-center mt-1">
+                <button class="btn sub_btn breakfast_nu_result_btn">부족/과잉 영양성분 보기</button>
             </div>
             {% else %}
             <div class="row justify-content-center mt-1">
@@ -272,37 +306,52 @@
         </div>
         <div class="col ml-3 mb-3 frame" style="overflow-y: auto;">
         {% if dinner_diet %}
-            {% if good_kcal_dinner != 0 %}
-            <div class="row mt-5 justify-content-center text-center">
-                섭취&nbsp;<font color="blue"><b>{{ good_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(충분)
+            {% if lack_kcal_dinner != 0 %}
+            <div class="row mt-1 mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<b style="color: #e8bd00;">{{ lack_kcal_dinner }}</b><font color="gray">&nbsp;kcal</font>&nbsp;<div style="color: #e8bd00;">(부족)</div>
             </div>
-            <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-            {% elif bad_kcal_dinner != 0 %}
-            <div class="row mt-5 justify-content-center text-center">
-                섭취&nbsp;<font color="red"><b>{{ bad_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(부족/과잉)
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+            <div class="row mt-2 mb-1 justify-content-center">
+                <div class="col d-flex justify-content-center">
+                    <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                </div>
             </div>
-            <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-            {% endif %}
-            {% if good_food_dinner%}
+            {% elif good_kcal_dinner != 0 %}
+            <div class="row mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<font color="blue"><b>{{ good_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="blue">(충분)</font>
+            </div>
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
             <div class="row mt-2 mb-1 justify-content-center">
                 <div class="col d-flex justify-content-center">
                     <img class="w-25" src="{% static 'image/잘한 식단 아이.png' %}" alt="로고 이미지"/>
                 </div>
             </div>
-                {% for food in good_food_dinner%}
-                <div class="row justify-content-center text-center">{{ food }}</div>
+            {% elif bad_kcal_dinner != 0 %}
+            <div class="row mt-5 justify-content-center text-center">
+                섭취 칼로리&nbsp;<font color="red"><b>{{ bad_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="red">(과잉)</font>
+            </div>
+            <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+            <div class="row mt-2 mb-1 justify-content-center">
+                <div class="col d-flex justify-content-center">
+                    <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                </div>
+            </div>
+            {% endif %}
+            {% if good_food_dinner %}
+            <div class="row mt-2 mb-1 justify-content-center"><b><충분한 영양소></b></div>
+                {% for food in good_food_dinner %}
+                <div class="row justify-content-center text-center">{{ food }}<font color="blue">&nbsp;(충분)</font></div>
                 {% endfor %}
             {% else %}
-                <div class="row mt-2 justify-content-center">
-                    <div class="col d-flex justify-content-center">
-                        <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
-                    </div>
-                </div>
                 <div class="row mt-2 mb-2 justify-content-center text-center">아쉬운 식단이네요</div>
             {% endif %}
-            {% if bad_food_dinner %}    
+            {% if lack_food_dinner %}
             <div class="row justify-content-center mt-1">
-                <button class="btn sub_btn dinner_nu_result_btn">부족/과잉 영양성분 보기</button>
+                <button class="btn sub_btn breakfast_nu_result_btn">부족/과잉 영양성분 보기</button>
+            </div>
+            {% elif bad_food_dinner %}
+            <div class="row justify-content-center mt-1">
+                <button class="btn sub_btn breakfast_nu_result_btn">부족/과잉 영양성분 보기</button>
             </div>
             {% else %}
             <div class="row justify-content-center mt-1">
@@ -446,28 +495,46 @@
                 </button>
             </div>
             <div class="modal-body text-center nu_body">
-                {% if good_kcal_breakfast != 0 %}
+                {% if lack_kcal_breakfast != 0 %}
                 <div class="row mt-2 justify-content-center text-center">
-                    섭취&nbsp;<font color="blue"><b>{{ good_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(충분)
+                    섭취 칼로리&nbsp;<b style="color: #e8bd00;">{{ lack_kcal_breakfast }}</b><font color="gray">&nbsp;kcal</font>&nbsp;<div style="color: #e8bd00;">(부족)</div>
                 </div>
-                <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-                {% elif bad_kcal_breakfast != 0 %}
-                <div class="row mt-2 justify-content-center text-center">
-                    섭취&nbsp;<font color="red"><b>{{ bad_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(부족/과잉)
-                </div>
-                <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-                {% endif %}
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
                 <div class="row mt-2 mb-1 justify-content-center">
                     <div class="col d-flex justify-content-center">
                         <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
                     </div>
                 </div>
+                {% elif good_kcal_breakfast != 0 %}
+                <div class="row mt-2 justify-content-center text-center">
+                    섭취 칼로리&nbsp;<font color="blue"><b>{{ good_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="blue">(충분)</font>
+                </div>
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+                <div class="row mt-2 mb-1 justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <img class="w-25" src="{% static 'image/잘한 식단 아이.png' %}" alt="로고 이미지"/>
+                    </div>
+                </div>
+                {% elif bad_kcal_breakfast != 0 %}
+                <div class="row mt-2 justify-content-center text-center">
+                    섭취 칼로리&nbsp;<font color="red"><b>{{ bad_kcal_breakfast }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="red">(과잉)</font>
+                </div>
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+                <div class="row mt-2 mb-1 justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                    </div>
+                </div>
+                {% endif %}
+                {% if lack_food_breakfast %}
+                    {% for food in lack_food_breakfast %}
+                    <div class="row justify-content-center text-center">{{ food }}<div style="color: #e8bd00;">&nbsp;(부족)</div></div>
+                    {% endfor %}
+                {% endif %}
                 {% if bad_food_breakfast %}
                     {% for food in bad_food_breakfast %}
-                    <div class="row justify-content-center text-center">{{ food }}</div>
+                    <div class="row justify-content-center text-center">{{ food }}<font color="red">&nbsp;(과잉)</font></div>
                     {% endfor %}
-                {% else %}
-                    <div class="row justify-content-center text-center">^^</div>
                 {% endif %} 
             </div>
             <div class="modal-footer justify-content-center">
@@ -487,28 +554,46 @@
                 </button>
             </div>
             <div class="modal-body text-center nu_body">
-                {% if good_kcal_lunch != 0 %}
+                {% if lack_kcal_lunch != 0 %}
                 <div class="row mt-2 justify-content-center text-center">
-                    섭취&nbsp;<font color="blue"><b>{{ good_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(충분)
+                    섭취 칼로리&nbsp;<b style="color: #e8bd00;">{{ lack_kcal_lunch }}</b><font color="gray">&nbsp;kcal</font>&nbsp;<div style="color: #e8bd00;">(부족)</div>
                 </div>
-                <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-                {% elif bad_kcal_lunch != 0 %}
-                <div class="row mt-2 justify-content-center text-center">
-                    섭취&nbsp;<font color="red"><b>{{ bad_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(부족/과잉)
-                </div>
-                <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-                {% endif %}
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
                 <div class="row mt-2 mb-1 justify-content-center">
                     <div class="col d-flex justify-content-center">
                         <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
                     </div>
                 </div>
+                {% elif good_kcal_lunch != 0 %}
+                <div class="row mt-2 justify-content-center text-center">
+                    섭취 칼로리&nbsp;<font color="blue"><b>{{ good_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="blue">(충분)</font>
+                </div>
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+                <div class="row mt-2 mb-1 justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <img class="w-25" src="{% static 'image/잘한 식단 아이.png' %}" alt="로고 이미지"/>
+                    </div>
+                </div>
+                {% elif bad_kcal_lunch != 0 %}
+                <div class="row mt-2 justify-content-center text-center">
+                    섭취 칼로리&nbsp;<font color="red"><b>{{ bad_kcal_lunch }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="red">(과잉)</font>
+                </div>
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+                <div class="row mt-2 mb-1 justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                    </div>
+                </div>
+                {% endif %}
+                {% if lack_food_lunch %}
+                    {% for food in lack_food_lunch %}
+                    <div class="row justify-content-center text-center">{{ food }}<div style="color: #e8bd00;">&nbsp;(부족)</div></div>
+                    {% endfor %}
+                {% endif %}
                 {% if bad_food_lunch %}
                     {% for food in bad_food_lunch %}
-                    <div class="row justify-content-center text-center">{{ food }}</div>
+                    <div class="row justify-content-center text-center">{{ food }}<font color="red">&nbsp;(과잉)</font></div>
                     {% endfor %}
-                {% else %}
-                    <div class="row justify-content-center text-center">^^</div>
                 {% endif %} 
             </div>
             <div class="modal-footer justify-content-center">
@@ -528,28 +613,46 @@
                 </button>
             </div>
             <div class="modal-body text-center nu_body">
-                {% if good_kcal_dinner != 0 %}
+                {% if lack_kcal_dinner != 0 %}
                 <div class="row mt-2 justify-content-center text-center">
-                    섭취&nbsp;<font color="blue"><b>{{ good_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(충분)
+                    섭취 칼로리&nbsp;<b style="color: #e8bd00;">{{ lack_kcal_dinner }}</b><font color="gray">&nbsp;kcal</font>&nbsp;<div style="color: #e8bd00;">(부족)</div>
                 </div>
-                <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-                {% elif bad_kcal_dinner != 0 %}
-                <div class="row mt-2 justify-content-center text-center">
-                    섭취&nbsp;<font color="red"><b>{{ bad_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;(부족/과잉)
-                </div>
-                <div class="row justify-content-center text-center"><small>권장 일일&nbsp;<b>2000</b><font color="gray">&nbsp;kcal</font></small></div>
-                {% endif %}
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
                 <div class="row mt-2 mb-1 justify-content-center">
                     <div class="col d-flex justify-content-center">
                         <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
                     </div>
                 </div>
+                {% elif good_kcal_dinner != 0 %}
+                <div class="row mt-2 justify-content-center text-center">
+                    섭취 칼로리&nbsp;<font color="blue"><b>{{ good_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="blue">(충분)</font>
+                </div>
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+                <div class="row mt-2 mb-1 justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <img class="w-25" src="{% static 'image/잘한 식단 아이.png' %}" alt="로고 이미지"/>
+                    </div>
+                </div>
+                {% elif bad_kcal_dinner != 0 %}
+                <div class="row mt-2 justify-content-center text-center">
+                    섭취 칼로리&nbsp;<font color="red"><b>{{ bad_kcal_dinner }}</b></font><font color="gray">&nbsp;kcal</font>&nbsp;<font color="red">(과잉)</font>
+                </div>
+                <div class="row justify-content-center text-center"><small>(일일 권장&nbsp;<b>1400</b><font color="gray">&nbsp;kcal</font>)</small></div>
+                <div class="row mt-2 mb-1 justify-content-center">
+                    <div class="col d-flex justify-content-center">
+                        <img class="w-25" src="{% static 'image/못한 식단 아이.png' %}" alt="로고 이미지"/>
+                    </div>
+                </div>
+                {% endif %}
+                {% if lack_food_dinner %}
+                    {% for food in lack_food_dinner %}
+                    <div class="row justify-content-center text-center">{{ food }}<div style="color: #e8bd00;">&nbsp;(부족)</div></div>
+                    {% endfor %}
+                {% endif %}
                 {% if bad_food_dinner %}
                     {% for food in bad_food_dinner %}
-                    <div class="row justify-content-center text-center">{{ food }}</div>
+                    <div class="row justify-content-center text-center">{{ food }}<font color="red">&nbsp;(과잉)</font></div>
                     {% endfor %}
-                {% else %}
-                    <div class="row justify-content-center text-center">^^</div>
                 {% endif %} 
             </div>
             <div class="modal-footer justify-content-center">
@@ -827,11 +930,11 @@ $(document).ready(function() {
 
     let recom = [1400,180,20,65,1200,600,7]
     let recom2 = ['Kcal','g','g','g','mg','mg','mg']
-
-    let intake = []
-    intake.push(int.breakfast_per)
-    intake.push(int.lunch_per)
-    intake.push(int.dinner_per)
+    
+    let intake1 = []
+    intake1.push(int.breakfast_per)
+    intake1.push(int.lunch_per)
+    intake1.push(int.dinner_per)
 
     let intake2 = []
     intake2.push(int.breakfast)
@@ -843,7 +946,7 @@ $(document).ready(function() {
       labels: labels,
         datasets: [{
           label: '아침',
-          data: intake[0],
+          data: intake1[0],
           backgroundColor: [
             'rgba(250,128,114)'
           ],
@@ -852,7 +955,7 @@ $(document).ready(function() {
           ]
         },{
           label: '점심',
-          data: intake[1],
+          data: intake1[1],
           backgroundColor: [
             'rgba(128,0,128)'
           ],
@@ -861,7 +964,7 @@ $(document).ready(function() {
           ]
         },{
           label: '저녁',
-          data: intake[2],
+          data: intake1[2],
           backgroundColor: [
             'rgba(135,206,235)'
           ],
@@ -889,8 +992,10 @@ $(document).ready(function() {
             tooltip: {
                 enabled: true,
                 titleAlign: 'center',
+                bodyAlign: 'center',
+                footerAlign: 'center',
+                xAlign: 'left',
                 callbacks: {
-                    titleAlign: 'center',
                     afterTitle: function(context) {
                         i = context[0].dataIndex
                         return "권장섭취량 : "+recom[i]+recom2[i]
@@ -899,37 +1004,39 @@ $(document).ready(function() {
                         
                         i = context.dataIndex
                         j = context.datasetIndex
-                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake[j][i])) + "% )"
+                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake1[j][i])) + "% )"
                     },
                     footer: function(contexts) {
 
-                        
-                        let sum = 0;
-                        let x = 0;
-                        let y = 0;
+                        i = contexts[0].dataIndex
 
-                        console.log(contexts)
+                        x=0
+                        y=0
                         
-                        contexts.forEach(function(context){
-                            sum += context.parsed.x;
-                        });
-
-                        return "총 : "+String(Math.round(sum)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
+                        for(j=0;j<3;j++){
+                            if(intake2[j]){
+                                x+=intake2[j][i]
+                            }
+                            if(intake1[j]){
+                                y+=intake1[j][i]
+                            }
+                        }
+                        
+                        return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
                     },
                 },
                 footerColor: function(context) {
 
                     if(context.tooltipItems[0]){
                         i = context.tooltipItems[0].dataIndex
-                        j = context.tooltipItems[0].datasetIndex
 
                         y=0;
 
-
-                        for(k=0;k<j;k++){
-                            y+=intake[k][i]
+                        for(k=0;k<3;k++){
+                            if(intake1[k]){
+                                y+=intake1[k][i]
+                            }
                         }
-
                         
                         if( y > 125){
                             return 'rgb(255,0,0,0.9)';
