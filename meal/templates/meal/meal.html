@@ -799,6 +799,25 @@ a.ui-button:active,
 
 {% block script %}
 <script>
+// csrftoken
+function getCookie(name) {
+    let cookieValue = null
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim()
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                break
+            }
+        }
+    }
+    return cookieValue
+}
+
+let csrftoken = getCookie('csrftoken')
+
+
 function modal_show(meal) {
     let meal_time
 
@@ -815,6 +834,7 @@ function modal_show(meal) {
     $('#' + meal + '_fileBtn').val('')
     $('#' + meal + '_modal').modal('show')
 }
+
 
 function meal_upload(meal) {
     if (!$('#' + meal + '_fileBtn').val())
@@ -840,6 +860,7 @@ function meal_upload(meal) {
         let formData = new FormData(form)
 
         formData.append('meal_img', $('#' + meal + '_fileBtn')[0].files[0])  // 식단 이미지 사진
+        formData.append('csrfmiddlewaretoken', csrftoken)  // csrftoken
 
         $.ajax({
             url: 'upload',
@@ -856,7 +877,7 @@ function meal_upload(meal) {
                 $.each(results, function(idx, food) {
                     add_food_place = '#' + meal + '_food_form .add_food'
                     $(add_food_place).before(
-                        '<div class="row ml-1 mr-1 mt-3 mb-3">' +
+                        '<div class="row ml-1 mr-1 mt-3">' +
                             '<input class="col w-100 mr-1" disabled value=' + food + ' name="food"/>' +
                             '<select name="portions">' +
                                 '<option value="1인분">1인분</option>' +
@@ -876,6 +897,7 @@ function meal_upload(meal) {
     })
 }
 
+
 function del_meal_diet(meal) {
     let regdate = $('#datepicker').val()
     let meal_time
@@ -889,10 +911,13 @@ function del_meal_diet(meal) {
         $.ajax({
             url: 'del_meal_diet',
             method: 'delete',
+            headers:{
+                'X-CSRFToken':csrftoken,  // csrf
+            },
             data: JSON.stringify({
                 regdate: regdate,
                 meal_time: meal_time,
-                kid_id: sessionStorage.getItem('kid_id')
+                kid_id: sessionStorage.getItem('kid_id'),
             }),
             contentType: 'application/json'
         }).done(function(result) {
@@ -905,6 +930,7 @@ function del_meal_diet(meal) {
         })
     })
 }
+
 
 $(document).ready(function() {
     console.log(sessionStorage.getItem('kid_id'))
@@ -927,26 +953,23 @@ $(document).ready(function() {
     })
 
     //차트
-
     let canvas = document.getElementById('myChart')
     let ctx = canvas.getContext('2d')
     let labels = ['칼로리','탄수화물','단백질','지방','나트륨','칼슘','철분']
     let int = {{ intake|safe }}
-
     let recom = [1400,180,20,65,1200,600,7]
     let recom2 = ['Kcal','g','g','g','mg','mg','mg']
-    
     let intake1 = []
+    let intake2 = []
+
     intake1.push(int.breakfast_per)
     intake1.push(int.lunch_per)
     intake1.push(int.dinner_per)
-
-    let intake2 = []
+    
     intake2.push(int.breakfast)
     intake2.push(int.lunch)
     intake2.push(int.dinner)
 
-  
     let data = {
       labels: labels,
         datasets: [{
@@ -981,19 +1004,14 @@ $(document).ready(function() {
   
     let options = {
         responsive: false,
-        
         indexAxis: 'y',
-
         plugins: {
-
             title: {
             display: true,
             position: 'bottom',
             text: '일일 권장섭취량 (%)'
             },
 
-
-    
             tooltip: {
                 enabled: true,
                 titleAlign: 'center',
@@ -1012,12 +1030,9 @@ $(document).ready(function() {
                         return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake1[j][i])) + "% )"
                     },
                     footer: function(contexts) {
-
                         i = contexts[0].dataIndex
-
                         x=0
                         y=0
-                        
                         for(j=0;j<3;j++){
                             if(intake2[j]){
                                 x+=intake2[j][i]
@@ -1026,23 +1041,18 @@ $(document).ready(function() {
                                 y+=intake1[j][i]
                             }
                         }
-                        
                         return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
                     },
                 },
                 footerColor: function(context) {
-
                     if(context.tooltipItems[0]){
                         i = context.tooltipItems[0].dataIndex
-
                         y=0;
-
                         for(k=0;k<3;k++){
                             if(intake1[k]){
                                 y+=intake1[k][i]
                             }
                         }
-                        
                         if( y > 125){
                             return 'rgb(255,0,0,0.9)';
                         }
@@ -1081,11 +1091,9 @@ $(document).ready(function() {
     }
   
     let myChart = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-  
-      options: options
-  
+        type: 'bar',
+        data: data,
+        options: options
     })
 
     
@@ -1128,6 +1136,9 @@ $(document).ready(function() {
         $.ajax({
             url: 'food_list',
             method: 'post',
+            data: {
+                csrfmiddlewaretoken: csrftoken,  // csrf
+            },
         }).done(function(foods) {
             if (foods) {
                 foods = foods.split(' ')
@@ -1153,6 +1164,9 @@ $(document).ready(function() {
         $.ajax({
             url: 'search_food_list',
             method: 'post',
+            headers:{
+                'X-CSRFToken':csrftoken,  // csrf
+            },
             data: JSON.stringify({
                 search_data: $('.food_input').val()
             }),
@@ -1163,11 +1177,13 @@ $(document).ready(function() {
                 foods = foods.split(' ')
                 $.each(foods, function(idx, food) {
                     if (food) {
-                        $('.food_table').append(`<div class="mb-3 ml-5" style="text-align: start;"><input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
+                        $('.food_table').append(`<div class="mb-3 ml-5" style="text-align: start;">
+                            <input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
                     }
                 })
             } else if (!foods) {
-                $('.food_table').append('<font class="d-flex justify-content-center" color="red">『' + $('.food_input').val() + '』에 대한 검색 결과가 존재하지 않습니다.</font>')
+                $('.food_table').append('<font class="d-flex justify-content-center" color="red"> \"'
+                    + $('.food_input').val() + '\" 에 대한 검색 결과가 존재하지 않습니다.</font>')
             }
         })
     })
@@ -1257,6 +1273,7 @@ $(document).ready(function() {
             formData.append('food_result', food_result)
             formData.append('portions', portions)
             formData.append('kid_id', sessionStorage.getItem('kid_id'))
+            formData.append('csrfmiddlewaretoken', csrftoken)  // csrftoken
 
             $.ajax({
                 url: 'meal_diet',

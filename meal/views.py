@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from .models import Meal, Nutrition, Diet
 from user.models import Kid
 import json
@@ -446,7 +445,6 @@ def meal_diet(request):
     return redirect('./')
 
 
-@csrf_exempt
 def del_meal_diet(request):
     req = json.loads(request.body)
     meal_regdate = req['regdate']
