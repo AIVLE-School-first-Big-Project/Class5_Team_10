@@ -1,42 +1,47 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import HttpResponseRedirect
 from .models import Post, Board, Comment
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from .forms import PostForm, CommentForm
+from decorators import login_message_required
 import os
 
 
-# Create your views here.
-def post_list(request): # 게시물 목록 조회 함수
-    page = request.GET.get('page', '1')  # 페이지
-    kw = request.GET.get('kw', '')  # 검색어
-    type = request.GET.get('type', '') # 카테고리
+@login_message_required
+@csrf_exempt
+def post_list(request):  # 게시물 목록 조회 함수
+    page = request.GET.get('page', '1')   # 페이지
+    kw = request.GET.get('kw', '')   # 검색어
+    type = request.GET.get('type', '')  # 카테고리
     post_list = Post.objects.order_by('-regdate')
     if kw:
         if type == 'title':
-            post_list = post_list.filter(Q(title__icontains=kw))# 제목 검색
+            post_list = post_list.filter(Q(title__icontains=kw))  # 제목 검색
         if type == 'content':
             post_list = post_list.filter(Q(content__icontains=kw))  # 내용 검색
         if type == 'category':
             post_list = post_list.filter(Q(board__ctg__icontains=kw))
     paginator = Paginator(post_list, 10)  # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
-    context = {'post_list':page_obj, 'page': page, 'kw': kw, 'type':type}
+    context = {'post_list': page_obj, 'page': page, 'kw': kw, 'type': type}
     return render(request, 'board/post_list.html', context)
 
+
+@login_message_required
 @csrf_exempt
-def post(request, post_id): # 게시물 상세 조회 함수
+def post(request, post_id):  # 게시물 상세 조회 함수
     post = get_object_or_404(Post, pk=post_id)
     comments = Comment.objects.filter(post=post_id)
     comments_list = comments.order_by('-regdate')
-    
+
     # 댓글 페이징 처리
     page = request.GET.get('page', '1')  # 페이지
     paginator = Paginator(comments_list, 5)  # 페이지당 5개씩 보여주기
     comments_obj = paginator.get_page(page)
-    context = {'post':post, 'comments_list':comments_obj, 'page':page}
+    context = {'post': post, 'comments_list': comments_obj, 'page': page}
 
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -52,8 +57,9 @@ def post(request, post_id): # 게시물 상세 조회 함수
     return render(request, 'board/post.html', context)
 
 
+@login_message_required
 @csrf_exempt
-def post_create(request):   # 게시물 작성 함수
+def post_create(request):  # 게시물 작성 함수
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -66,12 +72,13 @@ def post_create(request):   # 게시물 작성 함수
             return redirect('board:post', post_id=post.id)
     else:
         form = PostForm()
-    context = {'form':form}
+    context = {'form': form}
     return render(request, 'board/post_create.html', context)
 
 
+@login_message_required
 @csrf_exempt
-def post_modify(request, post_id): # 게시물 수정 함수
+def post_modify(request, post_id):  # 게시물 수정 함수
     post = get_object_or_404(Post, pk=post_id)
     pre_img = post.img
     if request.method == "POST":
@@ -83,11 +90,13 @@ def post_modify(request, post_id): # 게시물 수정 함수
                 post.img = request.FILES.get('image')
                 # 이미지 삭제 요청이 있으면
             elif request.POST.get('check'):
-                    post.img = None
-                    try:
-                        os.remove('media/board_images/{}/{}_{}'.format(post.board.ctg, pre_img, '.png'))
-                    except Exception:
-                        pass
+                post.img = None
+                try:
+                    root = "media/board_images/"
+                    ctg = post.board.ctg
+                    os.remove(root + '{}/{}_{}'.format(ctg, pre_img, '.png'))
+                except Exception:
+                    pass
             else:
                 post.img = pre_img
             post.board = Board.objects.get(ctg=request.POST['category'])
@@ -95,10 +104,11 @@ def post_modify(request, post_id): # 게시물 수정 함수
             return redirect('board:post', post_id=post.id)
     else:
         form = PostForm(instance=post)
-    context = {'form':form, 'post':post}
+    context = {'form': form, 'post': post}
     return render(request, 'board/post_modify.html', context)
 
 
+@login_message_required
 @csrf_exempt
 def post_delete(request, post_id):
     post = Post.objects.get(id=post_id)
@@ -106,6 +116,7 @@ def post_delete(request, post_id):
     return redirect('board:post_list')
 
 
+@login_message_required
 @csrf_exempt
 def comment_modify(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
@@ -116,6 +127,7 @@ def comment_modify(request, comment_id):
     return redirect('board:post', post_id=post_id)
 
 
+@login_message_required
 @csrf_exempt
 def comment_delete(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
