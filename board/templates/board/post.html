@@ -58,6 +58,7 @@
                     </div>
                     <div class="row">
                         <form method="POST" id="comment_submit" href="{% url 'board:comment_modify' comment.id %}">
+                            {% csrf_token %}
                             <div class="col-8 text-white mt-1">
                                 <input type="text" class="comment w-75 rounded" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required style="font-size:5px;">
                             </div>

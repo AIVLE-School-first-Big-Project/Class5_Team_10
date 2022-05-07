@@ -52,8 +52,8 @@
                                 <div class="form-control navbar_color text-center text-white"><b>카테고리</b></div>
                             </div>
                             <div class="col">
-                                <select name='category' class="form-control navbar_edge_color text-center">
-                                    <option value='{{ post.board.ctg }}' class="header_color text-white">{{ post.board.ctg }}</option>
+                                <select id="select" name='category' class="form-control navbar_edge_color text-center">
+                                    <option selected value='{{ post.board.ctg }}' class="header_color text-white">{{ post.board.ctg }}</option>
                                     <option value='공지' class="header_color text-white b">공지</option>
                                     <option value='영양' class="header_color text-white n">영양</option>
                                     <option value='Q&A' class="header_color text-white q">Q&A</option>
@@ -144,7 +144,7 @@
 
 {% block script %}
 <script>
-    let previous = $('select').val()
+    let previous = $('#select option:selected')
     console.log(previous)
     if (previous == '공지') {
         previous = 'b'
