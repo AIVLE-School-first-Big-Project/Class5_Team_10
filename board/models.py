@@ -22,7 +22,7 @@ class Board(models.Model):
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True, null=False)
-    title = models.CharField(max_length=20, null=False)
+    title = models.CharField(max_length=50, null=False)
     content = models.TextField(null=False)
     img = models.ImageField(null=True, blank=True, upload_to=board_dir_path)
     regdate = models.DateTimeField(null=False)
