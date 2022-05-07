@@ -24,6 +24,7 @@ def post_list(request):  # 게시물 목록 조회 함수
             post_list = post_list.filter(Q(content__icontains=kw))  # 내용 검색
         if type == 'category':
             post_list = post_list.filter(Q(board__ctg__icontains=kw))
+
     paginator = Paginator(post_list, 10)  # 페이지당 10개씩 보여주기
     page_obj = paginator.get_page(page)
     context = {'post_list': page_obj, 'page': page, 'kw': kw, 'type': type}
