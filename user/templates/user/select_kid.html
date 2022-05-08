@@ -28,7 +28,7 @@
             <p class="profile-card"><h4 class="text-center" id="cafe" style="color:#808080;">{{ kid.name }}</h4></p>
             {% else %}
             <img src="{{ '../../static/images/kid_profile_default.PNG' }}" class="profile-card" id="kid_{{ kid.id }}"/>
-            <p class="profile-card">{{ kid.name }}</p>
+            <p class="profile-card"><h4 class="text-center" id="cafe" style="color:#808080;">{{ kid.name }}</h4></p>
             {% endif %}
         </div>
         {% empty %}
