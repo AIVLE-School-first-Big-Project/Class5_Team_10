@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container" style="margin-bottom: 40%;">
-    <div class='row my-3'></div>
+<div class="container">
+    <div class="row" style="height: 8rem;"></div>
+    <div class='row mt-5 justify-content-center'></div>
     <div class="col-6 pt-3 d-flex justify-content-center" style="float: none; margin:0 auto; color:#808080;">
         <h2 id="cafe">이메일함을 확인해주세요.</h2>
     </div>
     <div class="col-6 pt-0 d-flex justify-content-center" style="float: none; margin:0 auto; color:#808080;">
         <h4 id="cafe">이메일 주소로 아이디를 보내드렸습니다.</h4>
     </div>
+    <div class="row mt-3 justify-content-center">
+        <a class="btn sub_btn" href="{% url 'user:login' %}" id="cafe" style="border: 5px #ff926c double; width:15rem;">
+            <b><h1 class="mt-3">Meal Kid</h1></b>
+        </a>
+    </div>
+    <div class="row" style="height: 8rem;"></div>
 </div>
 {% endblock %}

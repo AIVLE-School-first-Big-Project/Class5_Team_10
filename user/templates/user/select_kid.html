@@ -18,7 +18,8 @@
         })
     }
 </script>
-<div class="container" style="margin-bottom: 15%;">
+<div class="container">
+    <div class="row" style="height: 3rem;"></div>
     <div class="row my-5"></div>
     <div class="row pb-2 my-2 justify-content-center">
         {% for kid in kid_set %}
@@ -44,5 +45,6 @@
     <div class="col text-center">
         <button class="btn main_btn" id="cafe" onclick="location.href= '{% url "user:kid_register" %}';">아이 등록하기</button>
     </div>
+    <div class="row" style="height: 3rem;"></div>
 </div>
 {% endblock %}

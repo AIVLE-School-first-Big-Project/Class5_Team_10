@@ -23,8 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0!%3#0z7ycf^2troii5dqsb+cj)-8aq6!$jj)_4uh#%zn+q@r5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-DEBUG = True
+DEBUG = False
+# DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # 접속 허용 주소
 
@@ -53,6 +53,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# 403 에러
+CSRF_FAILURE_VIEW = 'config.views.csrf_failure'
 
 ROOT_URLCONF = 'config.urls'
 
