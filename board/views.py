@@ -1,12 +1,12 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import HttpResponseRedirect
 from .models import Post, Board, Comment
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt
 from .forms import PostForm, CommentForm
-from decorators import login_message_required
+from decorators import login_message_required, staff_member_required
 import os
 
 
@@ -56,7 +56,7 @@ def post(request, post_id):  # 게시물 상세 조회 함수
     return render(request, 'board/post.html', context)
 
 
-@login_message_required
+@staff_member_required
 def post_create(request):  # 게시물 작성 함수
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -80,7 +80,7 @@ def post_create(request):  # 게시물 작성 함수
     return render(request, 'board/post_create.html', context)
 
 
-@login_message_required
+@staff_member_required
 def post_modify(request, post_id):  # 게시물 수정 함수
     post = get_object_or_404(Post, pk=post_id)
     pre_img = post.img
@@ -111,7 +111,7 @@ def post_modify(request, post_id):  # 게시물 수정 함수
     return render(request, 'board/post_modify.html', context)
 
 
-@login_message_required
+@staff_member_required
 def post_delete(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
