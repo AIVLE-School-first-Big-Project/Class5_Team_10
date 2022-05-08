@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('title', models.CharField(max_length=20)),
                 ('content', models.TextField()),
-                ('img', models.ImageField(blank=True, null=True, upload_to=board.models.board_directory_path)),
+                ('img', models.ImageField(blank=True, null=True, upload_to=board.models.board_dir_path)),
                 ('regdate', models.DateTimeField()),
                 ('moddate', models.DateTimeField(blank=True, null=True)),
                 ('board', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='board.Board')),

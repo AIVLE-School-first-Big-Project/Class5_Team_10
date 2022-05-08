@@ -11,7 +11,6 @@ import os
 
 
 @login_message_required
-@csrf_exempt
 def post_list(request):  # 게시물 목록 조회 함수
     page = request.GET.get('page', '1')   # 페이지
     kw = request.GET.get('kw', '')   # 검색어
@@ -32,7 +31,6 @@ def post_list(request):  # 게시물 목록 조회 함수
 
 
 @login_message_required
-@csrf_exempt
 def post(request, post_id):  # 게시물 상세 조회 함수
     post = get_object_or_404(Post, pk=post_id)
     comments = Comment.objects.filter(post=post_id)
@@ -59,7 +57,6 @@ def post(request, post_id):  # 게시물 상세 조회 함수
 
 
 @login_message_required
-@csrf_exempt
 def post_create(request):  # 게시물 작성 함수
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -78,7 +75,6 @@ def post_create(request):  # 게시물 작성 함수
 
 
 @login_message_required
-@csrf_exempt
 def post_modify(request, post_id):  # 게시물 수정 함수
     post = get_object_or_404(Post, pk=post_id)
     pre_img = post.img
@@ -110,7 +106,6 @@ def post_modify(request, post_id):  # 게시물 수정 함수
 
 
 @login_message_required
-@csrf_exempt
 def post_delete(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
@@ -118,7 +113,6 @@ def post_delete(request, post_id):
 
 
 @login_message_required
-@csrf_exempt
 def comment_modify(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     post_id = comment.post.id
@@ -129,7 +123,6 @@ def comment_modify(request, comment_id):
 
 
 @login_message_required
-@csrf_exempt
 def comment_delete(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     post_id = comment.post.id
