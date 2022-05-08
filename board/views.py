@@ -68,6 +68,12 @@ def post_create(request):  # 게시물 작성 함수
             post.regdate = timezone.now()
             post.img = request.FILES.get('image')
             post.user = request.user
+            try:
+                Board.objects.get(ctg=request.POST['category'])
+            except Exception:
+                board = Board(ctg=request.POST['category'])
+                board.save()
+
             post.board = Board.objects.get(ctg=request.POST['category'])
             post.save()
             return redirect('board:post', post_id=post.id)
