@@ -52,7 +52,11 @@
             </div>
             {% else %}
             <div class="row d-flex justify-content-center mt-3 mb-3">
+                {% if breakfast_meal %}
+                <img class="img" id="breakfast" src="{% static 'image/꽉찬식판.png' %}" alt="이미지가 존재하지 않습니다."/>
+                {% else %}
                 <img class="img" id="breakfast" src="{% static 'image/식판.png' %}" alt="이미지가 존재하지 않습니다."/>
+                {% endif %}
             </div>
             {% endif %}
             {% if breakfast_meal %}
@@ -75,17 +79,17 @@
                         <select name="portions" disabled>
                             <option value="{{ diet.portions }}인분">{{ diet.portions }}인분</option>
                         </select>
-                        <button class="btn main_btn ml-1 del_food_btn" id="del_breakfast{{ diet.nutrition.food }}_btn" disabled>삭제</button>
+                        <button class="btn main_btn2 ml-1 del_food_btn" id="del_breakfast{{ diet.nutrition.food }}_btn" disabled>삭제</button>
                     </div>
                     {% endfor %}
-                    <button class="btn sub_btn mt-1 w-75 add_food" disabled>식단 추가</button>
+                    <button class="btn sub_btn2 mt-1 w-75 add_food" disabled>식단 추가</button>
                 {% else %}
                 <button class="btn sub_btn mt-5 w-75 add_food">식단 추가</button>
                 {% endif %}
             </div>
             <div class="row d-flex justify-content-center mt-2 p-2 meal_submit">
                 {% if breakfast_diet %}
-                <button class="btn main_btn w-75 result_btn" disabled>결과 확인</button>
+                <button class="btn main_btn2 w-75 result_btn" disabled>결과 확인</button>
                 {% else %}
                 <button class="btn main_btn w-75 result_btn">결과 확인</button>
                 {% endif %}
@@ -142,7 +146,7 @@
             </div>
             {% else %}
             <div class="row justify-content-center mt-1">
-                <button class="btn sub_btn" disabled>100점입니다!</button>
+                <button class="btn sub_btn2" disabled>100점입니다!</button>
             </div>
             {% endif %}
         {% else %}
@@ -159,7 +163,11 @@
             </div>
             {% else %}
             <div class="row d-flex justify-content-center mt-3 mb-3">
+                {% if lunch_meal %}
+                <img class="img" id="lunch" src="{% static 'image/꽉찬식판.png' %}" alt="이미지가 존재하지 않습니다."/>
+                {% else %}
                 <img class="img" id="lunch" src="{% static 'image/식판.png' %}" alt="이미지가 존재하지 않습니다."/>
+                {% endif %}
             </div>
             {% endif %}
             {% if lunch_meal %}
@@ -182,17 +190,17 @@
                         <select name="portions" disabled>
                             <option value="{{ diet.portions }}인분">{{ diet.portions }}인분</option>
                         </select>
-                        <button class="btn main_btn ml-1 del_food_btn" id="del_breakfast{{ diet.nutrition.food }}_btn" disabled>삭제</button>
+                        <button class="btn main_btn2 ml-1 del_food_btn" id="del_breakfast{{ diet.nutrition.food }}_btn" disabled>삭제</button>
                     </div>
                     {% endfor %}
-                    <button class="btn sub_btn mt-1 w-75 add_food" disabled>식단 추가</button>
+                    <button class="btn sub_btn2 mt-1 w-75 add_food" disabled>식단 추가</button>
                 {% else %}
                 <button class="btn sub_btn mt-5 w-75 add_food">식단 추가</button>
                 {% endif %}
             </div>
             <div class="row d-flex justify-content-center mt-2 p-2 meal_submit">
                 {% if lunch_diet %}
-                <button class="btn main_btn w-75 result_btn" disabled>결과 확인</button>
+                <button class="btn main_btn2 w-75 result_btn" disabled>결과 확인</button>
                 {% else %}
                 <button class="btn main_btn w-75 result_btn">결과 확인</button>
                 {% endif %}
@@ -249,7 +257,7 @@
             </div>
             {% else %}
             <div class="row justify-content-center mt-1">
-                <button class="btn sub_btn" disabled>100점입니다!</button>
+                <button class="btn sub_btn2" disabled>100점입니다!</button>
             </div>
             {% endif %}
         {% else %}
@@ -266,7 +274,11 @@
             </div>
             {% else %}
             <div class="row d-flex justify-content-center mt-3 mb-3">
+                {% if dinner_meal %}
+                <img class="img" id="dinner" src="{% static 'image/꽉찬식판.png' %}" alt="이미지가 존재하지 않습니다."/>
+                {% else %}
                 <img class="img" id="dinner" src="{% static 'image/식판.png' %}" alt="이미지가 존재하지 않습니다."/>
+                {% endif %}
             </div>
             {% endif %}
             {% if dinner_meal %}
@@ -289,17 +301,17 @@
                         <select name="portions" disabled>
                             <option value="{{ diet.portions }}인분">{{ diet.portions }}인분</option>
                         </select>
-                        <button class="btn main_btn ml-1 del_food_btn" id="del_breakfast{{ diet.nutrition.food }}_btn" disabled>삭제</button>
+                        <button class="btn main_btn2 ml-1 del_food_btn" id="del_breakfast{{ diet.nutrition.food }}_btn" disabled>삭제</button>
                     </div>
                     {% endfor %}
-                    <button class="btn sub_btn mt-1 w-75 add_food" disabled>식단 추가</button>
+                    <button class="btn sub_btn2 mt-1 w-75 add_food" disabled>식단 추가</button>
                 {% else %}
                 <button class="btn sub_btn mt-5 w-75 add_food">식단 추가</button>
                 {% endif %}
             </div>
             <div class="row d-flex justify-content-center mt-2 p-2 meal_submit">
                 {% if dinner_diet %}
-                <button class="btn main_btn w-75 result_btn" disabled>결과 확인</button>
+                <button class="btn main_btn2 w-75 result_btn" disabled>결과 확인</button>
                 {% else %}
                 <button class="btn main_btn w-75 result_btn">결과 확인</button>
                 {% endif %}
@@ -356,7 +368,7 @@
             </div>
             {% else %}
             <div class="row justify-content-center mt-1">
-                <button class="btn sub_btn" disabled>100점입니다!</button>
+                <button class="btn sub_btn2" disabled>100점입니다!</button>
             </div>
             {% endif %}
         {% else %}
@@ -783,6 +795,32 @@ a.ui-button:active,
     height: 2rem;
 }
 
+.main_btn2 {
+    background-color: #ff926c;
+    border: #ff926c 2px solid;
+    color: white;
+    font-weight: bold;
+}
+
+.main_btn2:hover {
+    background-color: #ff926c;
+    border: #ff926c 2px solid;
+    color: white;
+    font-weight: bold;
+}
+
+.sub_btn2 {
+    border: #ff926c 2px solid;
+    color: #ff926c;
+    font-weight: bold;
+}
+
+.sub_btn2:hover {
+    border: #ff926c 2px solid;
+    color: #ff926c;
+    font-weight: bold;
+}
+
 /* 모달 */
 .search_result {
     height: 20rem;
@@ -887,7 +925,7 @@ function meal_upload(meal) {
                                 '<option value="0.7인분">0.7인분</option>' +
                                 '<option value="1.5인분">1.5인분</option>' +
                             '</select>' +
-                            '<button class="btn main_btn ml-1 del_food_btn" id="del_' + meal + food + '_btn">삭제</button>' +
+                            '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + meal + food + '_btn">삭제</button>' +
                         '</div>'
                     )
                 })
@@ -1238,7 +1276,7 @@ $(document).ready(function() {
                         '<option value="0.7인분">0.7인분</option>' +
                         '<option value="1.5인분">1.5인분</option>' +
                     '</select>' +
-                    '<button class="btn main_btn ml-1 del_food_btn" id="del_' + window.parent_food_form + window.food_list[i] + '_btn">삭제</button>' +
+                    '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + window.parent_food_form + window.food_list[i] + '_btn">삭제</button>' +
                 '</div>'
             )
         }

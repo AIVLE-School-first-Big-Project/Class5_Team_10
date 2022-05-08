@@ -186,7 +186,7 @@ def meal(request):
             context['kid_id'] = kid_id
             kid = Kid.objects.get(id=kid_id)
         except Exception:
-            pass
+            return redirect('user:kid_select')
 
         # 오늘 날짜 디폴트
         date = datetime.date.today().strftime('%Y-%m-%d')

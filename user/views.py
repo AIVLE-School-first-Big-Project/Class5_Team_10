@@ -12,6 +12,7 @@ from user.forms import UserCreationForm, KidRegisterForm
 from user.forms import UpdateUserForm, UpdateKidForm
 from user.models import User, Kid
 from decorators import login_message_required, logout_message_required
+import shutil
 
 
 # 회원가입
@@ -164,7 +165,6 @@ def kid_select(request):
     context = {
         'kid_set': kid_set,
     }
-    print(kid_set)
     return render(request, 'user/select_kid.html', context)
 
 
@@ -187,9 +187,8 @@ def user_update(request):
             if form.is_valid():
                 form.save()
                 user = authenticate(username=id, password=password1)  # 사용자 인증
-                auth_login(request, user)
-                messages.success(request, '회원정보가 수정되었습니다.')
-                return redirect('user:kid_select')
+                logout(request)
+                return redirect('user:login')
             else:
                 email_error_msg = '이메일 양식이 맞지 않습니다.'
                 context = {
@@ -263,6 +262,11 @@ def kid_del(request):
     kid_id = request.session['kid_id']
     data = Kid.objects.get(pk=kid_id)
     data.delete()
+    # 디렉토리 강제삭제(하위 파일 존재해도 삭제)
+    try:
+        shutil.rmtree('media/meal_images/kid_{}'.format(kid_id))
+    except Exception:
+        pass
     return redirect('user:kid_select')
 
 

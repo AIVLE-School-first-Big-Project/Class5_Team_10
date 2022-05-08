@@ -26,7 +26,8 @@ def logout_message_required(function=None):
 
 
 # 관리자 권한 확인
-def staff_member_required(view_func=None, redirect_field_name=REDIRECT_FIELD_NAME,
+def staff_member_required(view_func=None,
+                          redirect_field_name=REDIRECT_FIELD_NAME,
                           login_url='user:login'):
     actual_decorator = user_passes_test(
         lambda u: u.is_active and u.is_staff,
