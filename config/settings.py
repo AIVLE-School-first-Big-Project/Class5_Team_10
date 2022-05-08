@@ -25,7 +25,7 @@ SECRET_KEY = '0!%3#0z7ycf^2troii5dqsb+cj)-8aq6!$jj)_4uh#%zn+q@r5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']  # 접속 허용 주소
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # 접속 허용 주소
 
 
 # Application definition
