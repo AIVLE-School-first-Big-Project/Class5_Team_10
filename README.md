@@ -14,7 +14,7 @@
 
 
 <br/>
-<img src="static\images\logo.png"  width="700" height="370">
+<img src="static\images\logo.PNG"  width="700" height="370">
 
 ## 프로젝트 소개
 ### 선정 배경
