@@ -25,7 +25,11 @@
                         <div class='row mb-2 justify-content-between'>
                             <div class="col">
                                 <div class="row align-content-center">
+                                    {% if kid.img %}
                                     <img class="img d-flex justify-content-start" src="{{ kid.img.url }}"/>
+                                    {% else %}
+                                    <img class="img d-flex justify-content-start" src="{% static 'images/kid_profile_default.png' %}"/>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col d-flex justify-content-start">
@@ -102,7 +106,7 @@
                 </button>
             </div>
             <div class='modal-body text-center'>
-                <p>정말 아이 정보를 삭제하시겠습니까?</p>
+                <b><font color="red">정말 아이 정보를 삭제하시겠습니까?</font></b><br>
                 <small>
                     삭제 한 후에는 되돌릴 수 없습니다.
                 </small>
