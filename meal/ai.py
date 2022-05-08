@@ -6,7 +6,7 @@ import json
 model = torch.hub.load(
     'ultralytics/yolov5',
     'custom',
-    path='meal/static/data/10_class_weight.pt')
+    path='meal/static/data/last_weight.pt')
 model.conf = 0.1
 
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<body>
 <style>
     input[type=checkbox] {
         -moz-appearance:none;
@@ -52,7 +53,7 @@
                                 <div class="form-control navbar_color text-center text-white"><b>카테고리</b></div>
                             </div>
                             <div class="col">
-                                <select id="select" name='category' class="form-control navbar_edge_color text-center">
+                                <select id="select" name='category' class="form-control navbar_edge_color text-center" value="sdf">
                                     <option selected value='{{ post.board.ctg }}' class="header_color text-white">{{ post.board.ctg }}</option>
                                     <option value='공지' class="header_color text-white b">공지</option>
                                     <option value='영양' class="header_color text-white n">영양</option>
@@ -144,18 +145,20 @@
 
 {% block script %}
 <script>
-    let previous = $('#select option:selected')
-    console.log(previous)
-    if (previous == '공지') {
-        previous = 'b'
-    } 
-    if (previous == '영양') {
-        previous = 'n'
-    } 
-    if (previous == 'Q&A') {
-        previous = 'q'
+    window.onload = function() {
+        var previous = document.getElementById("select").options[document.getElementById("select").selectedIndex].value;
+        console.log(previous);
+        if (previous == '공지') {
+            previous = 'b'
+        } 
+        if (previous == '영양') {
+            previous = 'n'
+        } 
+        if (previous == 'Q&A') {
+            previous = 'q'
+        }
+        $('.' + previous).remove()
     }
-    $('.' + previous).remove()
 
     function hey() {
         let name = $('#file')[0].files[0].name
