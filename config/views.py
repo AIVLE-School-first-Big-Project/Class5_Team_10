@@ -2,6 +2,7 @@ from django.template.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import render
+from django.contrib.auth import logout as auth_logout
 
 
 def main(request):
@@ -25,6 +26,7 @@ def any_request(request):
 
 # 403 에러(2)
 def csrf_failure(request, reason=""):
+    auth_logout(request)
     context = {'RequestContext': RequestContext(request)}
     response = render_to_response('403.html', context)
     response.status_code = 403
