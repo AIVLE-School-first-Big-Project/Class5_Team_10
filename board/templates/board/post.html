@@ -207,13 +207,15 @@
         })
 
         $('.comment_delete').click(function() {
+            let comment_id = $(this).attr('id')
+            
             $('.modal-header b').text('댓글 삭제하기')
             $('.modal-body p').html('<font color="red"><b>정말로 삭제하시겠습니까?<b></font>')
             $('.modal-body small').remove()
             $('#modal').modal('show')
 
             $('.modal-footer .yes_btn').click(function() {
-                location.href = $('.comment_delete').attr('data-uri')
+                location.href = $('#' + comment_id).attr('data-uri')
             })
         })
 
@@ -222,7 +224,6 @@
         $('.comment_cancel').click(function() {
             location.href = './'
         })
-
 
         $(document).on('click', '.comment_modify', function() {
             input_id = '#' + $(this).attr('id') + "_input"
