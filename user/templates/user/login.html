@@ -12,7 +12,7 @@
                         <h4 class="font-weight-bold" for="id" id="cafe" style="color:#808080">사용자ID</h4>
                         <div class="input-group">
                             <input class="form-control navbar_edge_color" type="text" name="username" id="id"
-                                value="{{ form.username.value|default_if_none:'' }}" required>
+                                value="{{ form.username.value|default_if_none:'' }}" autocomplete="off" required>
                         </div>
                     </div>
                     <div class="row my-0 py-0">
@@ -22,7 +22,7 @@
                         <h4 class="font-weight-bold" for="password" id="cafe" style="color:#808080">비밀번호</h4>
                         <div class="input-group">
                             <input class="form-control navbar_edge_color" type="password" name="password" id="password"
-                                value="{{ form.password.value|default_if_none:'' }}" required>
+                                value="{{ form.password.value|default_if_none:'' }}" autocomplete="off" required>
                         </div>              
                     </div>
                     <div class="row my-0 py-0">

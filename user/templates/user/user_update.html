@@ -20,14 +20,14 @@
             <h5 for="password" id="cafe" >비밀번호</h5>
             <div class="input-group">
                 <input class="form-control navbar_edge_color" type="password" name="password1" id="password" 
-                    value ="{{ form.password.value|default_if_none:'' }}" required placeholder="">
+                    value ="{{ form.password.value|default_if_none:'' }}" autocomplete="off" required placeholder="">
             </div>
         </div>
         <div class="row mx-5 my-0 pb-2">
             <h5 class='font-wieght-bold' id="cafe">비밀번호 확인</h5>
             <div class="input-group">
                 <input class='form-control navbar_edge_color' type='password' name='password2' id='password_check'
-                    placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
+                    placeholder=' 위와 동일한 비밀번호를 입력하세요.' autocomplete="off" required>
             </div>
             <small class='mt-1 text-danger'> {{password_error_msg}} </small>
         </div>
@@ -35,7 +35,7 @@
             <h5 for="email" id="cafe">이메일</h5>
             <div class="input-group">
                 <input class="form-control navbar_edge_color" type="text" name="email" id="email"
-                    value="{{ user.email }}" required>
+                    value="{{ user.email }}" autocomplete="off" required>
             </div>
             <small class='mt-1 text-danger'> {{email_error_msg}} </small>
         </div>

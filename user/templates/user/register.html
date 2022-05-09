@@ -137,22 +137,26 @@ $(document).ready(function() {
                         <div class='row mb-2' id=kid_name_div>
                             <label class='font-weight-bold' for='kid_name' style="color:#808080" id="cafe">아이 이름</label>
                             <div class='input-group'>
-                                <input type='text' class='form-control navbar_edge_color' name='name' id='kid_name' placeholder='아이 이름을 입력하세요.' required>
+                                <input type='text' class='form-control navbar_edge_color' name='name'
+                                    id='kid_name' placeholder='아이 이름을 입력하세요.' autocomplete="off" required>
                             </div>
                         </div>
                         <div class='row mb-2'>
                             <label class='font-weight-bold form-label' for='kid_birth_date' style="color:#808080" id="cafe">아이 생년월일</label>
-                            <input type="text" class='form-control navbar_edge_color' name='birthday' id="kid_birth_date" placeholder='yyyy-mm-dd' required>
+                            <input type="text" class='form-control navbar_edge_color' name='birthday'
+                                id="kid_birth_date" placeholder='yyyy-mm-dd' autocomplete="off" required>
                             <small class='mt-1 text-danger'> {{birthday_error_msg}} </small>
                         </div>
                         <div class='row mb-2'>
                             <label class='font-weight-bold' for='kid_height' style="color:#808080" id="cafe">아이 신장</label>
-                            <input type='text' class='form-control navbar_edge_color' name='height' id='kid_height' placeholder='(cm)' required>
+                            <input type='text' class='form-control navbar_edge_color' name='height'
+                                id='kid_height' placeholder='(cm)' autocomplete="off" required>
                             <small class='mt-1 text-danger'> {{height_error_msg}} </small>
                         </div>
                         <div class='row mb-3'>
                             <label class='font-weight-bold' for='kid_weight' style="color:#808080" id="cafe">아이 체중</label>
-                            <input type='text' class='form-control navbar_edge_color' name='weight' id='kid_weight' placeholder='(kg)' required>
+                            <input type='text' class='form-control navbar_edge_color' name='weight'
+                                id='kid_weight' placeholder='(kg)' autocomplete="off" required>
                             <small class='mt-1 text-danger'> {{weight_error_msg}} </small>
                         </div>
                         <div class="row justify-content-between">

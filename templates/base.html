@@ -24,14 +24,16 @@
     {% endblock%}
 </head>
 <body class="body">
-    <!-- header -->
-    {% include "header.html" %}
-    <!-- 네비게이션바 -->
-    {% include "navbar.html" %}
-    <!-- 기본 템플릿 안에 삽입될 내용 Start -->
-    {% block content %}
-    {% endblock %}
-    <!-- 기본 템플릿 안에 삽입될 내용 End -->
+    <div class="wrapper">
+        <!-- header -->
+        {% include "header.html" %}
+        <!-- 네비게이션바 -->
+        {% include "navbar.html" %}
+        <!-- 기본 템플릿 안에 삽입될 내용 Start -->
+        {% block content %}
+        {% endblock %}
+        <!-- 기본 템플릿 안에 삽입될 내용 End -->
+    </div>
     <!-- footer -->
     {% include "footer.html" %}
 </body>

@@ -12,7 +12,7 @@
                             <h4 class='font-wieght-bold' id="cafe" style="color:#808080;">아이디</h4>
                             <div class='input-group'>
                                 <input type='text' class='form-control navbar_edge_color mr-1' name='id' id='user_id'
-                                    value="{{ form.id.value | default_if_none:'' }}" placeholder=' 아이디를 입력하세요.' required>
+                                    value="{{ form.id.value | default_if_none:'' }}" placeholder=' 아이디를 입력하세요.' autocomplete="off" required>
                                 <button color=#feb737 id="cafe" type='button' class='btn main_btn' onclick=id_check()>중복확인</button>
                             </div>
                             <small class='mt-1 text-danger' id='id_check_msg'> {{id_error_msg}} </small>
@@ -20,23 +20,24 @@
                         <div class='row my-1'>
                             <h4 class='font-wieght-bold' id="cafe" style="color:#808080;">비밀번호</h4>
                             <input type='password' class='form-control navbar_edge_color' name='password1' id='password'
-                                value="{{ form.password1.value | default_if_none:'' }}" placeholder=' 비밀번호를 입력하세요.' required>
+                                value="{{ form.password1.value | default_if_none:'' }}" placeholder=' 비밀번호를 입력하세요.' autocomplete="off" required>
                         </div>
                         <div class='row my-1'>
                             <h4 class='font-wieght-bold' id="cafe" style="color:#808080;">비밀번호 확인</h4>
                             <input type='password' class='form-control navbar_edge_color' name='password2' id='password_check'
-                                placeholder=' 위와 동일한 비밀번호를 입력하세요.' required>
+                                placeholder=' 위와 동일한 비밀번호를 입력하세요.' autocomplete="off" required>
                             <small class='mt-1 text-danger'> {{password_error_msg}} </small>
                         </div>
                         <div class='row mb-2'>
                             <h4 id="cafe" style="color:#808080;" class='font-wieght-bold'>이름</h4>
                             <input type='text' class='form-control navbar_edge_color' name='name' id='user_name'
-                                value="{{ form.name.value | default_if_none:'' }}" placeholder=' 이름을 입력하세요.' required>
+                                value="{{ form.name.value | default_if_none:'' }}" placeholder=' 이름을 입력하세요.' autocomplete="off" required>
                             <h6 class='font-wieght-bold' id='user_name_check'></h6>
                         </div>
                         <div class='row mb-3'>
                             <h4  class='font-wieght-bold' id="cafe" style="color:#808080;">이메일</h4>
-                            <input type='text' class='form-control navbar_edge_color' name='email' id='email' placeholder=' 이메일을 입력하세요.' required>
+                            <input type='text' class='form-control navbar_edge_color' name='email' id='email'
+                                placeholder=' 이메일을 입력하세요.' autocomplete="off" required>
                             <small class='mt-1 text-danger' id='email_check_msg'> {{email_error_msg}} </small>
                         </div>
                         <div class='row justify-content-between'>
