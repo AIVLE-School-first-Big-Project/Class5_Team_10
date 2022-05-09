@@ -145,24 +145,23 @@
 
 {% block script %}
 <script>
-    window.onload = function() {
-        var previous = document.getElementById("select").options[document.getElementById("select").selectedIndex].value;
-        console.log(previous);
-        if (previous == '공지') {
-            previous = 'b'
-        } 
-        if (previous == '영양') {
-            previous = 'n'
-        } 
-        if (previous == 'Q&A') {
-            previous = 'q'
-        }
-        $('.' + previous).remove()
-    }
+function hey() {
+    let name = $('#file')[0].files[0].name
+    $('label').text(name)
+}
 
-    function hey() {
-        let name = $('#file')[0].files[0].name
-        $('label').text(name)
+$(document).ready(function() {
+    let previous = document.getElementById("select").options[document.getElementById("select").selectedIndex].value
+    if (previous == '공지') {
+        previous = 'b'
+    } 
+    if (previous == '영양') {
+        previous = 'n'
+    } 
+    if (previous == 'Q&A') {
+        previous = 'q'
     }
+    $('.' + previous).remove()
+})
 </script>
 {% endblock %}

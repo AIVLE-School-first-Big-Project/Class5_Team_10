@@ -232,11 +232,10 @@
             cancle_id = '#' + $(this).attr('id') + "_cancel"
             delete_id = '#' + $(this).attr('id') + "_delete"
             
-            $(submit_id).show();
-            $(cancle_id).show();
-            $(this).hide();
-            console.log(this)
-            $(delete_id).hide();
+            $(submit_id).show()
+            $(cancle_id).show()
+            $(this).hide()
+            $(delete_id).hide()
         })
 
         $(document).on('click', '.comment_cancel', function() {
@@ -247,10 +246,10 @@
             $(input_id).attr('readonly', true)
             delete_id = id + "_delete"
             modify_id = id
-            $(modify_id).show();
-            $(delete_id).show();
-            $(this).hide();
-            $(submit_id).hide();
+            $(modify_id).show()
+            $(delete_id).show()
+            $(this).hide()
+            $(submit_id).hide()
         })
     })
 </script>

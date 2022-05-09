@@ -34,7 +34,6 @@ def signup(request):
             return render(request, 'user/signup.html', context)
         except Exception:
             pass
-        
         # 이메일 존재여부
         try:
             if User.objects.filter(email=email):
@@ -53,8 +52,8 @@ def signup(request):
         else:
             if form.is_valid():
                 User.objects.create_user(id=id, username=id,
-                                        password=password1,
-                                        email=email, name=name)
+                                         password=password1,
+                                         email=email, name=name)
                 return redirect('user:login')
             else:
                 email_error_msg = '이메일 양식이 맞지 않습니다.'
