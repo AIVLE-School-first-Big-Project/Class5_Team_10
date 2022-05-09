@@ -875,9 +875,6 @@ function modal_show(meal) {
 
 
 function meal_upload(meal) {
-    if (!$('#' + meal + '_fileBtn').val())
-            $('#' + meal + '_mod').attr('disabled', 'disabled')
-
     $('#' + meal + '_fileBtn').change(function() {
         if(this.files[0]) {
             let reader = new FileReader()
@@ -908,6 +905,7 @@ function meal_upload(meal) {
             contentType: false,
             processData: false,
         }).done(function(results) {
+            $('#' + meal + '_food_form input').parent().remove()  // 기존에 모델 output이 있는 경우 청소
             results = results.replaceAll(',', '')
             results = results.split(' ')
             results_length = results.pop()
@@ -990,7 +988,7 @@ $(document).ready(function() {
         maxDate: "+0d" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
     })
 
-    //차트
+    // 차트
     let canvas = document.getElementById('myChart')
     let ctx = canvas.getContext('2d')
     let labels = ['칼로리','탄수화물','단백질','지방','나트륨','칼슘','철분']
@@ -1059,7 +1057,7 @@ $(document).ready(function() {
                 callbacks: {
                     afterTitle: function(context) {
                         i = context[0].dataIndex
-                        return "권장섭취량 : "+recom[i]+recom2[i]
+                        return "일일 권장섭취량 : "+recom[i]+recom2[i]
                     },
                     label: function(context) {
                         
@@ -1276,7 +1274,7 @@ $(document).ready(function() {
                         '<option value="0.7인분">0.7인분</option>' +
                         '<option value="1.5인분">1.5인분</option>' +
                     '</select>' +
-                    '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + window.parent_food_form + window.food_list[i] + '_btn">삭제</button>' +
+                    '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + window.parent_food_form + window.food_list[i] + i + '_btn">삭제</button>' +
                 '</div>'
             )
         }
