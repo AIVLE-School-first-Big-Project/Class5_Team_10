@@ -30,40 +30,36 @@ def signup(request):
         try:
             if User.objects.get(id=id):
                 id_error_msg = '이미 존재하는 아이디입니다.'
-            context = {
-                'form': form,
-                'id_error_msg': id_error_msg,
-            }
+            context['id_error_msg'] = id_error_msg
             return render(request, 'user/signup.html', context)
         except Exception:
-            # 비밀번호와 비밀번호 확인이 일치하지 않는 경우
-            if password1 != password2:
-                password_error_msg = '비밀번호가 일치하지 않습니다. 다시 입력해주세요.'
-                return render(request,
-                              'user/signup.html',
-                              {
-                                 'form': form,
-                                 'password_error_msg': password_error_msg
-                              }
-                              )
+            pass
+        
+        # 이메일 존재여부
+        try:
+            if User.objects.filter(email=email):
+                email_error_msg = '이미 존재하는 이메일입니다.'
+            context['email_error_msg'] = email_error_msg
+            return render(request, 'user/signup.html', context)
+            # else:
+        except Exception:
+            pass
+
+        # 비밀번호와 비밀번호 확인이 일치하지 않는 경우
+        if password1 != password2:
+            password_error_msg = '비밀번호가 일치하지 않습니다. 다시 입력해주세요.'
+            context['password_error_msg'] = password_error_msg
+            return render(request, 'user/signup.html', context)
+        else:
+            if form.is_valid():
+                User.objects.create_user(id=id, username=id,
+                                        password=password1,
+                                        email=email, name=name)
+                return redirect('user:login')
             else:
-                if form.is_valid():
-                    User.objects.create_user(id=id, username=id,
-                                             password=password1,
-                                             email=email, name=name)
-                    return redirect('user:login')
-                else:
-                    email_error_msg = '이메일 양식이 맞지 않습니다.'
-                    context = {
-                        'form': form,
-                        'email_error_msg': email_error_msg,
-                    }
-                    return render(request, 'user/signup.html',
-                                  {
-                                     'form': form,
-                                     'email_error_msg': email_error_msg
-                                  }
-                                  )
+                email_error_msg = '이메일 양식이 맞지 않습니다.'
+                context['email_error_msg'] = email_error_msg
+                return render(request, 'user/signup.html', context=context)
     else:
         form = UserCreationForm()
     context = {

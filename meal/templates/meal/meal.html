@@ -969,7 +969,6 @@ function del_meal_diet(meal) {
 
 
 $(document).ready(function() {
-    console.log(sessionStorage.getItem('kid_id'))
     // 데이트피커
     //input을 datepicker로 선언
     $("#datepicker").datepicker({
@@ -1289,7 +1288,6 @@ $(document).ready(function() {
     // 식단 결과 확인 - meal, diet 객체 생성
     $('.result_btn').click(function() {
         food_form = '#' + $(this).parent().parent().attr('id') + ' div:nth-child(2)'
-        console.log(food_form)
         food_row = '#' + $(food_form).attr('id') + ' input'
         food_row_portions = '#' + $(food_form).attr('id') + ' select option:selected'
         food_result = []
