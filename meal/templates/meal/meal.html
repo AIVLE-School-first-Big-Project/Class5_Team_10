@@ -5,7 +5,7 @@
 <div class="container my-3">
     <div class="row justify-content-end">
         <form method="post">
-            <!-- {% csrf_token %} -->
+            {% csrf_token %}
             {% if date %}
             <input type="hidden" name="kid_id" value="{{ kid_id }}">
             <input type="text" class="h-100" name="datepicker" id="datepicker" value="{{ date }}">
