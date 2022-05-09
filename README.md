@@ -1,4 +1,4 @@
-<img src="static\images\favicon.PNG"  width="100%" height="auto%">
+<img src="static\images\favicon.png"  width="100%" height="auto%">
 
 <br/>
 
@@ -38,7 +38,7 @@
 <br/>
 
 ## 4. Architecture (3 - tier)
-<img src="static\images\Class5_Architecture.PNG"  width="100%" height="auto%">
+<img src="static\images\Class5_Architecture.png"  width="100%" height="auto%">
 
 <br/>
 
