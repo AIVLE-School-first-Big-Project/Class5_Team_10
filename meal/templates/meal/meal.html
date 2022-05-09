@@ -14,7 +14,7 @@
         </form>
     </div>
     <div class="row mt-3 mb-3 ml-2 kid_pofile">
-        <div class="col mt-4 ml-4">
+        <div class="col mt-4 ml-4 mb-4">
             {% if kid.img %}
             <img class="img" id="profile" src="{{ kid.img.url }}"/>
             {% else %}
@@ -30,7 +30,7 @@
                 <a class="btn main_btn" href="/user/update/kid_info/">아이 프로필 수정</a>
             </div>
         </div>
-        <div class="col mt-1 mr-3">
+        <div class="col mt-4">
             <div class="chart-container">
                 <canvas id="myChart">
                     <p>Hello Fallback World</p>
@@ -757,7 +757,7 @@ a.ui-button:active,
 }
 
 #myChart {
-    width: 35vw;
+    width: 35rem;
 }
 
 #breakfast_previewImg, #lunch_previewImg, #dinner_previewImg {
