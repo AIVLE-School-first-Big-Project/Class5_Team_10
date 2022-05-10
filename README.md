@@ -1,4 +1,4 @@
-<img src="static\images\main_logo.png"  width="100%" height="auto%">
+<img src="static\images\readme.png"  width="100%" height="auto%">
 
 <br/>
 
