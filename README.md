@@ -2,9 +2,9 @@
 
 <br/>
 
-## 1. 조원 소개
+## 1. 팀 소개
 - 소속: AI 수도권 5반 1조(10조)
-- 이정현(조장), 김상훈, 김희준, 박유진(서기), 서승우, 송정우
+- 조원: 이정현(조장), 김상훈, 김희준, 박유진(서기), 서승우, 송정우
 
 
 <br/>
@@ -38,7 +38,7 @@
 <br/>
 
 ## 4. Architecture (3 - tier)
-<img src="static\images\Class5_Architecture.png"  width="100%" height="auto%">
+<img src="static\images\architecture.png"  width="100%" height="auto%">
 
 <br/>
 
