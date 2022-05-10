@@ -1,4 +1,4 @@
-<img src="static\images\main_logo.png"  width="100%" height="auto%">
+<img src="static\images\main_logo.PNG"  width="100%" height="auto%">
 
 <br/>
 
@@ -14,6 +14,7 @@
  - 2022.04.11 ~ 2022.05.11
 ### 주제 선정 배경
  - 아이가 건강하게 자라길 바라는 것은 모든 부모의 바람이다. 부모는 아이가 균형 잡힌 음식을 먹고 성장하기를 바라지만 모든 부모가 영양 지식을 갖춘 것은 아니다. ‘밀키드’ 서비스는 부모에게 자신이 만든 음식의 영양 구성 정보를 알려준다. 부모는 이를 통해 아이에게 부족한 영양이 무엇인지 알고 균형 잡힌 식단을 구성할 수 있을 것이다.
+
  - 유아기는 발육이 왕성한 시기이며 영양소 필요량을 체중 kg당으로 환산하였을 때 성인보다 2~3배의 영양소 공급이 필요한 시기이다. 또한 아직 장기의 발달이 완성되지 않아 소화흡수 능력이 떨어지고, 면역력이 약하기 때문에 적절한 식품섭취가 중요하다. 우리의 서비스를 통해 아이들은 부족한 영양을 채워줄 적절한 식품을 추천 받을 수 있을 것이다. 
 
 ### 주요 서비스 대상
@@ -28,12 +29,13 @@
  1. Python 가상환경은 3.8 버전 이상을 사용해주세요.
  2. 사용하시는 DB가 있을 경우 Config Settings에서 설정해주세요. 저희 프로젝트는 MySQL로 설정되어 있습니다.
  3. pip install -r requirements.txt를 실행시켜 필요한 모듈을 설치해주세요.
- 4. 서비스를 시작할 때 python manage.py runserver --insecure 로 실행시켜주세요.
+ 4. python manage.py makemigrations & python manage.py migrate 을 실행해주세요.
+ 5. 서비스를 시작할 때 python manage.py runserver --insecure 로 실행시켜주세요.
 
 <br/>
 
 ## 3. Service Flow
-<img src="static\images\service_flow.PNG"  width="100%" height="auto%">
+<img src="static\images\service_flow.png"  width="100%" height="auto%">
 
 <br/>
 
@@ -43,7 +45,7 @@
 <br/>
 
 ## 5. ERD
-<img src="static\images\ERD.PNG"  width="100%" height="auto%">
+<img src="static\images\ERD.png"  width="100%" height="auto%">
 
 ## 6. Tech
 ### Front-End
