@@ -35,7 +35,7 @@
 <br/>
 
 ## 3. Service Flow
-<img src="static\images\service_flow.png"  width="100%" height="auto%">
+<img src="static\images\service_flow.PNG"  width="100%" height="auto%">
 
 <br/>
 
@@ -45,7 +45,7 @@
 <br/>
 
 ## 5. ERD
-<img src="static\images\ERD.png"  width="100%" height="auto%">
+<img src="static\images\ERD.PNG"  width="100%" height="auto%">
 
 ## 6. Tech
 ### Front-End
