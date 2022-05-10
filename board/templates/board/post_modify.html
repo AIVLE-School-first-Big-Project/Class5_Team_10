@@ -29,8 +29,20 @@ input[type=checkbox]:checked:before {
 {% block script %}
 <script>
 function hey() {
-    let name = $('#file')[0].files[0].name
-    $('label').text(name)
+    if (($('#file').val()) && ($('#file').length)) {
+        let file_name = $('#file')[0].files[0].name
+            if ((file_name.slice(-3).toLowerCase() == 'jpeg') ||
+                    (file_name.slice(-3).toLowerCase() == 'jpg') || (file_name.slice(-3).toLowerCase() == 'png')) {
+                $('.submit_btn').removeAttr('disabled')
+                $('#upload_label').text(file_name)
+            } else {
+                $('.submit_btn').attr('disabled', 'disabled')
+                $('#upload_label').html('지원하지 않는 양식입니다.')
+            }
+    } else {
+        $('#upload_label').html('<i class="fa-solid fa-upload"></i>업로드')
+        $('.submit_btn').removeAttr('disabled')
+    }
 }
 
 $(document).ready(function() {
@@ -88,7 +100,7 @@ $(document).ready(function() {
                             </div>
                             <div class="col">
                                 <form>
-                                    <label for="file" class="custom-file-upload btn sub_btn">
+                                    <label for="file" class="custom-file-upload btn sub_btn" id="upload_label">
                                         <i class="fa-solid fa-upload"></i>업로드
                                     </label>
                                     <input id="file" type="file" name="image" onchange="hey()" style="display:none"/>
@@ -127,7 +139,7 @@ $(document).ready(function() {
                                 </div>
                             <div class="col">
                                 <div class="row justify-content-end pr-3">
-                                    <input type="submit" value="수정하기" style="font-weight : bold" class="btn post_btn">
+                                    <input type="submit" value="수정하기" style="font-weight : bold" class="btn post_btn submit_btn">
                                 </div>
                             </div>
                         </div>

@@ -2,8 +2,19 @@
 {% block script %}
 <script>
 function hey() {
-    let name = $('#file')[0].files[0].name
-    $('label').text(name)
+    if (($('#file').val()) && ($('#file').length)) {
+        let file_name = $('#file')[0].files[0].name
+            if ((file_name.slice(-3).toLowerCase() == 'jpeg') ||
+                    (file_name.slice(-3).toLowerCase() == 'jpg') || (file_name.slice(-3).toLowerCase() == 'png')) {
+                $('.submit_btn').removeAttr('disabled')
+                $('label').text(file_name)
+            } else {
+                $('.submit_btn').attr('disabled', 'disabled')
+                $('label').html('지원하지 않는 양식입니다.')
+            }
+    } else {
+        $('label').html('<i class="fa-solid fa-upload"></i>업로드')
+    }
 }
 </script>
 {% endblock %}
@@ -70,7 +81,7 @@ function hey() {
                                 </div>
                             <div class="col">
                                 <div class="row justify-content-end">
-                                    <input type="submit" value="등록하기" style="font-weight : bold" class="btn post_btn mr-3">
+                                    <input type="submit" value="등록하기" style="font-weight : bold" class="btn post_btn mr-3 submit_btn">
                                 </div>
                             </div>
                         </div>

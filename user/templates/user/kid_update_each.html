@@ -15,15 +15,27 @@
 $(document).ready(function() {
     // 아이 사진 미리보기
     $("#kid_img_btn").change(function() {
-        $('.img').removeAttr('src')
-        if(this.files[0]) {
-            let reader = new FileReader()
-            reader.readAsDataURL(this.files[0])
-    
-            reader.addEventListener('load', function() {
-                $('.img').attr('src', reader.result)
-                readerResult = reader.result
-            }, false)
+        if ($('#kid_img_btn').val() && $('#kid_img_btn').length) {
+            $('.img').removeAttr('src')
+            if(this.files[0]) {
+                let file_name = this.files[0]['name']
+                if ((file_name.slice(-3).toLowerCase() == 'jpeg') ||
+                (file_name.slice(-3).toLowerCase() == 'jpg') || (file_name.slice(-3).toLowerCase() == 'png')) {
+                    $('.update_btn').removeAttr('disabled')
+                    let reader = new FileReader()
+                    reader.readAsDataURL(this.files[0])
+            
+                    reader.addEventListener('load', function() {
+                        $('.img').attr('src', reader.result)
+                        readerResult = reader.result
+                    }, false)
+                } else {
+                    $('.img').attr('src', "{% static 'images/지원하지 않는 형식 아이 이미지.PNG' %}")
+                    $('.update_btn').attr('disabled', 'disabled')
+                }
+            }
+        } else {
+            $('.img').attr('src', "{% static 'images/kid_profile_default.png' %}")
         }
     })
 })
@@ -83,7 +95,7 @@ $(document).ready(function() {
                         </div>
                         <div class="row justify-content-between">
                             <a class='btn sub_btn mr-1' data-toggle='modal' data-target='#modal' id="cafe">이전</a>
-                            <button class="btn main_btn" id="cafe">수정완료</button>
+                            <button class="btn main_btn update_btn" id="cafe">수정완료</button>
                         </div>
                         <div class="row mt-3 pb-2 justify-content-end">
                             <small><a href="#" data-toggle="modal" data-target="#modal_kid_del" id="cafe" style="color: coral;"><h6 class="btn sub_btn">아이 정보 삭제하기</h6></a></small>

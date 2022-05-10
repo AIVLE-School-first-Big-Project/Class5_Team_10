@@ -198,15 +198,27 @@ function modal_show(meal) {
 function meal_upload(meal) {
     $('#' + meal + '_upload').attr('disabled', 'disabled')
     $('#' + meal + '_fileBtn').change(function() {
-        if(this.files[0]) {
-            let reader = new FileReader()
-            reader.readAsDataURL(this.files[0])
-    
-            reader.addEventListener('load', function() {
-                $('#' + meal + '_previewImg').attr('src', reader.result)
-                $('#' + meal + '_upload').removeAttr('disabled')
-                readerResult = reader.result
-            }, false)
+        if ($('#' + meal + '_fileBtn').val() && $('#' + meal + '_fileBtn').length) {
+            let file_name = this.files[0]['name']
+            if ((file_name.slice(-3).toLowerCase() == 'jpeg') ||
+                    (file_name.slice(-3).toLowerCase() == 'jpg') || (file_name.slice(-3).toLowerCase() == 'png')) {
+                if(this.files[0]) {
+                    let reader = new FileReader()
+                    reader.readAsDataURL(this.files[0])
+                    
+                    reader.addEventListener('load', function() {
+                        $('#' + meal + '_previewImg').attr('src', reader.result)
+                        $('#' + meal + '_upload').removeAttr('disabled')
+                        readerResult = reader.result
+                    }, false)
+                }
+            } else {
+                $('#' + meal + '_previewImg').attr('src', "{% static 'image/식판.png' %}")
+                $('#' + meal + '_upload').attr('disabled', 'disabled')
+            }
+        } else {
+            $('#' + meal + '_previewImg').attr('src', "{% static 'image/식판.png' %}")
+            $('#' + meal + '_upload').attr('disabled', 'disabled')
         }
     })
 
@@ -1057,7 +1069,7 @@ $(document).ready(function() {
                 <label for="breakfast_fileBtn" class="btn main_btn">
                     <i class="fa-solid fa-upload"></i>&nbsp;업로드
                 </label>
-                <input id="breakfast_fileBtn" type="file" accept=".jpg, .png" style="display:none"/>
+                <input id="breakfast_fileBtn" type="file" accept=".jpg, .jpeg, .png" style="display:none"/>
             </form>
             <div class="modal-footer justify-content-center">
                 <button class="btn sub_btn" data-dismiss="modal">취소</button>
