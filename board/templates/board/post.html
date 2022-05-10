@@ -1,5 +1,67 @@
 {% extends "base.html" %}
+{% block script %}
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $('.post_delete').click(function() {
+            $('.modal-header b').text('게시물 삭제하기')
+            $('.modal-body p').html('<font color="red"><b>정말로 삭제하시겠습니까?<b></font>')
+            $('.modal-body small').remove()
+            $('#modal').modal('show')
 
+            $('.modal-footer .yes_btn').click(function() {
+                location.href = $('.post_delete').attr('data-uri')
+            })
+        })
+
+        $('.comment_delete').click(function() {
+            let comment_id = $(this).attr('id')
+            
+            $('.modal-header b').text('댓글 삭제하기')
+            $('.modal-body p').html('<font color="red"><b>정말로 삭제하시겠습니까?<b></font>')
+            $('.modal-body small').remove()
+            $('#modal').modal('show')
+
+            $('.modal-footer .yes_btn').click(function() {
+                location.href = $('#' + comment_id).attr('data-uri')
+            })
+        })
+
+        let comment_id = $('.comment_modify').attr('id')
+
+        $('.comment_cancel').click(function() {
+            location.href = './'
+        })
+
+        $(document).on('click', '.comment_modify', function() {
+            input_id = '#' + $(this).attr('id') + "_input"
+            $(input_id).removeAttr('readonly')
+            // 댓글 수정 완료, 취소 버튼 활성화
+            submit_id = '#' + $(this).attr('id') + "_submit" 
+            cancle_id = '#' + $(this).attr('id') + "_cancel"
+            delete_id = '#' + $(this).attr('id') + "_delete"
+            
+            $(submit_id).show()
+            $(cancle_id).show()
+            $(this).hide()
+            $(delete_id).hide()
+        })
+
+        $(document).on('click', '.comment_cancel', function() {
+            cancel_id = '#' + $(this).attr('id')
+            id = input_id.split('_')[0]
+            input_id = id + '_input'
+
+            $(input_id).attr('readonly', true)
+            delete_id = id + "_delete"
+            modify_id = id
+            $(modify_id).show()
+            $(delete_id).show()
+            $(this).hide()
+            $(submit_id).hide()
+        })
+    })
+</script>
+{% endblock %}
 {% block content %}
 <div class="container">
     <!-- 게시물 상세 조회 -->
@@ -190,68 +252,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block script %}
-<script type='text/javascript'>
-    $(document).ready(function() {
-        $('.post_delete').click(function() {
-            $('.modal-header b').text('게시물 삭제하기')
-            $('.modal-body p').html('<font color="red"><b>정말로 삭제하시겠습니까?<b></font>')
-            $('.modal-body small').remove()
-            $('#modal').modal('show')
-
-            $('.modal-footer .yes_btn').click(function() {
-                location.href = $('.post_delete').attr('data-uri')
-            })
-        })
-
-        $('.comment_delete').click(function() {
-            let comment_id = $(this).attr('id')
-            
-            $('.modal-header b').text('댓글 삭제하기')
-            $('.modal-body p').html('<font color="red"><b>정말로 삭제하시겠습니까?<b></font>')
-            $('.modal-body small').remove()
-            $('#modal').modal('show')
-
-            $('.modal-footer .yes_btn').click(function() {
-                location.href = $('#' + comment_id).attr('data-uri')
-            })
-        })
-
-        let comment_id = $('.comment_modify').attr('id')
-
-        $('.comment_cancel').click(function() {
-            location.href = './'
-        })
-
-        $(document).on('click', '.comment_modify', function() {
-            input_id = '#' + $(this).attr('id') + "_input"
-            $(input_id).removeAttr('readonly')
-            // 댓글 수정 완료, 취소 버튼 활성화
-            submit_id = '#' + $(this).attr('id') + "_submit" 
-            cancle_id = '#' + $(this).attr('id') + "_cancel"
-            delete_id = '#' + $(this).attr('id') + "_delete"
-            
-            $(submit_id).show()
-            $(cancle_id).show()
-            $(this).hide()
-            $(delete_id).hide()
-        })
-
-        $(document).on('click', '.comment_cancel', function() {
-            cancel_id = '#' + $(this).attr('id')
-            id = input_id.split('_')[0]
-            input_id = id + '_input'
-
-            $(input_id).attr('readonly', true)
-            delete_id = id + "_delete"
-            modify_id = id
-            $(modify_id).show()
-            $(delete_id).show()
-            $(this).hide()
-            $(submit_id).hide()
-        })
-    })
-</script>
 {% endblock %}

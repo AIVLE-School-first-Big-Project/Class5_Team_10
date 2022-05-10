@@ -1,5 +1,12 @@
 {% extends "base.html" %}
-
+{% block script %}
+<script>
+function hey() {
+    let name = $('#file')[0].files[0].name
+    $('label').text(name)
+}
+</script>
+{% endblock %}
 {% block content %}
 <div class="row mt-5"></div>
 <div class="container my-3 rounded">
@@ -98,13 +105,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block script %}
-<script>
-function hey() {
-    let name = $('#file')[0].files[0].name
-    $('label').text(name)
-}
-</script>
 {% endblock %}

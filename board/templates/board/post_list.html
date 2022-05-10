@@ -1,24 +1,36 @@
 {% extends "base.html" %}
-
-{% block content %}
+{% block style %}
 <style>
-    .icon_btn {
-        border: #ff926c 1px solid;
-        color: #ff926c;
-        font-weight: bold;
-    }
-    
-    .icon_btn:hover {
-        background-color: #ff926c;
-        border: #ff926c 1px solid;
-        color: white;
-        font-weight: bold;
-    }
-    #GD {
-        font-family: 'Nanum Gothic', sans-serif;
-    }
-</style>
+.icon_btn {
+    border: #ff926c 1px solid;
+    color: #ff926c;
+    font-weight: bold;
+}
 
+.icon_btn:hover {
+    background-color: #ff926c;
+    border: #ff926c 1px solid;
+    color: white;
+    font-weight: bold;
+}
+
+#GD {
+    font-family: 'Nanum Gothic', sans-serif;
+}
+</style>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    target = window.location.search.split('&')[0].split('=')[1]
+    var type = document.getElementsByTagName('option')
+    for (var i = 0; i < 3; i++) {
+        if (type[i].value === target) {
+            type[i].setAttribute('selected', 'selected')
+        }
+    }
+</script>
+{% endblock %}
+{% block content %}
 <div class="container my-3">
     <div class="row mt-5"></div>
     <form class="mt-5" method="GET">
@@ -30,7 +42,8 @@
                     <option value="category">카테고리</option>
                 </select>
                 <input type="text" id="search_kw" name="kw" value="{{ kw|default_if_none:'' }}" 
-                class="form-control col-9 header_edge_color text-center" placeholder="검색어를 입력해주세요." style="border: 1px solid #ff7449; color:ff7449;">
+                class="form-control col-9 header_edge_color text-center" placeholder="검색어를 입력해주세요."
+                autocomplete="off" style="border: 1px solid #ff7449; color:ff7449;">
                 <button class="btn icon_btn col-1" type="submit" id="search_btn" sytle="margin-top: 5px;"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <table class="table mt-2">
@@ -115,17 +128,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-
-{% block script %}
-<script type="text/javascript">
-    target = window.location.search.split('&')[0].split('=')[1]
-    var type = document.getElementsByTagName('option')
-    for (var i = 0; i < 3; i++) {
-        if (type[i].value === target) {
-            type[i].setAttribute('selected', 'selected')
-        }
-    }
-</script>
 {% endblock %}

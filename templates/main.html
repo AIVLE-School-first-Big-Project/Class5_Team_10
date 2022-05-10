@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block content%}
+{% block style%}
 <style>
-    #JB {
-        font-family: 'JGaegujaengyi-Bold-KO';
-    }
+#JB {
+    font-family: 'JGaegujaengyi-Bold-KO';
+}
 </style>
+{% endblock %}
+{% block content%}
 <div class="row" style="max-width: 100%;">
     <img src="{% static 'images/main.png' %}" id="img" style="max-width: 70%; height: auto;">
 </div>

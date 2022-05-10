@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block content %}
+{% block style %}
 <style>
 .img {
     width: 12rem; 
@@ -9,6 +9,27 @@
     object-fit: cover;
 }
 </style>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function() {
+    // 아이 사진 미리보기
+    $("#kid_img_btn").change(function() {
+        $('.img').removeAttr('src')
+        if(this.files[0]) {
+            let reader = new FileReader()
+            reader.readAsDataURL(this.files[0])
+    
+            reader.addEventListener('load', function() {
+                $('.img').attr('src', reader.result)
+                readerResult = reader.result
+            }, false)
+        }
+    })
+})
+</script>
+{% endblock %}
+{% block content %}
 <div class='container'>
     <div class='row my-5'>
         <div class='col'></div>
@@ -118,33 +139,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-{% block style %}
-<style>
-.img {
-    width: 150px; 
-    height: 150px;
-    border-radius: 25%;
-    object-fit: cover;
-}
-</style>
-{% endblock %}
-{% block script %}
-<script>
-$(document).ready(function() {
-    // 아이 사진 미리보기
-    $("#kid_img_btn").change(function() {
-        $('.img').removeAttr('src')
-        if(this.files[0]) {
-            let reader = new FileReader()
-            reader.readAsDataURL(this.files[0])
-    
-            reader.addEventListener('load', function() {
-                $('.img').attr('src', reader.result)
-                readerResult = reader.result
-            }, false)
-        }
-    })
-})
-</script>
 {% endblock %}

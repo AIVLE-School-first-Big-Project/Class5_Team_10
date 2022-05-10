@@ -1,34 +1,55 @@
 {% extends "base.html" %}
-
-{% block content %}
-<body>
+{% block style %}
 <style>
-    input[type=checkbox] {
-        -moz-appearance:none;
-        -webkit-appearance:none;
-        -o-appearance:none;
-        outline: none;
-        content: none;	
-    }
-    
-    input[type=checkbox]:before {
-        font-family: "FontAwesome";
-        content: "\f00c";
-        font-size: 15px;
-        color: transparent !important;
-        background: #ff7449;
-        width: 2rem;
-        height: 1rem;
-        border: 1px solid grey;
-        margin-right: 7px;
-    }
-    
-    input[type=checkbox]:checked:before {
-        color: white !important;
-    }
+input[type=checkbox] {
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    -o-appearance:none;
+    outline: none;
+    content: none;	
+}
+
+input[type=checkbox]:before {
+    font-family: "FontAwesome";
+    content: "\f00c";
+    font-size: 15px;
+    color: transparent !important;
+    background: #ff7449;
+    width: 2rem;
+    height: 1rem;
+    border: 1px solid grey;
+    margin-right: 7px;
+}
+
+input[type=checkbox]:checked:before {
+    color: white !important;
+}
 </style>
-<div class="row mt-5"></div>
-<div class="container my-3 rounded">
+{% endblock %}
+{% block script %}
+<script>
+function hey() {
+    let name = $('#file')[0].files[0].name
+    $('label').text(name)
+}
+
+$(document).ready(function() {
+    let previous = document.getElementById("select").options[document.getElementById("select").selectedIndex].value
+    if (previous == '공지') {
+        previous = 'b'
+    } 
+    if (previous == '영양') {
+        previous = 'n'
+    } 
+    if (previous == 'Q&A') {
+        previous = 'q'
+    }
+    $('.' + previous).remove()
+})
+</script>
+{% endblock %}
+{% block content %}
+<div class="container mt-5 my-3 rounded">
     <form action="{% url 'board:post_modify' post.id %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row mt-5 justify-content-center" style="color:#808080"><b><h1>게시물 수정하기</h1></b></div>
@@ -141,27 +162,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block script %}
-<script>
-function hey() {
-    let name = $('#file')[0].files[0].name
-    $('label').text(name)
-}
-
-$(document).ready(function() {
-    let previous = document.getElementById("select").options[document.getElementById("select").selectedIndex].value
-    if (previous == '공지') {
-        previous = 'b'
-    } 
-    if (previous == '영양') {
-        previous = 'n'
-    } 
-    if (previous == 'Q&A') {
-        previous = 'q'
-    }
-    $('.' + previous).remove()
-})
-</script>
 {% endblock %}

@@ -1,4 +1,32 @@
 {% extends "base.html" %}
+{% block script %}
+<script>
+function id_check() {
+    let user_id = $('#user_id').val()
+    let msg_div = $('#user_id_check_div')
+    let msg = $('#id_check_msg')
+
+    $.ajax({
+        url: './id_check',
+        method: 'get',
+        data: {'user_id': user_id},
+    }).done(function(result) {
+        check_result = result['result']
+        if (check_result == 'fail') {
+            msg.removeAttr('class')
+            msg.attr('class', 'text-danger')
+            msg.html('이미 존재하는 아이디입니다.')
+            msg_div.append(msg)
+        } else {
+            msg.removeAttr('class')
+            msg.attr('class', 'text-primary')
+            msg.html('사용가능한 아이디입니다.')
+            msg_div.append(msg)
+        }
+    })
+}
+</script>
+{% endblock script %}
 {% block content %}
 <div class='container'>
     <div class='row my-5'>
@@ -74,31 +102,3 @@
     </div>
 </div>
 {% endblock content %}
-{% block script %}
-<script>
-function id_check() {
-    let user_id = $('#user_id').val()
-    let msg_div = $('#user_id_check_div')
-    let msg = $('#id_check_msg')
-
-    $.ajax({
-        url: './id_check',
-        method: 'get',
-        data: {'user_id': user_id},
-    }).done(function(result) {
-        check_result = result['result']
-        if (check_result == 'fail') {
-            msg.removeAttr('class')
-            msg.attr('class', 'text-danger')
-            msg.html('이미 존재하는 아이디입니다.')
-            msg_div.append(msg)
-        } else {
-            msg.removeAttr('class')
-            msg.attr('class', 'text-primary')
-            msg.html('사용가능한 아이디입니다.')
-            msg_div.append(msg)
-        }
-    })
-}
-</script>
-{% endblock script %}

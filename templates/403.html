@@ -1,26 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block content %}
-<!-- 403 Page -->
-<div class="container mt-2">
-    <div class="row" style="height: 5rem;"></div>
-    <div class="row mt-5 justify-content-center">
-        <div class="col-12 text-center">
-            <span class="display-1 d-block" style="color:#808080;"><h2>403</h2></span>
-            <div class="mt-3 mb-4 lead" style="color:#808080;"><b>잘못된 접근입니다.</b></div>
-            <div class="row mt-2 mb-1 justify-content-center">
-                <img class="w-25" src="{% static 'images/못한 식단 아이.png' %}"/>
-            </div>
-            <div class="mt-3 content">
-                <p><b><font color="red">잠시 후 메인 페이지로 돌아갑니다.</font></b></p>
-            </div>
-        </div>
-    </div>
-    <div class="row" style="height: 5rem;"></div>
-</div>
-{% endblock %}
-
 {% block script %}
 <script>
 $(document).ready(function() {
@@ -39,4 +18,23 @@ $(document).ready(function() {
 
 })
 </script>
+{% endblock %}
+{% block content %}
+<!-- 403 Page -->
+<div class="container mt-2">
+    <div class="row" style="height: 5rem;"></div>
+    <div class="row mt-5 justify-content-center">
+        <div class="col-12 text-center">
+            <span class="display-1 d-block" style="color:#808080;"><h2>403</h2></span>
+            <div class="mt-3 mb-4 lead" style="color:#808080;"><b>잘못된 접근입니다.</b></div>
+            <div class="row mt-2 mb-1 justify-content-center">
+                <img class="w-25" src="{% static 'images/못한 식단 아이.png' %}"/>
+            </div>
+            <div class="mt-3 content">
+                <p><b><font color="red">잠시 후 메인 페이지로 돌아갑니다.</font></b></p>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="height: 5rem;"></div>
+</div>
 {% endblock %}

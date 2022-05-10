@@ -211,7 +211,6 @@ def member_del(request):
 
 
 # 로그아웃
-# @logout_message_required
 def CustomLogout(request):
     logout(request)
     return redirect('/')

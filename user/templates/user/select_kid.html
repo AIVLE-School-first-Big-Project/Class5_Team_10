@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 {% block style %}
-    <link rel="stylesheet" href="../../static/user/css/select_page.css">
+<link rel="stylesheet" href="../../static/user/css/select_page.css">
+{% endblock %}
+{% block script %}
+<script>
+// 아이 사진 클릭 시 세션에 아이 정보를 남기는 부분
+function selecting(kid_id) {
+    sessionStorage.removeItem('kid_id')
+    sessionStorage.setItem('kid_id', kid_id)
+    $.ajax({
+        url: 'kid',
+        method: 'post',
+        data: {kid_id: kid_id}
+    }).done(function() {
+        location.href='http://127.0.0.1:8000/meal/meal'
+    })
+}
+</script>
 {% endblock %}
 {% block content %}
-    <!-- 아이 사진 클릭 시 세션에 아이 정보를 남기는 부분 -->
-<script src="../../static/user/js/select_page.js"></script>
-<script>
-    function selecting(kid_id) {
-        sessionStorage.removeItem('kid_id')
-        sessionStorage.setItem('kid_id', kid_id)
-        $.ajax({
-            url: 'kid',
-            method: 'post',
-            data: {kid_id: kid_id}
-        }).done(function() {
-            location.href='http://127.0.0.1:8000/meal/meal'
-        })
-    }
-</script>
 <div class="container">
     <div class="row" style="height: 3rem;"></div>
     <div class="row my-5"></div>

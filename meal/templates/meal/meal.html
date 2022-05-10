@@ -1,6 +1,668 @@
 {% extends "base.html" %}
 {% load static %}
+{% block style %}
+<style>
+.container, .modal {
+  font-family : 'Cafe24Dongdong'
+}
 
+#datepicker, input[name=food], select {
+    border: #ff7449 1px solid;
+    border-radius: 5px;
+}
+
+#datepicker {
+    text-align: center;
+}
+
+.ui-widget {
+    font-family: Cafe24Dongdong;
+    font-size: 1em;
+}
+
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: Cafe24Dongdong;
+    font-size: 1em;
+}
+
+.ui-widget-content {
+    border: 1px solid #dddddd;
+    background: #ffede5;
+    color: #333333;
+}
+
+.ui-widget-header {
+    border: 1px solid #ff7349;
+    background: #ff926c;
+    color: #333333;
+    font-weight: bold;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus,
+.ui-button:hover,
+.ui-button:focus {
+    border: 1px solid #cccccc;
+    background: #ffede5;
+    font-weight: normal;
+    color: #2b2b2b;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+    border: 1px solid #ff6030;
+    background: #ff7449;
+    font-weight: normal;
+    color: #ffffff;
+}
+
+.kid_pofile {
+    border: #ff7449 2px solid;
+    border-radius: 20px;
+}
+
+#profile {
+    width: 14rem;
+    height: 13rem;
+    border-radius: 25%;
+    object-fit: cover;
+}
+
+#myChart {
+    width: 35rem;
+}
+
+#breakfast_previewImg, #lunch_previewImg, #dinner_previewImg {
+    margin: 1rem;
+    width: 18rem;
+    height: 15rem;
+    border: #ff7449 1px solid;
+    border-radius: 20px;
+}
+
+.description {
+    color: #808080;
+}
+
+.frame {
+    height: 20rem;
+    border: #ff7449 2px solid;
+    border-radius: 20px;
+}
+
+.img {
+    width: 75%;
+    height: 15rem;
+    border-radius: 20px;
+}
+
+.picked_food_list {
+    height: 1rem;
+}
+
+.picked_food {
+    border: #ff7449 1px solid;
+    border-radius: 5%;
+    background-color: #fcc5ae;
+    height: 2rem;
+}
+
+.main_btn2 {
+    background-color: #ff926c;
+    border: #ff926c 2px solid;
+    color: white;
+    font-weight: bold;
+}
+
+.main_btn2:hover {
+    background-color: #ff926c;
+    border: #ff926c 2px solid;
+    color: white;
+    font-weight: bold;
+}
+
+.sub_btn2 {
+    border: #ff926c 2px solid;
+    color: #ff926c;
+    font-weight: bold;
+}
+
+.sub_btn2:hover {
+    border: #ff926c 2px solid;
+    color: #ff926c;
+    font-weight: bold;
+}
+
+/* 모달 */
+.search_result {
+    height: 20rem;
+    border-top: #ff7449 1px solid;
+}
+
+.food_input, .search_food {
+    border: #ff7449 1px solid;
+    border-radius: 5px;
+}
+</style>
+{% endblock %}
+{% block script %}
+<script>
+// csrftoken
+function getCookie(name) {
+    let cookieValue = null
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim()
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                break
+            }
+        }
+    }
+    return cookieValue
+}
+
+let csrftoken = getCookie('csrftoken')
+
+
+function modal_show(meal) {
+    let meal_time
+
+    if (meal == 'breakfast') meal_time = '아침'
+    else if (meal == 'lunch') meal_time = '점심'
+    else meal_time = '저녁'
+    
+    if ($('#' + meal).attr('src') != "{% static 'image/식판.png' %}") {
+        $('#' + meal + '_modal img').attr('src', $('#' + meal).attr('src'))
+    } else {
+        $('#' + meal + '_modal img').attr('src', "{% static 'image/식판.png' %}")
+    }
+
+    $('#' + meal + '_fileBtn').val('')
+    $('#' + meal + '_modal').modal('show')
+}
+
+
+function meal_upload(meal) {
+    $('#' + meal + '_fileBtn').change(function() {
+        if(this.files[0]) {
+            let reader = new FileReader()
+            reader.readAsDataURL(this.files[0])
+    
+            reader.addEventListener('load', function() {
+                $('#' + meal + '_previewImg').attr('src', reader.result)
+                readerResult = reader.result
+            }, false)
+        }
+    })
+
+    $('#' + meal + '_upload').click(function() {
+        meal_img = $('#' + meal + '_previewImg').attr('src')
+        $('#' + meal).attr('src', meal_img)
+
+        let form = $('#' + meal + '_form')[0]
+        let formData = new FormData(form)
+
+        formData.append('meal_img', $('#' + meal + '_fileBtn')[0].files[0])  // 식단 이미지 사진
+        formData.append('csrfmiddlewaretoken', csrftoken)  // csrftoken
+
+        $.ajax({
+            url: 'upload',
+            method: 'post',
+            enctype: 'multipart/form-data',
+            data: formData,
+            contentType: false,
+            processData: false,
+        }).done(function(results) {
+            $('#' + meal + '_food_form input').parent().remove()  // 기존에 모델 output이 있는 경우 청소
+            results = results.replaceAll(',', '')
+            results = results.split(' ')
+            results_length = results.pop()
+            if (results) {
+                $.each(results, function(idx, food) {
+                    add_food_place = '#' + meal + '_food_form .add_food'
+                    $(add_food_place).before(
+                        '<div class="row ml-1 mr-1 mt-3">' +
+                            '<input class="col w-100 mr-1" disabled value=' + food + ' name="food"/>' +
+                            '<select name="portions">' +
+                                '<option value="1인분">1인분</option>' +
+                                '<option value="0.1인분">0.1인분</option>' +
+                                '<option value="0.3인분">0.3인분</option>' +
+                                '<option value="0.5인분">0.5인분</option>' +
+                                '<option value="0.7인분">0.7인분</option>' +
+                                '<option value="1.5인분">1.5인분</option>' +
+                            '</select>' +
+                            '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + meal + food + '_btn">삭제</button>' +
+                        '</div>'
+                    )
+                })
+            }
+        })
+        $('#' + meal + '_modal').modal('hide')
+    })
+}
+
+
+function del_meal_diet(meal) {
+    let regdate = $('#datepicker').val()
+    let meal_time
+
+    if (meal == 'breakfast') meal_time = '아침'
+    else if (meal == 'lunch') meal_time = '점심'
+    else meal_time = '저녁'
+
+    $('#re_modal').modal('show')
+    $('#re_btn').click(function() {
+        $.ajax({
+            url: 'del_meal_diet',
+            method: 'delete',
+            headers:{
+                'X-CSRFToken':csrftoken,  // csrf
+            },
+            data: JSON.stringify({
+                regdate: regdate,
+                meal_time: meal_time,
+                kid_id: sessionStorage.getItem('kid_id'),
+            }),
+            contentType: 'application/json'
+        }).done(function(result) {
+            $('#' + meal).attr('src', "{% static 'image/식판.png' %}")
+            $('#' + meal +'_food_form div').remove()
+            $('#' + meal +'_frame .add_food').removeAttr('disabled')
+            $('#' + meal +'_frame .result_btn').removeAttr('disabled')
+            $('#re_modal').modal('hide')
+            window.location.reload()
+        })
+    })
+}
+
+
+$(document).ready(function() {
+    // 데이트피커
+    //input을 datepicker로 선언
+    $("#datepicker").datepicker({
+        dateFormat: 'yy-mm-dd', //달력 날짜 형태
+        showOtherMonths: true, //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        selectOtherMonths: true,
+        showMonthAfterYear:true, // 월- 년 순서가아닌 년도 - 월 순서
+        changeYear: true, //option값 년 선택 가능
+        changeMonth: true, //option값  월 선택 가능                           
+        yearSuffix: "년", //달력의 년도 부분 뒤 텍스트
+        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트
+        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 Tooltip
+        dayNamesMin: ['일','월','화','수','목','금','토'], //달력의 요일 텍스트
+        dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'], //달력의 요일 Tooltip
+        minDate: "-5Y", //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        maxDate: "+0d" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
+    })
+
+    // 차트
+    let canvas = document.getElementById('myChart')
+    let ctx = canvas.getContext('2d')
+    let labels = ['칼로리','탄수화물','단백질','지방','나트륨','칼슘','철분']
+    let int = {{ intake|safe }}
+    let recom = [1400,180,20,65,1200,600,7]
+    let recom2 = ['Kcal','g','g','g','mg','mg','mg']
+    let intake1 = []
+    let intake2 = []
+
+    intake1.push(int.breakfast_per)
+    intake1.push(int.lunch_per)
+    intake1.push(int.dinner_per)
+    
+    intake2.push(int.breakfast)
+    intake2.push(int.lunch)
+    intake2.push(int.dinner)
+
+    let data = {
+      labels: labels,
+        datasets: [{
+          label: '아침',
+          data: intake1[0],
+          backgroundColor: [
+            'rgba(250,128,114)'
+          ],
+          hoverBackgroundColor: [
+            'rgb(250,128,114,0.5)'
+          ]
+        },{
+          label: '점심',
+          data: intake1[1],
+          backgroundColor: [
+            'rgba(128,0,128)'
+          ],
+          hoverBackgroundColor: [
+            'rgb(128,0,128,0.5)'
+          ]
+        },{
+          label: '저녁',
+          data: intake1[2],
+          backgroundColor: [
+            'rgba(135,206,235)'
+          ],
+          hoverBackgroundColor: [
+            'rgb(135,206,235,0.5)'
+          ]
+        }]
+    }
+  
+    let options = {
+        responsive: false,
+        indexAxis: 'y',
+        plugins: {
+            title: {
+            display: true,
+            position: 'bottom',
+            text: '일일 권장섭취량 (%)'
+            },
+
+            tooltip: {
+                enabled: true,
+                titleAlign: 'center',
+                bodyAlign: 'center',
+                footerAlign: 'center',
+                xAlign: 'left',
+                callbacks: {
+                    afterTitle: function(context) {
+                        i = context[0].dataIndex
+                        return "일일 권장섭취량 : "+recom[i]+recom2[i]
+                    },
+                    label: function(context) {
+                        
+                        i = context.dataIndex
+                        j = context.datasetIndex
+                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake1[j][i])) + "% )"
+                    },
+                    footer: function(contexts) {
+                        i = contexts[0].dataIndex
+                        x=0
+                        y=0
+                        for(j=0;j<3;j++){
+                            if(intake2[j]){
+                                x+=intake2[j][i]
+                            }
+                            if(intake1[j]){
+                                y+=intake1[j][i]
+                            }
+                        }
+                        return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
+                    },
+                },
+                footerColor: function(context) {
+                    if(context.tooltipItems[0]){
+                        i = context.tooltipItems[0].dataIndex
+                        y=0;
+                        for(k=0;k<3;k++){
+                            if(intake1[k]){
+                                y+=intake1[k][i]
+                            }
+                        }
+                        if( y > 125){
+                            return 'rgb(255,0,0,0.9)';
+                        }
+                        else if(y <75){
+                            return 'rgb(255,255,0,0.8)';
+                        }
+                        else {
+                            return 'rgb(0,255,0,0.8)';
+                        }
+                    }
+                    else return 'white';
+                },
+                backgroundColor: 'rgb(0,0,0,0.75)'
+            },
+        },
+  
+        scales: {
+          x: {
+            stacked: true,
+            ticks: {
+              callback: function(value, index, ticks) {
+                return value+'%'
+              }
+            },
+            grid: {
+                lineWidth: 1
+            },
+          },
+          y: {
+            stacked: true,
+            grid: {
+                lineWidth: 1
+            },
+          },
+        }
+    }
+  
+    let myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: options
+    })
+
+    
+    $('.breakfast_upload').click(function() {
+        modal_show('breakfast')        
+        meal_upload('breakfast')
+    })
+
+    $('.lunch_upload').click(function() {
+        modal_show('lunch')
+        meal_upload('lunch')
+    })
+
+    $('.dinner_upload').click(function() {
+        modal_show('dinner')
+        meal_upload('dinner')
+    })
+
+    $('.breakfast_del_btn').click(function() {
+        del_meal_diet('breakfast')
+    })
+
+    $('.lunch_del_btn').click(function() {
+        del_meal_diet('lunch')
+    })
+
+    $('.dinner_del_btn').click(function() {
+        del_meal_diet('dinner')
+    })
+
+    // 검색 모달 띄우고 결과값 들어가게
+    $('.add_food').click(function() {
+        
+        // 들어갈 폼 - 전역변수 선언
+        window.parent_food_form = $(this).parent().attr('id')
+        window.food_list = []  // 전역변수 선언
+
+        $('.food_table').empty()
+        $('.picked_food_list').empty()
+        $.ajax({
+            url: 'food_list',
+            method: 'post',
+            data: {
+                csrfmiddlewaretoken: csrftoken,  // csrf
+            },
+        }).done(function(foods) {
+            if (foods) {
+                foods = foods.split(' ')
+                $.each(foods, function(idx, food) {
+                    if (food) {
+                        $('.food_table').append(`<div class="mb-3 ml-5" style="text-align: start;"><input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
+                    }
+                })
+            }
+        })
+        $('.food_input').val('')
+        $('#food_search').modal('show')
+    })
+
+    // 실시간 검색
+    let old_val
+    $(".food_input").on("propertychange change keyup paste input", function(){
+        let current_val = $(this).val()
+        if (current_val == old_val) {
+            return
+        }
+        old_val = current_val
+        $.ajax({
+            url: 'search_food_list',
+            method: 'post',
+            headers:{
+                'X-CSRFToken':csrftoken,  // csrf
+            },
+            data: JSON.stringify({
+                search_data: $('.food_input').val()
+            }),
+            contentType: 'application/json'
+        }).done(function(foods) {
+            $('.food_table').empty()
+            if (foods) {
+                foods = foods.split(' ')
+                $.each(foods, function(idx, food) {
+                    if (food) {
+                        $('.food_table').append(`<div class="mb-3 ml-5" style="text-align: start;">
+                            <input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
+                    }
+                })
+            } else if (!foods) {
+                $('.food_table').append('<font class="d-flex justify-content-center" color="red"> \"'
+                    + $('.food_input').val() + '\" 에 대한 검색 결과가 존재하지 않습니다.</font>')
+            }
+        })
+    })
+
+    $('.search_food').click(function() {
+        if (!($('.food_input').val())) {
+            $('.food_table').empty()
+            $('.food_table').append('<font class="d-flex justify-content-center" color="red">한 글자 이상 검색해주세요.</font>')
+        }
+    })
+    
+    // 검색창에서 음식 선택
+    $(document).on('click', 'input:checkbox', function() {
+        food_id = $(this).attr('id')
+        check_id = '#' + food_id
+        if($(check_id).is(':checked')) {
+            $('.picked_food_list').append(`<button class="mr-1 p-1 picked_food" id="${food_id}"><small>${food_id} x</small></button>`)
+            window.food_list.push(food_id)
+        }
+    })
+
+    // 검색창에서 선택된 음식 삭제 & 체크박스 해제
+    $(document).on('click', '.picked_food', function() {
+        food_id = $(this).attr('id')
+        picked_id = '#' + food_id
+        $('input:checkbox[id="' + food_id +'"]').prop('checked', false)
+        $('button' + picked_id).remove()
+
+        // 전역변수에서도 해당 음식 삭제
+        for(let i = 0; i < window.food_list.length; i++) {
+            if (window.food_list[i] === food_id) {
+                window.food_list.splice(i, 1)
+                i--
+            }
+        }
+    })
+
+    // 음식 검색 후 음식 추가
+    $('#add_Btn').click(function() {
+        add_food_place = '#' + window.parent_food_form + ' .add_food'
+        cnt = $('.picked_food_list').children().length
+
+        for (let i = 0; i < cnt; i++) {
+            $(add_food_place).before(
+                '<div class="row ml-1 mr-1 mt-3">' +
+                    '<input class="col w-100 mr-1" disabled value=' + window.food_list[i] + ' name="food"/>' +
+                    '<select name="portions">' +
+                        '<option value="1인분">1인분</option>' +
+                        '<option value="0.1인분">0.1인분</option>' +
+                        '<option value="0.3인분">0.3인분</option>' +
+                        '<option value="0.5인분">0.5인분</option>' +
+                        '<option value="0.7인분">0.7인분</option>' +
+                        '<option value="1.5인분">1.5인분</option>' +
+                    '</select>' +
+                    '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + window.parent_food_form + window.food_list[i] + i + '_btn">삭제</button>' +
+                '</div>'
+            )
+        }
+        $('#food_search').modal('hide')
+    })
+
+    // 음식 삭제
+    $(document).on('click', '.del_food_btn', function() {
+        btn_id = '#' + $(this).attr('id')
+        $(btn_id).parent().remove()
+    })
+
+    // 식단 결과 확인 - meal, diet 객체 생성
+    $('.result_btn').click(function() {
+        food_form = '#' + $(this).parent().parent().attr('id') + ' div:nth-child(2)'
+        food_row = '#' + $(food_form).attr('id') + ' input'
+        food_row_portions = '#' + $(food_form).attr('id') + ' select option:selected'
+        food_result = []
+        portions = []
+
+        if ($(food_row).val()) {
+            for(let i = 0; i < $(food_row).length; i++) {
+                food_result.push($(food_row).eq(i).val())
+                portions.push($(food_row_portions).eq(i).val())
+            }
+            let meal = $(this).parent().parent().attr('id').replace('_frame', '')
+            let form = $('#' + meal + '_form')[0]
+            let formData = new FormData(form)
+            formData.append('meal_img', $('#' + meal + '_fileBtn')[0].files[0])
+            formData.append('date', $('#datepicker').val())
+            formData.append('frame', $(food_form).attr('id'))
+            formData.append('food_result', food_result)
+            formData.append('portions', portions)
+            formData.append('kid_id', sessionStorage.getItem('kid_id'))
+            formData.append('csrfmiddlewaretoken', csrftoken)  // csrftoken
+
+            $.ajax({
+                url: 'meal_diet',
+                method: 'post',
+                enctype: 'multipart/form-data',
+                data: formData,
+                contentType: false,
+                processData: false,
+            }).done(function(results) {
+                window.location.reload()
+            })
+            $(this).attr('disabled', 'disabled')
+            $('.' + meal + '_upload').attr('disabled', 'disabled')
+            $('.' + meal + '_del_btn').removeAttr('disabled')
+            $('#' + $(food_form).attr('id') + ' .del_food_btn').attr('disabled', 'disabled')
+            $('#' + $(food_form).attr('id') + ' select').attr('disabled', 'disabled')
+            $('#' + $(food_form).attr('id') + ' .add_food').attr('disabled', 'disabled')
+        }
+    })
+
+    // 부족/과잉 영양성분 보기
+    $('.breakfast_nu_result_btn').click(function() {
+        $('#breakfast_nu_modal').modal('show')
+    })
+    $('.lunch_nu_result_btn').click(function() {
+        $('#lunch_nu_modal').modal('show')
+    })
+    $('.dinner_nu_result_btn').click(function() {
+        $('#dinner_nu_modal').modal('show')
+    })
+})
+</script>
+{% endblock %}
 {% block content %}
 <div class="container my-3">
     <div class="row justify-content-end">
@@ -675,669 +1337,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block style %}
-<style>
-.container, .modal {
-  font-family : 'Cafe24Dongdong'
-}
-
-#datepicker, input[name=food], select {
-    border: #ff7449 1px solid;
-    border-radius: 5px;
-}
-
-#datepicker {
-    text-align: center;
-}
-
-.ui-widget {
-	font-family: Cafe24Dongdong;
-	font-size: 1em;
-}
-
-.ui-widget input,
-.ui-widget select,
-.ui-widget textarea,
-.ui-widget button {
-	font-family: Cafe24Dongdong;
-	font-size: 1em;
-}
-
-.ui-widget-content {
-	border: 1px solid #dddddd;
-	background: #ffede5;
-	color: #333333;
-}
-
-.ui-widget-header {
-	border: 1px solid #ff7349;
-	background: #ff926c;
-	color: #333333;
-	font-weight: bold;
-}
-
-.ui-state-hover,
-.ui-widget-content .ui-state-hover,
-.ui-widget-header .ui-state-hover,
-.ui-state-focus,
-.ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus,
-.ui-button:hover,
-.ui-button:focus {
-	border: 1px solid #cccccc;
-	background: #ffede5;
-	font-weight: normal;
-	color: #2b2b2b;
-}
-
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active,
-a.ui-button:active,
-.ui-button:active,
-.ui-button.ui-state-active:hover {
-	border: 1px solid #ff6030;
-	background: #ff7449;
-	font-weight: normal;
-	color: #ffffff;
-}
-
-.kid_pofile {
-    border: #ff7449 2px solid;
-    border-radius: 20px;
-}
-
-#profile {
-    width: 14rem;
-    height: 13rem;
-    border-radius: 25%;
-    object-fit: cover;
-}
-
-#myChart {
-    width: 35rem;
-}
-
-#breakfast_previewImg, #lunch_previewImg, #dinner_previewImg {
-    margin: 1rem;
-    width: 18rem;
-    height: 15rem;
-    border: #ff7449 1px solid;
-    border-radius: 20px;
-}
-
-.description {
-    color: #808080;
-}
-
-.frame {
-    height: 20rem;
-    border: #ff7449 2px solid;
-    border-radius: 20px;
-}
-
-.img {
-    width: 75%;
-    height: 15rem;
-    border-radius: 20px;
-}
-
-.picked_food_list {
-    height: 1rem;
-}
-
-.picked_food {
-    border: #ff7449 1px solid;
-    border-radius: 5%;
-    background-color: #fcc5ae;
-    height: 2rem;
-}
-
-.main_btn2 {
-    background-color: #ff926c;
-    border: #ff926c 2px solid;
-    color: white;
-    font-weight: bold;
-}
-
-.main_btn2:hover {
-    background-color: #ff926c;
-    border: #ff926c 2px solid;
-    color: white;
-    font-weight: bold;
-}
-
-.sub_btn2 {
-    border: #ff926c 2px solid;
-    color: #ff926c;
-    font-weight: bold;
-}
-
-.sub_btn2:hover {
-    border: #ff926c 2px solid;
-    color: #ff926c;
-    font-weight: bold;
-}
-
-/* 모달 */
-.search_result {
-    height: 20rem;
-    border-top: #ff7449 1px solid;
-}
-
-.food_input, .search_food {
-    border: #ff7449 1px solid;
-    border-radius: 5px;
-}
-
-</style>
-{% endblock %}
-
-{% block script %}
-<script>
-// csrftoken
-function getCookie(name) {
-    let cookieValue = null
-    if (document.cookie && document.cookie !== '') {
-        let cookies = document.cookie.split(';')
-        for (let i = 0; i < cookies.length; i++) {
-            let cookie = cookies[i].trim()
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
-                break
-            }
-        }
-    }
-    return cookieValue
-}
-
-let csrftoken = getCookie('csrftoken')
-
-
-function modal_show(meal) {
-    let meal_time
-
-    if (meal == 'breakfast') meal_time = '아침'
-    else if (meal == 'lunch') meal_time = '점심'
-    else meal_time = '저녁'
-    
-    if ($('#' + meal).attr('src') != "{% static 'image/식판.png' %}") {
-        $('#' + meal + '_modal img').attr('src', $('#' + meal).attr('src'))
-    } else {
-        $('#' + meal + '_modal img').attr('src', "{% static 'image/식판.png' %}")
-    }
-
-    $('#' + meal + '_fileBtn').val('')
-    $('#' + meal + '_modal').modal('show')
-}
-
-
-function meal_upload(meal) {
-    $('#' + meal + '_fileBtn').change(function() {
-        if(this.files[0]) {
-            let reader = new FileReader()
-            reader.readAsDataURL(this.files[0])
-    
-            reader.addEventListener('load', function() {
-                $('#' + meal + '_previewImg').attr('src', reader.result)
-                readerResult = reader.result
-            }, false)
-        }
-    })
-
-    $('#' + meal + '_upload').click(function() {
-        meal_img = $('#' + meal + '_previewImg').attr('src')
-        $('#' + meal).attr('src', meal_img)
-
-        let form = $('#' + meal + '_form')[0]
-        let formData = new FormData(form)
-
-        formData.append('meal_img', $('#' + meal + '_fileBtn')[0].files[0])  // 식단 이미지 사진
-        formData.append('csrfmiddlewaretoken', csrftoken)  // csrftoken
-
-        $.ajax({
-            url: 'upload',
-            method: 'post',
-            enctype: 'multipart/form-data',
-            data: formData,
-            contentType: false,
-            processData: false,
-        }).done(function(results) {
-            $('#' + meal + '_food_form input').parent().remove()  // 기존에 모델 output이 있는 경우 청소
-            results = results.replaceAll(',', '')
-            results = results.split(' ')
-            results_length = results.pop()
-            if (results) {
-                $.each(results, function(idx, food) {
-                    add_food_place = '#' + meal + '_food_form .add_food'
-                    $(add_food_place).before(
-                        '<div class="row ml-1 mr-1 mt-3">' +
-                            '<input class="col w-100 mr-1" disabled value=' + food + ' name="food"/>' +
-                            '<select name="portions">' +
-                                '<option value="1인분">1인분</option>' +
-                                '<option value="0.1인분">0.1인분</option>' +
-                                '<option value="0.3인분">0.3인분</option>' +
-                                '<option value="0.5인분">0.5인분</option>' +
-                                '<option value="0.7인분">0.7인분</option>' +
-                                '<option value="1.5인분">1.5인분</option>' +
-                            '</select>' +
-                            '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + meal + food + '_btn">삭제</button>' +
-                        '</div>'
-                    )
-                })
-            }
-        })
-        $('#' + meal + '_modal').modal('hide')
-    })
-}
-
-
-function del_meal_diet(meal) {
-    let regdate = $('#datepicker').val()
-    let meal_time
-
-    if (meal == 'breakfast') meal_time = '아침'
-    else if (meal == 'lunch') meal_time = '점심'
-    else meal_time = '저녁'
-
-    $('#re_modal').modal('show')
-    $('#re_btn').click(function() {
-        $.ajax({
-            url: 'del_meal_diet',
-            method: 'delete',
-            headers:{
-                'X-CSRFToken':csrftoken,  // csrf
-            },
-            data: JSON.stringify({
-                regdate: regdate,
-                meal_time: meal_time,
-                kid_id: sessionStorage.getItem('kid_id'),
-            }),
-            contentType: 'application/json'
-        }).done(function(result) {
-            $('#' + meal).attr('src', "{% static 'image/식판.png' %}")
-            $('#' + meal +'_food_form div').remove()
-            $('#' + meal +'_frame .add_food').removeAttr('disabled')
-            $('#' + meal +'_frame .result_btn').removeAttr('disabled')
-            $('#re_modal').modal('hide')
-            window.location.reload()
-        })
-    })
-}
-
-
-$(document).ready(function() {
-    // 데이트피커
-    //input을 datepicker로 선언
-    $("#datepicker").datepicker({
-        dateFormat: 'yy-mm-dd', //달력 날짜 형태
-        showOtherMonths: true, //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-        selectOtherMonths: true,
-        showMonthAfterYear:true, // 월- 년 순서가아닌 년도 - 월 순서
-        changeYear: true, //option값 년 선택 가능
-        changeMonth: true, //option값  월 선택 가능                           
-        yearSuffix: "년", //달력의 년도 부분 뒤 텍스트
-        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트
-        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 Tooltip
-        dayNamesMin: ['일','월','화','수','목','금','토'], //달력의 요일 텍스트
-        dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'], //달력의 요일 Tooltip
-        minDate: "-5Y", //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-        maxDate: "+0d" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
-    })
-
-    // 차트
-    let canvas = document.getElementById('myChart')
-    let ctx = canvas.getContext('2d')
-    let labels = ['칼로리','탄수화물','단백질','지방','나트륨','칼슘','철분']
-    let int = {{ intake|safe }}
-    let recom = [1400,180,20,65,1200,600,7]
-    let recom2 = ['Kcal','g','g','g','mg','mg','mg']
-    let intake1 = []
-    let intake2 = []
-
-    intake1.push(int.breakfast_per)
-    intake1.push(int.lunch_per)
-    intake1.push(int.dinner_per)
-    
-    intake2.push(int.breakfast)
-    intake2.push(int.lunch)
-    intake2.push(int.dinner)
-
-    let data = {
-      labels: labels,
-        datasets: [{
-          label: '아침',
-          data: intake1[0],
-          backgroundColor: [
-            'rgba(250,128,114)'
-          ],
-          hoverBackgroundColor: [
-            'rgb(250,128,114,0.5)'
-          ]
-        },{
-          label: '점심',
-          data: intake1[1],
-          backgroundColor: [
-            'rgba(128,0,128)'
-          ],
-          hoverBackgroundColor: [
-            'rgb(128,0,128,0.5)'
-          ]
-        },{
-          label: '저녁',
-          data: intake1[2],
-          backgroundColor: [
-            'rgba(135,206,235)'
-          ],
-          hoverBackgroundColor: [
-            'rgb(135,206,235,0.5)'
-          ]
-        }]
-    }
-  
-    let options = {
-        responsive: false,
-        indexAxis: 'y',
-        plugins: {
-            title: {
-            display: true,
-            position: 'bottom',
-            text: '일일 권장섭취량 (%)'
-            },
-
-            tooltip: {
-                enabled: true,
-                titleAlign: 'center',
-                bodyAlign: 'center',
-                footerAlign: 'center',
-                xAlign: 'left',
-                callbacks: {
-                    afterTitle: function(context) {
-                        i = context[0].dataIndex
-                        return "일일 권장섭취량 : "+recom[i]+recom2[i]
-                    },
-                    label: function(context) {
-                        
-                        i = context.dataIndex
-                        j = context.datasetIndex
-                        return String(Math.round(intake2[j][i])) + recom2[i] + " ( " + String(Math.round(intake1[j][i])) + "% )"
-                    },
-                    footer: function(contexts) {
-                        i = contexts[0].dataIndex
-                        x=0
-                        y=0
-                        for(j=0;j<3;j++){
-                            if(intake2[j]){
-                                x+=intake2[j][i]
-                            }
-                            if(intake1[j]){
-                                y+=intake1[j][i]
-                            }
-                        }
-                        return "총 : "+String(Math.round(x)) + recom2[i] + " ( " + String(Math.round(y)) + "% )"
-                    },
-                },
-                footerColor: function(context) {
-                    if(context.tooltipItems[0]){
-                        i = context.tooltipItems[0].dataIndex
-                        y=0;
-                        for(k=0;k<3;k++){
-                            if(intake1[k]){
-                                y+=intake1[k][i]
-                            }
-                        }
-                        if( y > 125){
-                            return 'rgb(255,0,0,0.9)';
-                        }
-                        else if(y <75){
-                            return 'rgb(255,255,0,0.8)';
-                        }
-                        else {
-                            return 'rgb(0,255,0,0.8)';
-                        }
-                    }
-                    else return 'white';
-                },
-                backgroundColor: 'rgb(0,0,0,0.75)'
-            },
-        },
-  
-        scales: {
-          x: {
-            stacked: true,
-            ticks: {
-              callback: function(value, index, ticks) {
-                return value+'%'
-              }
-            },
-            grid: {
-                lineWidth: 1
-            },
-          },
-          y: {
-            stacked: true,
-            grid: {
-                lineWidth: 1
-            },
-          },
-        }
-    }
-  
-    let myChart = new Chart(ctx, {
-        type: 'bar',
-        data: data,
-        options: options
-    })
-
-    
-    $('.breakfast_upload').click(function() {
-        modal_show('breakfast')        
-        meal_upload('breakfast')
-    })
-
-    $('.lunch_upload').click(function() {
-        modal_show('lunch')
-        meal_upload('lunch')
-    })
-
-    $('.dinner_upload').click(function() {
-        modal_show('dinner')
-        meal_upload('dinner')
-    })
-
-    $('.breakfast_del_btn').click(function() {
-        del_meal_diet('breakfast')
-    })
-
-    $('.lunch_del_btn').click(function() {
-        del_meal_diet('lunch')
-    })
-
-    $('.dinner_del_btn').click(function() {
-        del_meal_diet('dinner')
-    })
-
-    // 검색 모달 띄우고 결과값 들어가게
-    $('.add_food').click(function() {
-        
-        // 들어갈 폼 - 전역변수 선언
-        window.parent_food_form = $(this).parent().attr('id')
-        window.food_list = []  // 전역변수 선언
-
-        $('.food_table').empty()
-        $('.picked_food_list').empty()
-        $.ajax({
-            url: 'food_list',
-            method: 'post',
-            data: {
-                csrfmiddlewaretoken: csrftoken,  // csrf
-            },
-        }).done(function(foods) {
-            if (foods) {
-                foods = foods.split(' ')
-                $.each(foods, function(idx, food) {
-                    if (food) {
-                        $('.food_table').append(`<div class="mb-3 ml-5" style="text-align: start;"><input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
-                    }
-                })
-            }
-        })
-        $('.food_input').val('')
-        $('#food_search').modal('show')
-    })
-
-    // 실시간 검색
-    let old_val
-    $(".food_input").on("propertychange change keyup paste input", function(){
-        let current_val = $(this).val()
-        if (current_val == old_val) {
-            return
-        }
-        old_val = current_val
-        $.ajax({
-            url: 'search_food_list',
-            method: 'post',
-            headers:{
-                'X-CSRFToken':csrftoken,  // csrf
-            },
-            data: JSON.stringify({
-                search_data: $('.food_input').val()
-            }),
-            contentType: 'application/json'
-        }).done(function(foods) {
-            $('.food_table').empty()
-            if (foods) {
-                foods = foods.split(' ')
-                $.each(foods, function(idx, food) {
-                    if (food) {
-                        $('.food_table').append(`<div class="mb-3 ml-5" style="text-align: start;">
-                            <input type="checkbox" name="food" value="${food}" id="${food}"/> ${food}</div>`)
-                    }
-                })
-            } else if (!foods) {
-                $('.food_table').append('<font class="d-flex justify-content-center" color="red"> \"'
-                    + $('.food_input').val() + '\" 에 대한 검색 결과가 존재하지 않습니다.</font>')
-            }
-        })
-    })
-
-    $('.search_food').click(function() {
-        if (!($('.food_input').val())) {
-            $('.food_table').empty()
-            $('.food_table').append('<font class="d-flex justify-content-center" color="red">한 글자 이상 검색해주세요.</font>')
-        }
-    })
-    
-    // 검색창에서 음식 선택
-    $(document).on('click', 'input:checkbox', function() {
-        food_id = $(this).attr('id')
-        check_id = '#' + food_id
-        if($(check_id).is(':checked')) {
-            $('.picked_food_list').append(`<button class="mr-1 p-1 picked_food" id="${food_id}"><small>${food_id} x</small></button>`)
-            window.food_list.push(food_id)
-        }
-    })
-
-    // 검색창에서 선택된 음식 삭제 & 체크박스 해제
-    $(document).on('click', '.picked_food', function() {
-        food_id = $(this).attr('id')
-        picked_id = '#' + food_id
-        $('input:checkbox[id="' + food_id +'"]').prop('checked', false)
-        $('button' + picked_id).remove()
-
-        // 전역변수에서도 해당 음식 삭제
-        for(let i = 0; i < window.food_list.length; i++) {
-            if (window.food_list[i] === food_id) {
-                window.food_list.splice(i, 1)
-                i--
-            }
-        }
-    })
-
-    // 음식 검색 후 음식 추가
-    $('#add_Btn').click(function() {
-        add_food_place = '#' + window.parent_food_form + ' .add_food'
-        cnt = $('.picked_food_list').children().length
-
-        for (let i = 0; i < cnt; i++) {
-            $(add_food_place).before(
-                '<div class="row ml-1 mr-1 mt-3">' +
-                    '<input class="col w-100 mr-1" disabled value=' + window.food_list[i] + ' name="food"/>' +
-                    '<select name="portions">' +
-                        '<option value="1인분">1인분</option>' +
-                        '<option value="0.1인분">0.1인분</option>' +
-                        '<option value="0.3인분">0.3인분</option>' +
-                        '<option value="0.5인분">0.5인분</option>' +
-                        '<option value="0.7인분">0.7인분</option>' +
-                        '<option value="1.5인분">1.5인분</option>' +
-                    '</select>' +
-                    '<button class="btn main_btn2 ml-1 del_food_btn" id="del_' + window.parent_food_form + window.food_list[i] + i + '_btn">삭제</button>' +
-                '</div>'
-            )
-        }
-        $('#food_search').modal('hide')
-    })
-    // 음식 삭제
-    $(document).on('click', '.del_food_btn', function() {
-        btn_id = '#' + $(this).attr('id')
-        $(btn_id).parent().remove()
-    })
-
-    // 식단 결과 확인 - meal, diet 객체 생성
-    $('.result_btn').click(function() {
-        food_form = '#' + $(this).parent().parent().attr('id') + ' div:nth-child(2)'
-        food_row = '#' + $(food_form).attr('id') + ' input'
-        food_row_portions = '#' + $(food_form).attr('id') + ' select option:selected'
-        food_result = []
-        portions = []
-
-        if ($(food_row).val()) {
-            for(let i = 0; i < $(food_row).length; i++) {
-                food_result.push($(food_row).eq(i).val())
-                portions.push($(food_row_portions).eq(i).val())
-            }
-            let meal = $(this).parent().parent().attr('id').replace('_frame', '')
-            let form = $('#' + meal + '_form')[0]
-            let formData = new FormData(form)
-            formData.append('meal_img', $('#' + meal + '_fileBtn')[0].files[0])
-            formData.append('date', $('#datepicker').val())
-            formData.append('frame', $(food_form).attr('id'))
-            formData.append('food_result', food_result)
-            formData.append('portions', portions)
-            formData.append('kid_id', sessionStorage.getItem('kid_id'))
-            formData.append('csrfmiddlewaretoken', csrftoken)  // csrftoken
-
-            $.ajax({
-                url: 'meal_diet',
-                method: 'post',
-                enctype: 'multipart/form-data',
-                data: formData,
-                contentType: false,
-                processData: false,
-            }).done(function(results) {
-                window.location.reload()
-            })
-            $(this).attr('disabled', 'disabled')
-            $('.' + meal + '_upload').attr('disabled', 'disabled')
-            $('.' + meal + '_del_btn').removeAttr('disabled')
-            $('#' + $(food_form).attr('id') + ' .del_food_btn').attr('disabled', 'disabled')
-            $('#' + $(food_form).attr('id') + ' select').attr('disabled', 'disabled')
-            $('#' + $(food_form).attr('id') + ' .add_food').attr('disabled', 'disabled')
-        }
-    })
-
-    // 부족/과잉 영양성분 보기
-    $('.breakfast_nu_result_btn').click(function() {
-        $('#breakfast_nu_modal').modal('show')
-    })
-    $('.lunch_nu_result_btn').click(function() {
-        $('#lunch_nu_modal').modal('show')
-    })
-    $('.dinner_nu_result_btn').click(function() {
-        $('#dinner_nu_modal').modal('show')
-    })
-})
-</script>
 {% endblock %}
