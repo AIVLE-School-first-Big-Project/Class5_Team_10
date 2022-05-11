@@ -29,7 +29,7 @@
  1. Python 가상환경은 3.8 버전 이상을 사용해주세요.
  2. 사용하시는 DB가 있을 경우 Config Settings에서 설정해주세요. 저희 프로젝트는 MySQL로 설정되어 있습니다.
  3. pip install -r requirements.txt를 실행시켜 필요한 모듈을 설치해주세요.
- 4. python manage.py makemigrations & python manage.py migrate 을 실행해주세요.
+ 4. python manage.py migrate 을 실행해주세요.
  5. Secure Coding이 적용되어 있어 서비스를 시작할 때 python manage.py runserver --insecure 로 실행시켜주세요.
 
 <br/>
