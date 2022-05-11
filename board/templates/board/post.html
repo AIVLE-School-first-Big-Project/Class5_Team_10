@@ -125,7 +125,7 @@ $(document).ready(function() {
                                 <input type="text" class="comment w-75 rounded" name='comment' value="{{ comment.content }}" id="{{comment.id}}_input" readonly required style="font-size:5px;">
                             </div>
                             <div class="col d-flex justify-content-end">
-                                {% if request.user.username == comment.user.username or request.user.is_staff%}
+                                {% if request.user.username == comment.user.username or request.user.is_staff %}
                                     <a href="javascript:void(0)" class="comment_modify btn post_btn mr-2" id="{{comment.id}}" style="width:3rem; height:2rem; font-size: 10px">수정</a>
                                     
                                     <button class="comment_submit btn post_btn mr-2" id="{{comment.id}}_submit"
